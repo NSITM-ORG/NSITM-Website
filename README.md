@@ -1,3 +1,34 @@
+<p align="center">
+  <!-- Project Banner -->
+  <img src="https://via.placeholder.com/1200x250.png?text=NSITM+Website+Project+Banner" alt="NSITM Website Banner" />
+
+  <!-- Tech Stack Badges -->
+  <br/><br/>
+  <img src="https://img.shields.io/badge/HTML-20232A?style=for-the-badge&logo=html5&logoColor=white" />
+  <img src="https://img.shields.io/badge/TailwindCSS-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white" />
+  <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" />
+  <img src="https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white" />
+  <img src="https://img.shields.io/badge/Resend-000000?style=for-the-badge&logo=mailgun&logoColor=white" />
+
+  <!-- GitHub Actions CI Badge -->
+  <br/><br/>
+  <img src="https://img.shields.io/github/actions/workflow/status/NSITM-ORG/NSITM-Website/ci.yml?style=for-the-badge&label=CI%20Build" />
+
+  <!-- Contributors Graph -->
+  <br/><br/>
+  <a href="https://github.com/NSITM-ORG/NSITM-Website/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/NSITM-ORG/NSITM-Website?style=for-the-badge" />
+  </a>
+
+  <!-- Built by Nextserve Students Badge -->
+  <br/><br/>
+  <img src="https://img.shields.io/badge/Built%20By-Nextserve%20Students-blueviolet?style=for-the-badge" />
+</p>
+
+
+
 # NSITM Website
 
 _The official website of Nextserve School of Information Technology and Management, providing programme information, cohort enrollment, and institutional administration._
