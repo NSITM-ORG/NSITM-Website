@@ -6,15 +6,15 @@ _The official website of Nextserve School of Information Technology and Manageme
 
 ## Table of Contents
 
-- [[#Overview|Overview]]
-- [[#Features|Features]]
-- [[#Tech Stack|Tech Stack]]
-- [[#Getting Started|Getting Started]]
-- [[#Project Structure|Project Structure]]
-- [[#Contributing|Contributing]]
-- [[#Versioning|Versioning]]
-- [[#Team|Team]]
-- [[#License|License]]
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [Versioning](#versioning)
+- [Team](#team)
+- [License](#license)
 
 ---
 
@@ -63,6 +63,9 @@ The website must be live and operational before the June 2026 cohort enrollment 
 
 - A modern web browser for viewing static pages during the current frontend-only phase
 - Node.js 18+ (required when backend development begins)
+- MongoDB Atlas or local MongoDB instance
+- Cloudinary account
+- Resend API key
 - Git
 
 ### Installation
@@ -78,6 +81,9 @@ git checkout develop
 # 3. Open the project
 # For the current static frontend phase, open index.html directly in your browser
 # or use a local server extension such as Live Server in VS Code
+
+# 4. Run the Development Server
+npm run dev
 ```
 
 > Backend setup instructions will be added when Node.js and Express development begins. This section will be updated at that point.
@@ -85,6 +91,8 @@ git checkout develop
 ### Environment Variables
 
 No environment variables are required for the current static frontend phase. The following will be required when backend development begins.
+
+Create a `.env` file:
 
 |Variable|Description|Required|
 |---|---|---|
@@ -125,8 +133,9 @@ NSITM-Website/
 ---
 
 ## Contributing
-
-All contributions must follow the process below. This is a Live Project and uncoordinated changes create conflicts that cost the whole team time.
+We welcome contributions from students, alumni, and external collaborators.
+Please read the Contributor Guide below before submitting a pull request.
+All contributions must follow the process below. This is a Live Project, and uncoordinated changes create conflicts that cost the whole team time.
 
 **Quick rules:**
 
@@ -155,7 +164,7 @@ This project uses [Semantic Versioning](https://semver.org/).
 
 | Role                              | Name                   | GitHub              |
 | --------------------------------- | ---------------------- | ------------------- |
-| Product Owner / Project Oversight | Muolokwu Ekene Dominic | @MADEPADIO          |
+| Product Owner / Project Lead| Muolokwu Ekene Dominic | @MADEPADIO          |
 | Tech Lead                         | George Tony            | @placeholder-george |
 | Frontend Developer                | —                      | @LUNNA-23           |
 
