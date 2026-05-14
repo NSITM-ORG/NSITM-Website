@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enroll Now | Nextserve Computer Academy</title>
+    <link rel="stylesheet" href="assets/css/enroll.css" />
+    <style>
+        :root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --primary-light: #dbeafe;
+  --secondary: #0f172a;
+  --accent: #06b6d4;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --bg: #f1f5f9;
+  --card-bg: #ffffff;
+  --text: #1e293b;
+  --text-light: #64748b;
+  --border: #e2e8f0;
+  --border-focus: #93c5fd;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg:
+    0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 40px -5px rgba(0, 0, 0, 0.15);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --transition: 0.2s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    "Segoe UI",
+    "Inter",
+    system-ui,
+    -apple-system,
+    sans-serif;
+
+    background-color: #ECEBFD;
+ 
+}
+
+/* logo style  */
+/* .logo-image {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+} */
+
+/* Header */
+.header {
+  background:rgb(55, 51, 255);
+  color: white;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-lg);
+}
+
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 24px;
+}
+
+/* logo style  */
+.logo-image {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--radius-sm);
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  text-decoration: none;
+  color: white;
+}
+
+
+
+.header-badge {
+  background: white;
+  color: rgb(55, 51, 255);
+  padding: 9px 16px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 11, 13, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(0, 11, 13, 0.5);
+  }
+}
+
+/* Main Container */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Progress Steps */
+.progress-steps {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 32px;
+  background: var(--card-bg);
+  border-radius: 50px;
+  padding: 6px;
+  box-shadow: var(--shadow);
+  position: relative;
+  flex-wrap: wrap;
+}
+
+.progress-step {
+  flex: 1;
+  min-width: 80px;
+  text-align: center;
+  padding: 10px 16px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text-light);
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.progress-step.active {
+  background: var(--primary);
+  color: white;
+  box-shadow: var(--shadow);
+}
+.progress-step.completed {
+  background: var(--success);
+  color: white;
+}
+.progress-step.completed::after {
+  content: " ✓";
+}
+
+/* Card */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 36px 32px;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+.card-header {
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--border);
+  text-align: center;
+}
+
+.card-header h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--secondary);
+  margin-bottom: 4px;
+}
+.card-header .subtitle {
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+.card-header .icon-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+}
+
+/* Form Sections */
+.form-section {
+  display: none;
+  animation: fadeSlideIn 0.4s ease;
+}
+.form-section.active {
+  display: block;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--primary);
+  font-weight: 700;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-label::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.form-group label .required {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: var(--transition);
+  background: #fafbfc;
+  color: var(--text);
+  width: 100%;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+  background: #fff;
+}
+.form-group input.error,
+.form-group select.error,
+.form-group textarea.error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.06);
+  background: #fef2f2;
+}
+
+.form-group .error-msg {
+  font-size: 0.78rem;
+  color: var(--danger);
+  display: none;
+  font-weight: 500;
+}
+.form-group .error-msg.show {
+  display: block;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Radio & Checkbox */
+.radio-group,
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.radio-option,
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 2px solid var(--border);
+  border-radius: 50px;
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 0.9rem;
+  font-weight: 500;
+  user-select: none;
+  background: #fafbfc;
+  white-space: nowrap;
+}
+.radio-option:hover,
+.checkbox-option:hover {
+  border-color: var(--border-focus);
+  background: #f8faff;
+}
+.radio-option input:checked + span,
+.checkbox-option input:checked + span {
+  color: var(--primary);
+}
+.radio-option:has(input:checked),
+.checkbox-option:has(input:checked) {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  font-weight: 600;
+}
+.radio-option input,
+.checkbox-option input {
+  accent-color: var(--primary);
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+/* Buttons */
+.btn-row {
+  display: flex;
+  gap: 14px;
+  margin-top: 28px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 13px 32px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition);
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+.btn-primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+}
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+.btn-outline {
+  background: white;
+  color: var(--text);
+  border: 2px solid var(--border);
+}
+.btn-outline:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: var(--primary-light);
+}
+
+.btn-success {
+  background: var(--success);
+  color: white;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+.btn-success:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Summary */
+.summary-list {
+  list-style: none;
+  padding: 0;
+}
+.summary-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.summary-list li .summary-label {
+  font-weight: 600;
+  color: var(--text-light);
+  min-width: 140px;
+}
+.summary-list li .summary-value {
+  color: var(--text);
+  text-align: right;
+  font-weight: 500;
+}
+
+/* Success */
+.success-overlay {
+  display: none;
+  text-align: center;
+  animation: fadeSlideIn 0.5s ease;
+}
+.success-overlay.show {
+  display: block;
+}
+.success-icon {
+  font-size: 5rem;
+  animation: bounceIn 0.6s ease;
+}
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.success-overlay h2 {
+  font-size: 1.8rem;
+  color: var(--success);
+  margin: 12px 0;
+}
+.success-overlay p {
+  color: var(--text-light);
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+.enrollment-id {
+  display: inline-block;
+  background: var(--primary-light);
+  color: var(--primary);
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 1px;
+  margin: 12px 0;
+}
+
+/* Tooltip */
+.info-tip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--border);
+  color: var(--text-light);
+  font-size: 0.7rem;
+  font-weight: 700;
+  cursor: help;
+  margin-left: 4px;
+  transition: var(--transition);
+}
+.info-tip:hover {
+  background: var(--primary);
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .card {
+    padding: 24px 16px;
+  }
+  .btn {
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    width: 100%;
+    justify-content: center;
+  }
+  .btn-row {
+    flex-direction: column;
+  }
+  .progress-steps {
+    border-radius: var(--radius-sm);
+    gap: 2px;
+  }
+  .progress-step {
+    font-size: 0.7rem;
+    padding: 8px 10px;
+    min-width: 55px;
+  }
+  .header-inner {
+    padding: 10px 14px;
+  }
+  .logo {
+    font-size: 1.1rem;
+  }
+  .radio-group {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .radio-option,
+  .checkbox-option {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .progress-step {
+    font-size: 0.65rem;
+    padding: 6px 8px;
+    min-width: 40px;
+  }
+  .card-header h2 {
+    font-size: 1.3rem;
+  }
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="course.html" class="logo">
+                <div class="logo-icon">
+                    <img src="assets/images/all-img/nxtlogo.png" alt="" class="logo-image" />
+                </div>
+                Nextserve Computer Academy
+            </a>
+            <span class="header-badge"> Enrolling Now</span>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Progress Steps -->
+        <div class="progress-steps" id="progressSteps">
+            <div class="progress-step active" data-step="1">📋 Personal Info</div>
+            <div class="progress-step" data-step="2">🎓 Course & Batch</div>
+            <div class="progress-step" data-step="3">📝 Additional Info</div>
+            <div class="progress-step" data-step="4">✅ Review & Submit</div>
+        </div>
+
+        <!-- Form Card -->
+        <div class="card" id="formCard">
+            <!-- Step 1: Personal Information -->
+            <div class="form-section active" id="section1">
+                <div class="card-header">
+                    <div class="icon-circle">👤</div>
+                    <h2>Personal Information</h2>
+                    <p class="subtitle">Tell us about yourself — this helps us personalize your learning experience.</p>
+                </div>
+                <div class="section-label">Basic Details</div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="fullName">Full Name <span class="required">*</span></label>
+                        <input type="text" id="fullName" placeholder="e.g. John Michael Doe" required>
+                        <span class="error-msg" id="err-fullName">Please enter your full name (minimum 3 characters).</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" placeholder="e.g. john@email.com" required>
+                        <span class="error-msg" id="err-email">Please enter a valid email address.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number <span class="required">*</span></label>
+                        <input type="tel" id="phone" placeholder="e.g. +1 234 567 8900" required>
+                        <span class="error-msg" id="err-phone">Please enter a valid phone number (7-15 digits).</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="dob">Date of Birth <span class="required">*</span></label>
+                        <input type="date" id="dob" required>
+                        <span class="error-msg" id="err-dob">Please select your date of birth.</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender <span class="required">*</span></label>
+                        <div class="radio-group" id="genderGroup">
+                            <label class="radio-option"><input type="radio" name="gender" value="male" required> <span>Male</span></label>
+                            <label class="radio-option"><input type="radio" name="gender" value="female"> <span>Female</span></label>
+                            <label class="radio-option"><input type="radio" name="gender" value="other"> <span>Other</span></label>
+                            <label class="radio-option"><input type="radio" name="gender" value="prefer-not"> <span>Prefer not to say</span></label>
+                        </div>
+                        <span class="error-msg" id="err-gender">Please select your gender.</span>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="address">Residential Address <span class="required">*</span></label>
+                        <input type="text" id="address" placeholder="Street, City, State, ZIP Code" required>
+                        <span class="error-msg" id="err-address">Please enter your full address.</span>
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button type="button" class="btn btn-primary" onclick="nextStep(2)">Next: Course & Batch →</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Course & Batch -->
+            <div class="form-section" id="section2">
+                <div class="card-header">
+                    <div class="icon-circle">🎓</div>
+                    <h2>Course & Batch Selection</h2>
+                    <p class="subtitle">Choose the course you want to enroll in and your preferred schedule.</p>
+                </div>
+                <div class="section-label">Course Details</div>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="course">Select Course <span class="required">*</span>
+                            <span class="info-tip" title="All courses include certification upon completion">?</span>
+                        </label>
+                        <select id="course" required>
+                            <option value="">-- Choose a Course --</option>
+                            <optgroup label="💻 Programming & Development">
+                                <option value="full-stack-web">Full Stack Web Development </option>
+                                <option value="Front -End Web">Front -End Web Development (HTML, CSS, JS, React, Node.js)</option>
+                                <option value="python-programming">Python Programming — Beginner to Advanced</option>
+                                <option value="java-masterclass">Java Masterclass with Spring Boot</option>
+                                <option value="mobile-app-dev">Mobile App Development (Flutter / React Native)</option>
+                                <option value="csharp-dotnet">Cloud/Automation Engineering</option>
+                                <option value="AI/Machine">AI/Machine Learning</option>
+                            </optgroup>
+                            <optgroup label="🎨 Design & Creative">
+                                <option value="ui-ux-design">UI/UX Design with Figma & Adobe XD</option>
+                                <option value="graphic-design">Graphic Design Mastery (Photoshop, Illustrator)</option>
+                                <option value="video-editing">Professional Video Editing & Motion Graphics</option>
+                            </optgroup>
+                             <optgroup label="Management Programs">
+                                 <option value="project-management">Project Management</option>
+                                 <option value="Digital Marketing">Digital Marketing</option>
+                                 <option value="Information">Information Management</option>
+                                <option value="Quality Control">Quality Control Management</option>
+                                <option value="Human Resource">Human Resource Management</option>
+                                <option value="Virtual Assistance">Virtual Assistance</option>
+                            </optgroup>
+                            <optgroup label="📊 Data & IT">
+                                <option value="data-science">Data Science & Machine Learning with Python</option>
+                                <option value="cybersecurity">Cybersecurity Essentials & Ethical Hacking</option>
+                                <option value="cloud-computing">Cloud Computing (AWS / Azure / GCP)</option>
+                                <option value="networking">Computer Networking (CCNA, Network+)</option>
+                            </optgroup>
+                            <optgroup label="🛠️ Other">
+                                <option value="ms-office">Microsoft Office Suite (Word, Excel, PowerPoint)</option>
+                                <option value="Sage">Sage/Quickbook/Vision/tally</option>
+                                <option value="other-course">Other (Please Specify)</option>
+                            </optgroup>
+                        </select>
+                        <span class="error-msg" id="err-course">Please select a course.</span>
+                    </div>
+                    <div class="form-group full-width" id="otherCourseGroup" style="display:none;">
+                        <label for="otherCourse">Please Specify the Course <span class="required">*</span></label>
+                        <input type="text" id="otherCourse" placeholder="Enter the course name">
+                        <span class="error-msg" id="err-otherCourse">Please specify the course name.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="batch">Preferred Batch <span class="required">*</span></label>
+                        <select id="batch" required>
+                            <option value="">-- Select Batch --</option>
+                            <option value="in-person">In-person</option>
+                            <option value="online-self">Online / Self-Paced Learning</option>
+                        </select>
+                        <span class="error-msg" id="err-batch">Please select a preferred batch.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="startDate">Preferred Start Date <span class="required">*</span></label>
+                        <input type="date" id="startDate" required>
+                        <span class="error-msg" id="err-startDate">Please select a preferred start date.</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Mode of Learning <span class="required">*</span></label>
+                        <div class="radio-group" id="modeGroup">
+                            <label class="radio-option"><input type="radio" name="mode" value="in-person" required> <span>🏫 In-Person</span></label>
+                            <label class="radio-option"><input type="radio" name="mode" value="online"> <span>💻 Online Live</span></label>
+                            <label class="radio-option"><input type="radio" name="mode" value="hybrid"> <span>🔄 Hybrid</span></label>
+                        </div>
+                        <span class="error-msg" id="err-mode">Please select a learning mode.</span>
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button type="button" class="btn btn-outline" onclick="prevStep(1)">← Back</button>
+                    <button type="button" class="btn btn-primary" onclick="nextStep(3)">Next: Additional Info →</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Additional Information -->
+            <div class="form-section" id="section3">
+                <div class="card-header">
+                    <div class="icon-circle">📝</div>
+                    <h2>Additional Information</h2>
+                    <p class="subtitle">Help us understand your background and needs better.</p>
+                </div>
+                <div class="section-label">Background & Preferences</div>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label for="education">Highest Educational Qualification <span class="required">*</span></label>
+                        <select id="education" required>
+                            <option value="">-- Select Qualification --</option>
+                            <option value="high-school">High School / Secondary</option>
+                            <option value="diploma">Diploma / Certificate</option>
+                            <option value="bachelors">Bachelor's Degree</option>
+                            <option value="masters">Master's Degree</option>
+                            <option value="phd">PhD / Doctorate</option>
+                            <option value="other-edu">Other</option>
+                        </select>
+                        <span class="error-msg" id="err-education">Please select your highest qualification.</span>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Current Computer Knowledge Level <span class="required">*</span></label>
+                        <div class="radio-group" id="knowledgeGroup">
+                            <label class="radio-option"><input type="radio" name="knowledge" value="beginner" required> <span>🌱 Beginner</span></label>
+                            <label class="radio-option"><input type="radio" name="knowledge" value="intermediate"> <span>🌿 Intermediate</span></label>
+                            <label class="radio-option"><input type="radio" name="knowledge" value="advanced"> <span>🌳 Advanced</span></label>
+                            <label class="radio-option"><input type="radio" name="knowledge" value="expert"> <span>🏆 Expert</span></label>
+                        </div>
+                        <span class="error-msg" id="err-knowledge">Please select your computer knowledge level.</span>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="heardFrom">How Did You Hear About Us? <span class="required">*</span></label>
+                        <select id="heardFrom" required>
+                            <option value="">-- Select an Option --</option>
+                            <option value="social-media">Social Media (Facebook, Instagram, etc.)</option>
+                            <option value="google-search">Google Search</option>
+                            <option value="friend-family">Friend / Family Referral</option>
+                            <option value="advertisement">Online Advertisement</option>
+                            <option value="walk-in">Walk-in / Passed By</option>
+                            <option value="other-source">Other</option>
+                        </select>
+                        <span class="error-msg" id="err-heardFrom">Please select how you heard about us.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="emergencyContact">Emergency Contact Name <span class="required">*</span></label>
+                        <input type="text" id="emergencyContact" placeholder="Full name of emergency contact" required>
+                        <span class="error-msg" id="err-emergencyContact">Please enter an emergency contact name.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="emergencyPhone">Emergency Contact Phone <span class="required">*</span></label>
+                        <input type="tel" id="emergencyPhone" placeholder="Phone number" required>
+                        <span class="error-msg" id="err-emergencyPhone">Please enter a valid phone number.</span>
+                    </div>
+                    <div class="form-group">
+                        <label>Preferred Payment Method <span class="required">*</span></label>
+                        <div class="radio-group" id="paymentGroup">
+                            <label class="radio-option"><input type="radio" name="payment" value="full-upfront" required> <span>💰 Full Upfront</span></label>
+                            <label class="radio-option"><input type="radio" name="payment" value="installment"> <span>📅 Installments</span></label>
+                        </div>
+                        <span class="error-msg" id="err-payment">Please select a payment preference.</span>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="notes">Special Requirements / Notes</label>
+                        <textarea id="notes" placeholder="Any accessibility needs, learning accommodations, dietary restrictions (for in-person), or other notes..."></textarea>
+                    </div>
+                </div>
+                <div class="btn-row">
+                    <button type="button" class="btn btn-outline" onclick="prevStep(2)">← Back</button>
+                    <button type="button" class="btn btn-primary" onclick="nextStep(4)">Next: Review →</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Review & Submit -->
+            <div class="form-section" id="section4">
+                <div class="card-header">
+                    <div class="icon-circle">✅</div>
+                    <h2>Review Your Enrollment</h2>
+                    <p class="subtitle">Please verify all the information before submitting.</p>
+                </div>
+                <div class="section-label">Enrollment Summary</div>
+                <ul class="summary-list" id="summaryList">
+                    <!-- Populated dynamically -->
+                </ul>
+                <div class="form-group full-width" style="margin-top: 20px;">
+                    <label class="checkbox-option" style="border:none; background:transparent; padding:0; display:flex; align-items:flex-start; gap:10px;">
+                        <input type="checkbox" id="termsCheck" style="margin-top:2px;">
+                        <span style="font-weight:500;">I confirm that all the information provided is correct. I agree to the <strong>Terms & Conditions</strong> and <strong>Privacy Policy</strong> of TechMasters Computer Academy. <span class="required">*</span></span>
+                    </label>
+                    <span class="error-msg" id="err-terms">You must agree to the terms and conditions.</span>
+                </div>
+                <div class="btn-row">
+                    <button type="button" class="btn btn-outline" onclick="prevStep(3)">← Back</button>
+                    <button type="button" class="btn btn-success" id="submitBtn" onclick="submitEnrollment()">🎉 Submit Enrollment</button>
+                </div>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-overlay" id="successOverlay">
+                <div class="success-icon">🎉</div>
+                <h2>Enrollment Submitted Successfully!</h2>
+                <p>Thank you for enrolling at <strong>TechMasters Computer Academy</strong>.</p>
+                <p>Your Enrollment ID:</p>
+                <div class="enrollment-id" id="enrollmentIdDisplay">—</div>
+                <p style="margin-top:12px; font-size:0.9rem; color: var(--text-light);">
+                    📧 A confirmation email has been sent to your email address.<br>
+                    📞 Our team will contact you within <strong>24 hours</strong> to confirm your seat.
+                </p>
+                <button type="button" class="btn btn-primary" style="margin-top:20px;" onclick="resetForm()">🔄 Enroll Another Student</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- State Management ---
+        let currentStep = 1;
+        const totalSteps = 4;
+        const formData = {};
+
+        // --- DOM References ---
+        const progressSteps = document.querySelectorAll('.progress-step');
+        const formSections = document.querySelectorAll('.form-section');
+        const summaryList = document.getElementById('summaryList');
+        const termsCheck = document.getElementById('termsCheck');
+        const submitBtn = document.getElementById('submitBtn');
+        const successOverlay = document.getElementById('successOverlay');
+        const formCard = document.getElementById('formCard');
+
+        // --- Show/hide other course field ---
+        const courseSelect = document.getElementById('course');
+        const otherCourseGroup = document.getElementById('otherCourseGroup');
+
+        courseSelect.addEventListener('change', function() {
+            if (this.value === 'other-course') {
+                otherCourseGroup.style.display = 'block';
+            } else {
+                otherCourseGroup.style.display = 'none';
+                document.getElementById('otherCourse').value = '';
+                hideError('otherCourse');
+            }
+        });
+
+        // --- Navigation ---
+        function updateProgressBar() {
+            progressSteps.forEach((step, index) => {
+                const stepNum = index + 1;
+                step.classList.remove('active', 'completed');
+                if (stepNum === currentStep) {
+                    step.classList.add('active');
+                } else if (stepNum < currentStep) {
+                    step.classList.add('completed');
+                }
+            });
+        }
+
+        function showSection(stepNum) {
+            formSections.forEach(section => section.classList.remove('active'));
+            const section = document.getElementById('section' + stepNum);
+            if (section) section.classList.add('active');
+            updateProgressBar();
+            // Scroll to top of card
+            formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function nextStep(step) {
+            if (validateStep(currentStep)) {
+                saveStepData(currentStep);
+                currentStep = step;
+                if (step === totalSteps) {
+                    populateSummary();
+                }
+                showSection(currentStep);
+            }
+        }
+
+        function prevStep(step) {
+            saveStepData(currentStep);
+            currentStep = step;
+            showSection(currentStep);
+        }
+
+        // --- Validation ---
+        function showError(fieldId) {
+            const errEl = document.getElementById('err-' + fieldId);
+            const inputEl = document.getElementById(fieldId);
+            if (errEl) errEl.classList.add('show');
+            if (inputEl) inputEl.classList.add('error');
+        }
+
+        function hideError(fieldId) {
+            const errEl = document.getElementById('err-' + fieldId);
+            const inputEl = document.getElementById(fieldId);
+            if (errEl) errEl.classList.remove('show');
+            if (inputEl) inputEl.classList.remove('error');
+        }
+
+        function validateField(fieldId, condition, errorFieldId) {
+            const efId = errorFieldId || fieldId;
+            if (!condition) {
+                showError(efId);
+                return false;
+            } else {
+                hideError(efId);
+                return true;
+            }
+        }
+
+        function validateStep(step) {
+            let valid = true;
+
+            if (step === 1) {
+                const fullName = document.getElementById('fullName').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const dob = document.getElementById('dob').value;
+                const gender = document.querySelector('input[name="gender"]:checked');
+                const address = document.getElementById('address').value.trim();
+
+                valid &= validateField('fullName', fullName.length >= 3);
+                valid &= validateField('email', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+                valid &= validateField('phone', /^[\d\s\-\+\(\)]{7,15}$/.test(phone));
+                valid &= validateField('dob', dob !== '');
+                if (!gender) { showError('gender');
+                    valid = false; } else { hideError('gender'); }
+                valid &= validateField('address', address.length >= 5);
+            }
+
+            if (step === 2) {
+                const course = document.getElementById('course').value;
+                const batch = document.getElementById('batch').value;
+                const startDate = document.getElementById('startDate').value;
+                const mode = document.querySelector('input[name="mode"]:checked');
+
+                valid &= validateField('course', course !== '');
+                if (course === 'other-course') {
+                    const otherCourse = document.getElementById('otherCourse').value.trim();
+                    valid &= validateField('otherCourse', otherCourse.length >= 2);
+                } else {
+                    hideError('otherCourse');
+                }
+                valid &= validateField('batch', batch !== '');
+                valid &= validateField('startDate', startDate !== '');
+                if (!mode) { showError('mode');
+                    valid = false; } else { hideError('mode'); }
+            }
+
+            if (step === 3) {
+                const education = document.getElementById('education').value;
+                const knowledge = document.querySelector('input[name="knowledge"]:checked');
+                const heardFrom = document.getElementById('heardFrom').value;
+                const emergencyContact = document.getElementById('emergencyContact').value.trim();
+                const emergencyPhone = document.getElementById('emergencyPhone').value.trim();
+                const payment = document.querySelector('input[name="payment"]:checked');
+
+                valid &= validateField('education', education !== '');
+                if (!knowledge) { showError('knowledge');
+                    valid = false; } else { hideError('knowledge'); }
+                valid &= validateField('heardFrom', heardFrom !== '');
+                valid &= validateField('emergencyContact', emergencyContact.length >= 2);
+                valid &= validateField('emergencyPhone', /^[\d\s\-\+\(\)]{7,15}$/.test(emergencyPhone));
+                if (!payment) { showError('payment');
+                    valid = false; } else { hideError('payment'); }
+            }
+
+            if (step === 4) {
+                if (!termsCheck.checked) {
+                    showError('terms');
+                    valid = false;
+                } else {
+                    hideError('terms');
+                }
+            }
+
+            return valid;
+        }
+
+        // --- Save Data ---
+        function saveStepData(step) {
+            if (step === 1) {
+                formData.fullName = document.getElementById('fullName').value.trim();
+                formData.email = document.getElementById('email').value.trim();
+                formData.phone = document.getElementById('phone').value.trim();
+                formData.dob = document.getElementById('dob').value;
+                const gender = document.querySelector('input[name="gender"]:checked');
+                formData.gender = gender ? gender.value : '';
+                formData.address = document.getElementById('address').value.trim();
+            }
+            if (step === 2) {
+                formData.course = document.getElementById('course').value;
+                formData.courseName = document.getElementById('course').selectedOptions[0]?.text || formData
+                .course;
+                if (formData.course === 'other-course') {
+                    formData.otherCourse = document.getElementById('otherCourse').value.trim();
+                    formData.courseName = formData.otherCourse;
+                } else {
+                    formData.otherCourse = '';
+                }
+                formData.batch = document.getElementById('batch').value;
+                formData.batchName = document.getElementById('batch').selectedOptions[0]?.text || formData.batch;
+                formData.startDate = document.getElementById('startDate').value;
+                const mode = document.querySelector('input[name="mode"]:checked');
+                formData.mode = mode ? mode.value : '';
+            }
+            if (step === 3) {
+                formData.education = document.getElementById('education').value;
+                formData.educationName = document.getElementById('education').selectedOptions[0]?.text || formData
+                .education;
+                const knowledge = document.querySelector('input[name="knowledge"]:checked');
+                formData.knowledge = knowledge ? knowledge.value : '';
+                formData.heardFrom = document.getElementById('heardFrom').value;
+                formData.heardFromName = document.getElementById('heardFrom').selectedOptions[0]?.text || formData
+                .heardFrom;
+                formData.emergencyContact = document.getElementById('emergencyContact').value.trim();
+                formData.emergencyPhone = document.getElementById('emergencyPhone').value.trim();
+                const payment = document.querySelector('input[name="payment"]:checked');
+                formData.payment = payment ? payment.value : '';
+                formData.notes = document.getElementById('notes').value.trim();
+            }
+        }
+
+        // --- Summary ---
+        function populateSummary() {
+            const modeLabels = { 'in-person': '🏫 In-Person', 'online': '💻 Online Live', 'hybrid': '🔄 Hybrid' };
+            const knowledgeLabels = { 'beginner': '🌱 Beginner', 'intermediate': '🌿 Intermediate', 'advanced': '🌳 Advanced',
+                'expert': '🏆 Expert' };
+            const paymentLabels = { 'full-upfront': '💰 Full Upfront', 'installment': '📅 Installments',
+                'scholarship': '🎓 Scholarship Request' };
+            const genderLabels = { 'male': 'Male', 'female': 'Female', 'other': 'Other', 'prefer-not': 'Prefer not to say' };
+
+            const items = [
+                { label: 'Full Name', value: formData.fullName || '—' },
+                { label: 'Email', value: formData.email || '—' },
+                { label: 'Phone', value: formData.phone || '—' },
+                { label: 'Date of Birth', value: formData.dob || '—' },
+                { label: 'Gender', value: genderLabels[formData.gender] || '—' },
+                { label: 'Address', value: formData.address || '—' },
+                { label: 'Course', value: formData.courseName || '—' },
+                { label: 'Batch', value: formData.batchName || '—' },
+                { label: 'Start Date', value: formData.startDate || '—' },
+                { label: 'Learning Mode', value: modeLabels[formData.mode] || '—' },
+                { label: 'Education', value: formData.educationName || '—' },
+                { label: 'Computer Knowledge', value: knowledgeLabels[formData.knowledge] || '—' },
+                { label: 'Heard From', value: formData.heardFromName || '—' },
+                { label: 'Emergency Contact', value: (formData.emergencyContact || '—') + ' (' + (formData
+                    .emergencyPhone || '—') + ')' },
+                { label: 'Payment Preference', value: paymentLabels[formData.payment] || '—' },
+                { label: 'Notes', value: formData.notes || 'None' },
+            ];
+
+            summaryList.innerHTML = items.map(item => `
+                        <li>
+                            <span class="summary-label">${item.label}</span>
+                            <span class="summary-value">${item.value}</span>
+                        </li>
+                    `).join('');
+        }
+
+        // --- Submit ---
+        function submitEnrollment() {
+            saveStepData(3);
+            saveStepData(4);
+            if (!validateStep(4)) return;
+
+            // Generate enrollment ID
+            const enrollmentId = 'TMA-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36)
+                .substring(2, 6).toUpperCase();
+            formData.enrollmentId = enrollmentId;
+
+            // Simulate submission
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Submitting...';
+
+            setTimeout(() => {
+                // Hide all sections and show success
+                formSections.forEach(s => s.classList.remove('active'));
+                document.getElementById('successOverlay').classList.add('show');
+                document.getElementById('enrollmentIdDisplay').textContent = enrollmentId;
+                progressSteps.forEach(s => s.classList.remove('active'));
+                progressSteps[totalSteps - 1].classList.add('completed');
+
+                // Log form data (in real app, send to server)
+                console.log('✅ Enrollment Submitted:', formData);
+                console.log('📋 Enrollment ID:', enrollmentId);
+
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🎉 Submit Enrollment';
+            }, 1500);
+        }
+
+        function resetForm() {
+            // Reset all fields
+            document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"], input[type="date"], textarea')
+                .forEach(el => el.value = '');
+            document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+            document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+            document.querySelectorAll('input[type="checkbox"]').forEach(el => el.checked = false);
+            document.querySelectorAll('.error-msg').forEach(el => el.classList.remove('show'));
+            document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+            document.getElementById('otherCourseGroup').style.display = 'none';
+            termsCheck.checked = false;
+
+            // Reset state
+            currentStep = 1;
+            Object.keys(formData).forEach(key => delete formData[key]);
+            document.getElementById('successOverlay').classList.remove('show');
+            showSection(1);
+            progressSteps.forEach(s => s.classList.remove('completed', 'active'));
+            progressSteps[0].classList.add('active');
+            formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // --- Live validation on blur ---
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.addEventListener('blur', function() {
+                const id = this.id;
+                if (!id) return;
+                if (id === 'fullName') validateField('fullName', this.value.trim().length >= 3);
+                if (id === 'email') validateField('email', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value
+                .trim()));
+                if (id === 'phone' || id === 'emergencyPhone') validateField(id, /^[\d\s\-\+\(\)]{7,15}$/.test(
+                    this.value.trim()));
+                if (id === 'dob') validateField('dob', this.value !== '');
+                if (id === 'address') validateField('address', this.value.trim().length >= 5);
+                if (id === 'course') {
+                    validateField('course', this.value !== '');
+                    if (this.value === 'other-course') {
+                        document.getElementById('otherCourseGroup').style.display = 'block';
+                    } else {
+                        document.getElementById('otherCourseGroup').style.display = 'none';
+                        hideError('otherCourse');
+                    }
+                }
+                if (id === 'otherCourse') validateField('otherCourse', this.value.trim().length >= 2);
+                if (id === 'batch') validateField('batch', this.value !== '');
+                if (id === 'startDate') validateField('startDate', this.value !== '');
+                if (id === 'education') validateField('education', this.value !== '');
+                if (id === 'heardFrom') validateField('heardFrom', this.value !== '');
+                if (id === 'emergencyContact') validateField('emergencyContact', this.value.trim().length >=
+                    2);
+            });
+        });
+
+        // Live validation for radio groups
+        document.querySelectorAll('input[type="radio"]').forEach(el => {
+            el.addEventListener('change', function() {
+                const name = this.name;
+                if (name === 'gender') hideError('gender');
+                if (name === 'mode') hideError('mode');
+                if (name === 'knowledge') hideError('knowledge');
+                if (name === 'payment') hideError('payment');
+            });
+        });
+
+        // Live validation for terms checkbox
+        termsCheck.addEventListener('change', function() {
+            if (this.checked) hideError('terms');
+            else showError('terms');
+        });
+
+        // --- Initialize ---
+        updateProgressBar();
+        console.log('🚀 TechMasters Academy — Enrollment Page Ready');
+        console.log('📝 Fill out the form step by step to enroll!');
+    </script>
+</body>
+</html>
