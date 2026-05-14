@@ -197,7 +197,7 @@ This project uses [Semantic Versioning](https://semver.org/).
 | --------------------------------- | ---------------------- | ------------------- |
 | Product Owner / Project Lead| Muolokwu Ekene Dominic | @MADEPADIO          |
 | Tech Lead                         | George Tony            | @placeholder-george |
-| Frontend Developer                | —                      | @LUNNA-23           |
+| Frontend Developer                | Ukegbu Ugochukwu                      | @LUNNA-23           |
 
 ---
 
