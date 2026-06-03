@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import "./index.css";
 import App from "./App.jsx";
+import { ToastProvider } from "./context/useToasterContext.jsx";
 // import { SEOProvider } from "./hooks/main-seo";
 
 /**
@@ -45,9 +46,11 @@ class ErrorBoundary extends React.Component {
 createRoot(document.getElementById("root")).render(
   <ErrorBoundary>
     {/* <SEOProvider> */}
+    <ToastProvider>
       <BrowserRouter>
         <App />
       </BrowserRouter>
+    </ToastProvider>
     {/* </SEOProvider> */}
   </ErrorBoundary>,
 );
