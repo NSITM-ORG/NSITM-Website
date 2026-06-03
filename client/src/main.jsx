@@ -6,6 +6,7 @@ import App from "./App.jsx";
 import { ToastProvider } from "./context/useToasterContext.jsx";
 // import { SEOProvider } from "./hooks/main-seo";
 
+
 /**
  * ErrorBoundary — Silent crash catcher
  * ======================================
@@ -16,18 +17,41 @@ import { ToastProvider } from "./context/useToasterContext.jsx";
  * This wraps the entire app so nothing can slip through unnoticed.
  */
 class ErrorBoundary extends React.Component {
-  state = { error: null };
+  state = { error: null, errorInfo: null };
 
   static getDerivedStateFromError(error) {
     return { error };
   }
 
+  
+  componentDidCatch(error, errorInfo) {
+    // Capture the component stack trace where the error originated
+    this.setState({ errorInfo });
+    
+    // Optional: Log the error to an external analytics service here (e.g., Sentry)
+    console.error("ErrorBoundary caught an error:", error, errorInfo);
+  }
+
   render() {
     if (this.state.error) {
       return (
-        <pre style={{ padding: 24, color: "red" }}>
-          {String(this.state.error)}
-        </pre>
+        <div style={{ padding: 24, fontFamily: "monospace", backgroundColor: "#fff5f5", color: "#c53030", border: "1px solid #feb2b2", borderRadius: 8, margin: 16 }}>
+          <h2 style={{ marginTop: 0 }}>🚨 Something went wrong</h2>
+          
+          <h3 style={{ marginBottom: 4 }}>Error Message:</h3>
+          <pre style={{ whiteSpace: "pre-wrap", background: "#fff", padding: 12, borderRadius: 4, border: "1px solid #fed7d7" }}>
+            {this.state.error.toString()}
+          </pre>
+          
+          {this.state.errorInfo && (
+            <>
+              <h3 style={{ marginBottom: 4, marginTop: 16 }}>Component Stack Trace:</h3>
+              <pre style={{ whiteSpace: "pre-wrap", background: "#fff", padding: 12, borderRadius: 4, border: "1px solid #fed7d7", fontSize: "0.9rem", color: "#4a5568" }}>
+                {this.state.errorInfo.componentStack}
+              </pre>
+            </>
+          )}
+        </div>
       );
     }
     return this.props.children;
