@@ -24,7 +24,7 @@ const initializeApp = async () => {
 
     // Configure Cloudinary (optional - only if credentials provided)
     if (process.env.CLOUDINARY_CLOUD_NAME) {
-      configureCloudinary();
+      // configureCloudinary();
     }
 
     logger.success('All configurations initialized successfully');
