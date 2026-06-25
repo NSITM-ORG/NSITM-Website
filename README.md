@@ -231,7 +231,7 @@ This project uses [Semantic Versioning](https://semver.org/).
 
 | Role                              | Name  | GitHub          |
 | --------------------------------- | ----- | --------------- |
-| Product Owner / Project Oversight | PADIO | @MADEPADIO      |
+| Product Manager / Project Manager | PADIO | @MADEPADIO      |
 | Tech Lead                         | Blvck | @TonyBllvc      |
 | Frontend Developer                | Lunna | @LUNNA-23       |
 | Backend Developer                 | Sommy | @SommyNice-Tech |
