@@ -1,0 +1,43 @@
+'use strict';
+
+/**
+ * Super Admin — Programme Management Routes
+ * Base: /api/v1/superadmin/programmes
+ * Access: Super Admin only
+ */
+
+import express from 'express';
+const router = express.Router();
+
+import {
+  getAllProgrammesAdmin,
+  createProgramme,
+  updateProgramme,
+  deleteProgramme,
+} from '../../controllers/programme.controller.js';
+
+import { protect } from '../../middleware/auth.middleware.js';
+import { authorize } from '../../middleware/rbac.middleware.js';
+import { validate } from '../../middleware/validate.middleware.js';
+import {
+  createProgrammeValidator,
+  updateProgrammeValidator,
+}from '../../utils/validators/programme.validator.js';
+import { ROLES }from '../../config/constants.js';
+
+router.use(protect);
+router.use(authorize(ROLES.SUPER_ADMIN));
+
+// GET    /api/v1/superadmin/programmes
+router.get('/', getAllProgrammesAdmin);
+
+// POST   /api/v1/superadmin/programmes
+router.post('/', createProgrammeValidator, validate, createProgramme);
+
+// PATCH  /api/v1/superadmin/programmes/:id
+router.patch('/:id', updateProgrammeValidator, validate, updateProgramme);
+
+// DELETE /api/v1/superadmin/programmes/:id
+router.delete('/:id', deleteProgramme);
+
+export default router;
