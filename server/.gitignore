@@ -3,8 +3,8 @@ node_modules/
 
 # ── Environment files (NEVER commit real env files)
 .env
-.env.development
-.env.production
+# .env.development
+# .env.production
 .env.local
 
 # ── Logs

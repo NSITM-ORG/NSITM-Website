@@ -29,7 +29,7 @@
  */
 
 import path from "path";
-const dotenv = require("dotenv");
+import dotenv from "dotenv";
 
 // Load the correct .env file based on NODE_ENV
 dotenv.config({

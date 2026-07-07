@@ -76,29 +76,23 @@ const updateAdminAccount = asyncHandler(async (req, res, next) => {
     );
   }
 
-  const { name, email } = req.body;
+  const { name, email, phone } = req.body;
 
   if (email && email !== account.email) {
     const emailTaken = await Account.findByEmail(email);
     if (emailTaken) {
-      return next(
-        new ApiError(
-          HTTP_STATUS.CONFLICT,
-          "EMAIL_ALREADY_EXISTS",
-          `Email '${email}' is already in use.`,
-        ),
-      );
+      return next(new ApiError(HTTP_STATUS.CONFLICT, 'EMAIL_ALREADY_EXISTS', `Email '${email}' is already in use.`));
     }
     account.email = email.toLowerCase().trim();
-    await Profile.findByIdAndUpdate(account.profile._id, {
-      $set: { email: email.toLowerCase().trim() },
-    });
+    await Profile.findByIdAndUpdate(account.profile._id, { $set: { email: email.toLowerCase().trim() } });
   }
 
   if (name) {
-    await Profile.findByIdAndUpdate(account.profile._id, {
-      $set: { fullName: name.trim() },
-    });
+    await Profile.findByIdAndUpdate(account.profile._id, { $set: { fullName: name.trim() } });
+  }
+
+  if (phone) {
+    await Profile.findByIdAndUpdate(account.profile._id, { $set: { phone: phone.trim() } });
   }
 
   await account.save();

@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * Email Service — All 10 Notification Templates (NTF-01 through NTF-10)
@@ -31,13 +31,12 @@
  *   the template spec in the FRD. Variables are validated before sending.
  */
 
-import { getResendClient } from '../config/email.js';
-import { NOTIFICATION_TYPES } from '../config/constants.js';
-import logger from '../utils/logger.js';
+import { getResendClient } from "../config/email.js";
+import { NOTIFICATION_TYPES } from "../config/constants.js";
+import logger from "../utils/logger.js";
 
-
-const EMAIL_FROM = () => process.env.EMAIL_FROM || 'noreply@nsitm.com.ng';
-const INSTITUTION_NAME = 'Nextserve School of IT and Management';
+const EMAIL_FROM = () => process.env.EMAIL_FROM || "noreply@nsitm.com.ng";
+const INSTITUTION_NAME = "Nextserve School of IT and Management";
 
 // ─────────────────────────────────────────────────────────────────────
 // PRIVATE: Core send function
@@ -56,11 +55,9 @@ const sendEmail = async (emailData, notificationType) => {
 
   // ── Development mode: log to console ────────────────────────────
   if (!client) {
-    logger.info(`📧 [EMAIL MOCK] ${notificationType}`, {
-      to: emailData.to,
-      subject: emailData.subject,
-      preview: emailData.text?.substring(0, 200),
-    });
+    logger.info(`📧 [EMAIL MOCK] ${notificationType} → ${emailData.to}`);
+    logger.info(`   Subject: ${emailData.subject}`);
+    logger.info(`   Body:\n${emailData.text}`);
     return { success: true, notificationType, mocked: true };
   }
 
@@ -92,7 +89,8 @@ const sendEmail = async (emailData, notificationType) => {
 // ─────────────────────────────────────────────────────────────────────
 // PRIVATE: HTML wrapper — minimal branded email shell
 // ─────────────────────────────────────────────────────────────────────
-const wrapHtml = (bodyContent) => `
+const wrapHtml = (bodyContent) =>
+  `
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -152,12 +150,15 @@ const sendEnrollmentAcknowledgment = async (toEmail, variables) => {
 
   const text = `Hello ${studentName}, thank you for submitting your enrollment for ${programmeName}. We have received your payment receipt and will confirm your payment within 2 to 3 business days. You will receive an email when your payment status is updated. If you have questions, contact us on WhatsApp: ${whatsappLink}.`;
 
-  return sendEmail({
-    to: toEmail,
-    subject: `We have received your Nextserve enrollment`,
-    html,
-    text,
-  }, NOTIFICATION_TYPES.NTF_01);
+  return sendEmail(
+    {
+      to: toEmail,
+      subject: `We have received your Nextserve enrollment`,
+      html,
+      text,
+    },
+    NOTIFICATION_TYPES.NTF_01,
+  );
 };
 
 // ─────────────────────────────────────────────────────────────────────
@@ -200,12 +201,15 @@ const sendPaymentConfirmed = async (toEmail, variables) => {
 
   const text = `Hello ${studentName}, your payment for ${programmeName} has been confirmed. You are enrolled in the ${cohortName} cohort starting ${startDate}. ${cohortLinkText} If you have questions: ${whatsappLink}.`;
 
-  return sendEmail({
-    to: toEmail,
-    subject: `Your Nextserve enrollment has been confirmed`,
-    html,
-    text,
-  }, NOTIFICATION_TYPES.NTF_02);
+  return sendEmail(
+    {
+      to: toEmail,
+      subject: `Your Nextserve enrollment has been confirmed`,
+      html,
+      text,
+    },
+    NOTIFICATION_TYPES.NTF_02,
+  );
 };
 
 // ─────────────────────────────────────────────────────────────────────
@@ -218,7 +222,8 @@ const sendPaymentConfirmed = async (toEmail, variables) => {
  * @param {string} toEmail
  */
 const sendPaymentRejected = async (toEmail, variables) => {
-  const { studentName, programmeName, rejectionReason, whatsappLink } = variables;
+  const { studentName, programmeName, rejectionReason, whatsappLink } =
+    variables;
 
   const html = wrapHtml(`
     <p>Hello ${studentName},</p>
@@ -231,12 +236,15 @@ const sendPaymentRejected = async (toEmail, variables) => {
 
   const text = `Hello ${studentName}, we reviewed the payment receipt you submitted for ${programmeName} but were unable to verify your payment. Reason: ${rejectionReason}. Please contact us on WhatsApp to resolve this: ${whatsappLink}.`;
 
-  return sendEmail({
-    to: toEmail,
-    subject: `Action required — your Nextserve payment could not be verified`,
-    html,
-    text,
-  }, NOTIFICATION_TYPES.NTF_03);
+  return sendEmail(
+    {
+      to: toEmail,
+      subject: `Action required — your Nextserve payment could not be verified`,
+      html,
+      text,
+    },
+    NOTIFICATION_TYPES.NTF_03,
+  );
 };
 
 // ─────────────────────────────────────────────────────────────────────
@@ -265,12 +273,15 @@ const sendAdminAccountCreated = async (toEmail, variables) => {
 
   const text = `Hello ${adminName}, an admin account has been created for you on the Nextserve admin dashboard. Login URL: ${adminLoginUrl}. Email: ${adminEmail}. Temporary password: ${tempPassword}. Please log in and change your password immediately.`;
 
-  return sendEmail({
-    to: toEmail,
-    subject: `Your Nextserve admin account has been created`,
-    html,
-    text,
-  }, NOTIFICATION_TYPES.NTF_04);
+  return sendEmail(
+    {
+      to: toEmail,
+      subject: `Your Nextserve admin account has been created`,
+      html,
+      text,
+    },
+    NOTIFICATION_TYPES.NTF_04,
+  );
 };
 
 // ─────────────────────────────────────────────────────────────────────
@@ -288,20 +299,23 @@ const sendPasswordResetLink = async (toEmail, variables) => {
   const html = wrapHtml(`
     <p>Hello ${adminName},</p>
     <p>A password reset has been requested for your Nextserve admin account.</p>
-    <p>Click the button below to reset your password. This link expires in <strong>24 hours</strong> and can only be used once.</p>
+     <p>Click the button below to reset your password. This link can only be used once, and stays active until you use it or request a newer reset.</p>
     <a href="${resetLink}" class="cta-link">Reset My Password</a>
     <p>If you did not request this reset, please contact your Super Admin immediately. Your account has not been changed.</p>
     <p>The Nextserve Team</p>
   `);
 
-  const text = `Hello ${adminName}, a password reset has been requested for your Nextserve admin account. Click here to reset your password: ${resetLink}. This link expires in 24 hours. If you did not request this reset, contact your Super Admin.`;
+  const text = `Hello ${adminName}, a password reset has been requested for your Nextserve admin account. Click here to reset your password: ${resetLink}. This link can only be used once and stays active until used or replaced by a newer request. If you did not request this reset, contact your Super Admin.`;
 
-  return sendEmail({
-    to: toEmail,
-    subject: `Reset your Nextserve admin password`,
-    html,
-    text,
-  }, NOTIFICATION_TYPES.NTF_05);
+  return sendEmail(
+    {
+      to: toEmail,
+      subject: `Reset your Nextserve admin password`,
+      html,
+      text,
+    },
+    NOTIFICATION_TYPES.NTF_05,
+  );
 };
 
 // ─────────────────────────────────────────────────────────────────────
@@ -328,12 +342,15 @@ const sendInstalmentAccessLink = async (toEmail, variables) => {
 
   const text = `Hello ${studentName}, you requested access to your Nextserve payment details. Click the link below to view your enrollment summary and submit your next instalment receipt. This link expires in 30 minutes and can only be used once. ${accessLink}. If you did not request this link, you can safely ignore this email.`;
 
-  return sendEmail({
-    to: toEmail,
-    subject: `Your Nextserve payment link`,
-    html,
-    text,
-  }, NOTIFICATION_TYPES.NTF_06);
+  return sendEmail(
+    {
+      to: toEmail,
+      subject: `Your Nextserve payment link`,
+      html,
+      text,
+    },
+    NOTIFICATION_TYPES.NTF_06,
+  );
 };
 
 // ─────────────────────────────────────────────────────────────────────
@@ -346,9 +363,10 @@ const sendInstalmentAccessLink = async (toEmail, variables) => {
  * @param {string} toEmail
  */
 const sendInstalmentReceiptAcknowledgment = async (toEmail, variables) => {
-  const { studentName, programmeName, instalmentNumber, amount, whatsappLink } = variables;
+  const { studentName, programmeName, instalmentNumber, amount, whatsappLink } =
+    variables;
 
-  const ordinals = { 1: 'First', 2: 'Second', 3: 'Third' };
+  const ordinals = { 1: "First", 2: "Second", 3: "Third" };
   const ordinal = ordinals[instalmentNumber] || instalmentNumber;
 
   const html = wrapHtml(`
@@ -362,12 +380,15 @@ const sendInstalmentReceiptAcknowledgment = async (toEmail, variables) => {
 
   const text = `Hello ${studentName}, we have received your receipt for instalment ${instalmentNumber} of ₦${amount.toLocaleString()} for ${programmeName}. We will review and confirm your payment within 2 to 3 business days. If you have questions: ${whatsappLink}.`;
 
-  return sendEmail({
-    to: toEmail,
-    subject: `We have received your instalment payment receipt`,
-    html,
-    text,
-  }, NOTIFICATION_TYPES.NTF_07);
+  return sendEmail(
+    {
+      to: toEmail,
+      subject: `We have received your instalment payment receipt`,
+      html,
+      text,
+    },
+    NOTIFICATION_TYPES.NTF_07,
+  );
 };
 
 // ─────────────────────────────────────────────────────────────────────
@@ -380,7 +401,8 @@ const sendInstalmentReceiptAcknowledgment = async (toEmail, variables) => {
  * @param {string} toEmail
  */
 const sendInstalmentConfirmed = async (toEmail, variables) => {
-  const { studentName, programmeName, instalmentNumber, amount, whatsappLink } = variables;
+  const { studentName, programmeName, instalmentNumber, amount, whatsappLink } =
+    variables;
 
   const html = wrapHtml(`
     <p>Hello ${studentName},</p>
@@ -392,12 +414,15 @@ const sendInstalmentConfirmed = async (toEmail, variables) => {
 
   const text = `Hello ${studentName}, your instalment ${instalmentNumber} payment of ₦${amount.toLocaleString()} for ${programmeName} has been confirmed. If you have questions: ${whatsappLink}.`;
 
-  return sendEmail({
-    to: toEmail,
-    subject: `Your instalment payment has been confirmed`,
-    html,
-    text,
-  }, NOTIFICATION_TYPES.NTF_08);
+  return sendEmail(
+    {
+      to: toEmail,
+      subject: `Your instalment payment has been confirmed`,
+      html,
+      text,
+    },
+    NOTIFICATION_TYPES.NTF_08,
+  );
 };
 
 // ─────────────────────────────────────────────────────────────────────
@@ -410,7 +435,13 @@ const sendInstalmentConfirmed = async (toEmail, variables) => {
  * @param {string} toEmail
  */
 const sendInstalmentRejected = async (toEmail, variables) => {
-  const { studentName, programmeName, instalmentNumber, rejectionReason, whatsappLink } = variables;
+  const {
+    studentName,
+    programmeName,
+    instalmentNumber,
+    rejectionReason,
+    whatsappLink,
+  } = variables;
 
   const html = wrapHtml(`
     <p>Hello ${studentName},</p>
@@ -423,12 +454,15 @@ const sendInstalmentRejected = async (toEmail, variables) => {
 
   const text = `Hello ${studentName}, we reviewed your instalment ${instalmentNumber} receipt for ${programmeName} but were unable to verify the payment. Reason: ${rejectionReason}. Please contact us on WhatsApp: ${whatsappLink}.`;
 
-  return sendEmail({
-    to: toEmail,
-    subject: `Action required — your instalment payment could not be verified`,
-    html,
-    text,
-  }, NOTIFICATION_TYPES.NTF_09);
+  return sendEmail(
+    {
+      to: toEmail,
+      subject: `Action required — your instalment payment could not be verified`,
+      html,
+      text,
+    },
+    NOTIFICATION_TYPES.NTF_09,
+  );
 };
 
 // ─────────────────────────────────────────────────────────────────────
@@ -454,12 +488,15 @@ const sendAllInstalmentsComplete = async (toEmail, variables) => {
 
   const text = `Hello ${studentName}, all instalment payments for ${programmeName} have been confirmed. Your payment plan is now complete. If you have questions: ${whatsappLink}.`;
 
-  return sendEmail({
-    to: toEmail,
-    subject: `Your Nextserve payment plan is complete`,
-    html,
-    text,
-  }, NOTIFICATION_TYPES.NTF_10);
+  return sendEmail(
+    {
+      to: toEmail,
+      subject: `Your Nextserve payment plan is complete`,
+      html,
+      text,
+    },
+    NOTIFICATION_TYPES.NTF_10,
+  );
 };
 // ADD these two new functions before the final module.exports.
 
@@ -485,12 +522,15 @@ const sendAdminInvitation = async (toEmail, variables) => {
 
   const text = `Hello, you have been invited to create an Admin account on the Nextserve admin dashboard. Complete your registration here: ${registrationLink}. The verification code embedded in this link expires in ${codeExpiryMinutes} minutes, but you can request a new code from the registration page if needed.`;
 
-  return sendEmail({
-    to: toEmail,
-    subject: `You're invited to join the Nextserve admin team`,
-    html,
-    text,
-  }, NOTIFICATION_TYPES.NTF_11);
+  return sendEmail(
+    {
+      to: toEmail,
+      subject: `You're invited to join the Nextserve admin team`,
+      html,
+      text,
+    },
+    NOTIFICATION_TYPES.NTF_11,
+  );
 };
 
 // ─────────────────────────────────────────────────────────────────────
@@ -513,12 +553,15 @@ const sendAdminRegistrationComplete = async (toEmail, variables) => {
 
   const text = `Hello ${adminName}, your Nextserve admin account is now active. Log in here: ${adminLoginUrl}.`;
 
-  return sendEmail({
-    to: toEmail,
-    subject: `Your Nextserve admin account is active`,
-    html,
-    text,
-  }, NOTIFICATION_TYPES.NTF_12);
+  return sendEmail(
+    {
+      to: toEmail,
+      subject: `Your Nextserve admin account is active`,
+      html,
+      text,
+    },
+    NOTIFICATION_TYPES.NTF_12,
+  );
 };
 
 // FIND the module.exports and REPLACE with:
