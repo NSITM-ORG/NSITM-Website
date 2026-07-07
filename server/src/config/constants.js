@@ -605,8 +605,6 @@ const AUDIT_ACTIONS = Object.freeze({
 // ─────────────────────────────────────────────────────────────────────
 const SETTINGS_SINGLETON_KEY = "global_settings";
 
-// FIND the final module.exports block and REPLACE it entirely with:
-
 export {
   HTTP_STATUS,
   ROLES,
@@ -635,4 +633,8 @@ export {
   INVALID_PAYMENT_TRANSITIONS,
   PAYMENT_COMPLETION_STATES,
   ALL_PROGRAMMES,
+  JOIN_COMMUNITY_ROLES,
+  JOIN_REQUEST_STATUS,
+  CONTACT_MESSAGE_STATUS,
+  DEFAULT_FAQ_CATEGORIES,
 };
