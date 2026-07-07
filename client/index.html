@@ -2,9 +2,29 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-   
+
+    <!--
+      Base SEO tags live here as a fallback for the very first paint
+      (before React mounts and useSEO() can update document.head).
+      useSEO() OVERWRITES these per-route once the app is interactive —
+      see src/utils/seo.js in Batch F4.
+    -->
+    <title>Nextserve — School of Information Technology and Management</title>
+    <meta
+      name="description"
+      content="Nextserve School of Information Technology and Management — hands-on, cohort-based tech and management training in Nigeria. Enroll online or in person."
+    />
+    <meta name="theme-color" content="#3E4095" />
+    <link rel="icon" type="image/svg+xml" href="/nsitm-logo.svg" />
+
+    <!-- Preconnect to Google Fonts for Plus Jakarta Sans + Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div id="root"></div>

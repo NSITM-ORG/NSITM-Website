@@ -1,45 +1,26 @@
-import { Routes, Route } from "react-router";
-import Navbar from "./test/components/Navbar";
-import SeoDemo from "./test/pages/SeoDemo";
-import RouterDemo from "./test/pages/RouterDemo";
-// import { useHeadSEO, SEO_CONFIG } from "./hooks/main-seo";
-
 /**
- * App — Root Application Component
+ * Root Application Component
  *
- * BrowserRouter now lives in main.jsx, so useHeadSEO (which calls useLocation
- * internally) has router context available when it runs here.
+ * This is a PLACEHOLDER for Batch F1 — it renders a minimal confirmation
+ * screen so the scaffold can be verified end-to-end (npm run dev) before
+ * the Redux store, router, and layouts exist.
  *
- * useHeadSEO(SEO_CONFIG.home) sets the default metadata for the "/" route.
- * Every child page calls its own useHeadSEO to override for its specific route.
+ * In Batch F5, this file will be replaced with the real composition:
+ * RouterProvider (React Router v7 data router built from the centralized
+ * route registry) + <ToastContainer/> + <LogoutModal/> + <Preloader/>
+ * mounted at this same root level.
  */
+
 function App() {
-  // useHeadSEO(SEO_CONFIG.home);
-
   return (
-    <>
-      {/* Global navigation — rendered on every route */}
-      <Navbar />
-
-      <main style={{ flex: 1, padding: "40px 20px" }}>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <div>
-                <h1>NextServe Systems Template</h1>
-                <p>
-                  Select a route from the top navbar to review the individual
-                  implementations.
-                </p>
-              </div>
-            }
-          />
-          <Route path="/seo-demo" element={<SeoDemo />} />
-          <Route path="/routing-demo" element={<RouterDemo />} />
-        </Routes>
-      </main>
-    </>
+    <div className="flex min-h-screen items-center justify-center bg-background text-primary">
+      <div className="text-center">
+        <h1 className="mb-2 text-2xl font-bold text-green-500">NSITM Frontend Scaffold</h1>
+        <p className="text-text-secondary">
+          Batch F1 complete. Redux store, router, and pages arrive in later batches.
+        </p>
+      </div>
+    </div>
   );
 }
 

@@ -1,56 +1,28 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router";
-import "./index.css";
-import App from "./App.jsx";
-import { ToastProvider } from "./context/useToasterContext.jsx";
-// import { SEOProvider } from "./hooks/main-seo";
-
 /**
- * ErrorBoundary — Silent crash catcher
- * ======================================
- * Catches any unhandled render errors in the tree below it and displays
- * them visibly instead of showing a blank screen. Without this, React 19
- * fails silently in production and you have no idea what broke.
+ * Application Entry Point
  *
- * This wraps the entire app so nothing can slip through unnoticed.
- */
-class ErrorBoundary extends React.Component {
-  state = { error: null };
-
-  static getDerivedStateFromError(error) {
-    return { error };
-  }
-
-  render() {
-    if (this.state.error) {
-      return (
-        <pre style={{ padding: 24, color: "red" }}>
-          {String(this.state.error)}
-        </pre>
-      );
-    }
-    return this.props.children;
-  }
-}
-
-/**
- * Application entry point.
+ * Mounts the React tree to #root. Wraps the app in:
+ *   1. StrictMode — surfaces potential React 19 issues early in dev
+ *   2. Redux <Provider> — makes the store available to useManageState()
+ *      everywhere in the tree (store built in Batch F2)
  *
- * Mount order matters here:
- *   ErrorBoundary — outermost, catches any crash in the entire tree
- *   SEOProvider   — must be outside BrowserRouter so context is always available
- *   BrowserRouter — must wrap App so useLocation() works everywhere inside it,
- *                   including inside useHeadSEO which is called in App itself
+ * The Router itself is NOT set up here — it lives in App.jsx so that
+ * App.jsx remains the single place that composes Provider + Router +
+ * global overlays (ToastContainer, LogoutModal, Preloader), keeping
+ * main.jsx a pure bootstrap file with no business logic.
  */
-createRoot(document.getElementById("root")).render(
-  <ErrorBoundary>
-    {/* <SEOProvider> */}
-    <ToastProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </ToastProvider>
-    {/* </SEOProvider> */}
-  </ErrorBoundary>,
+
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
+import App from './App.jsx';
+import './index.css';
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  </StrictMode>
 );
