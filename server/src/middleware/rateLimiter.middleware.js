@@ -118,6 +118,25 @@ const adminRegistrationLimiter = rateLimit({
   keyGenerator: (req) => ipKeyGenerator(req),
 });
 
+
+const joinCommunityLimiter = rateLimit({
+  windowMs: RATE_LIMITS.JOIN_COMMUNITY.WINDOW_MS,
+  max: RATE_LIMITS.JOIN_COMMUNITY.MAX_REQUESTS,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: handler429('Too many submissions from this IP. Please try again later.'),
+  keyGenerator: (req) => req.ip,
+});
+
+const contactMessageLimiter = rateLimit({
+  windowMs: RATE_LIMITS.CONTACT_MESSAGE.WINDOW_MS,
+  max: RATE_LIMITS.CONTACT_MESSAGE.MAX_REQUESTS,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: handler429('Too many messages sent from this IP. Please try again later.'),
+  keyGenerator: (req) => req.ip,
+});
+
 // ─────────────────────────────────────────────────────────────────────
 // 4. General API Rate Limiter (Catch-All)
 // Applied globally in app.js to all /api/v1/* routes.
@@ -139,10 +158,12 @@ const generalApiLimiter = rateLimit({
 // FIND the module.exports and REPLACE with:
 
 export {
-  loginLimiter,
+ loginLimiter,
   enrollmentStep1Limiter,
   instalmentLinkLimiter,
   superAdminRegisterLimiter,
   adminRegistrationLimiter,
+  joinCommunityLimiter,
+  contactMessageLimiter,
   generalApiLimiter,
 };

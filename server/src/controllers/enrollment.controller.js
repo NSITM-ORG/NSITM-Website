@@ -16,7 +16,7 @@ import { sendSuccess, sendPaginated } from '../utils/ApiResponse.js';
 import { getPaginationParams, getPaginationMeta } from '../utils/pagination.js';
 import { resolveStudentProfile } from '../helpers/profileResolver.helper.js';
 import { findExistingPartialRecord, assertNoActiveEnrollment, findLatestPartialRecord } from '../helpers/duplicateChecker.helper.js';
-import { uploadEnrollmentReceipt } from '../services/upload.service.js';
+import { uploadEnrollmentReceipt, getSignedFileUrl } from '../services/upload.service';
 import { sendEnrollmentAcknowledgment } from '../services/email.service.js';
 import { HTTP_STATUS, PAYMENT_STATUS, AUDIT_ACTIONS } from '../config/constants.js';
 import logger from '../utils/logger.js';
@@ -291,6 +291,13 @@ const getAllEnrollments = asyncHandler(async (req, res, next) => {
 // ADMIN: GET /api/v1/admin/enrollments/:id
 // Single enrollment detail (FR-04.5)
 // ─────────────────────────────────────────────────────────────────────
+/**
+ * Both the top-level receipt AND every instalment receipt (if this is an
+ * instalment student) receive a freshly signed, short-lived Cloudinary URL
+ * at request time — see upload.service.js getSignedFileUrl() docstring.
+ * Local-mode (development) receipts pass through unchanged since there is
+ * nothing to sign.
+ */
 const getEnrollmentById = asyncHandler(async (req, res, next) => {
   const enrollment = await Enrollment.findById(req.params.id)
     .populate('profile', 'fullName email phone whatsappNumber')
@@ -303,17 +310,34 @@ const getEnrollmentById = asyncHandler(async (req, res, next) => {
     return next(new ApiError(HTTP_STATUS.NOT_FOUND, 'ENROLLMENT_NOT_FOUND', 'Enrollment record not found.'));
   }
 
-  // Attach instalment records if paymentType is instalment
+  const enrollmentObj = enrollment.toObject({ virtuals: true });
+
+  // ── Sign the initial enrollment receipt, if one exists ────────────
+  if (enrollmentObj.receipt && enrollmentObj.receipt.provider === 'cloudinary') {
+    const resourceType = enrollmentObj.receipt.url?.includes('/raw/') ? 'raw' : 'image';
+    enrollmentObj.receipt.signedUrl = getSignedFileUrl(enrollmentObj.receipt.publicId, resourceType);
+  }
+
+  // ── Attach instalment records if paymentType is instalment ────────
   let instalmentSummary = null;
   if (enrollment.paymentType === 'instalment' && enrollment.paymentStatus === PAYMENT_STATUS.CONFIRMED) {
     const { getInstalmentSummary } = require('../services/instalment.service');
     instalmentSummary = await getInstalmentSummary(enrollment._id);
+
+    // Sign each instalment's receipt (instalments 2 and 3 may have one)
+    instalmentSummary.records = instalmentSummary.records.map((record) => {
+      if (record.receipt && record.receipt.provider === 'cloudinary') {
+        const resourceType = record.receipt.url?.includes('/raw/') ? 'raw' : 'image';
+        record.receipt.signedUrl = getSignedFileUrl(record.receipt.publicId, resourceType);
+      }
+      return record;
+    });
   }
 
   return sendSuccess(
     res,
     HTTP_STATUS.OK,
-    { enrollment, instalmentSummary },
+    { enrollment: enrollmentObj, instalmentSummary },
     'Enrollment record retrieved successfully.'
   );
 });
@@ -364,6 +388,62 @@ const getDashboardOverview = asyncHandler(async (req, res, next) => {
   );
 });
 
+/**
+ * SUPER ADMIN: DELETE /api/v1/superadmin/enrollments/:id
+ *
+ * Implements FRD FR-08.4: "Manual cleanup of old partial records is a
+ * Super Admin action available through the standard record management
+ * interface."
+ *
+ * DELIBERATELY RESTRICTED: only records with paymentStatus === 'not_paid'
+ * may be deleted through this endpoint. Pending, Confirmed, and Rejected
+ * records represent real financial/enrollment history and audit trail —
+ * they are never deletable, matching the project-wide "student records
+ * are never automatically deleted" retention rule (FRD Section 6.3).
+ * This endpoint exists solely to let Super Admin clear out genuinely
+ * abandoned form starts that will never be followed up on.
+ */
+const archivePartialEnrollment = asyncHandler(async (req, res, next) => {
+  const enrollment = await Enrollment.findById(req.params.id).populate('profile', 'fullName email');
+
+  if (!enrollment) {
+    return next(new ApiError(HTTP_STATUS.NOT_FOUND, 'ENROLLMENT_NOT_FOUND', 'Enrollment record not found.'));
+  }
+
+  if (enrollment.paymentStatus !== PAYMENT_STATUS.NOT_PAID) {
+    return next(new ApiError(
+      HTTP_STATUS.BAD_REQUEST,
+      'CANNOT_DELETE_NON_PARTIAL_RECORD',
+      "Only 'Not Paid' partial records can be permanently deleted. Pending, Confirmed, and Rejected records are retained as part of the institution's enrollment history."
+    ));
+  }
+
+  // Defensive cleanup: not_paid records should never have a receipt, but
+  // if one somehow exists, remove the Cloudinary file before deleting the record.
+  if (enrollment.receipt?.provider === 'cloudinary' && enrollment.receipt.publicId) {
+    const { deleteFile } = require('../services/upload.service');
+    const resourceType = enrollment.receipt.url?.includes('/raw/') ? 'raw' : 'image';
+    await deleteFile(enrollment.receipt.publicId, resourceType);
+  }
+
+  // Decrement the cohort's enrollment count — it was incremented on creation.
+  if (enrollment.cohort) {
+    await Cohort.findByIdAndUpdate(enrollment.cohort, { $inc: { currentEnrollmentCount: -1 } });
+  }
+
+  const studentLabel = enrollment.profile?.fullName || enrollment.profile?.email || 'Unknown';
+
+  await Enrollment.findByIdAndDelete(enrollment._id);
+
+  await req.logAction(AUDIT_ACTIONS.ENROLLMENT_ARCHIVED, {
+    targetModel: 'Enrollment',
+    targetId: enrollment._id,
+    description: `Stale partial enrollment record permanently deleted: ${studentLabel}`,
+  });
+
+  return sendSuccess(res, HTTP_STATUS.OK, null, 'Partial enrollment record has been permanently deleted.');
+});
+
 export {
   createPartialRecord,
   updatePartialRecord,
@@ -371,4 +451,5 @@ export {
   getAllEnrollments,
   getEnrollmentById,
   getDashboardOverview,
+  archivePartialEnrollment,
 };

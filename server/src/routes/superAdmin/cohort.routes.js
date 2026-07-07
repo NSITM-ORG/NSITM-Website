@@ -11,6 +11,7 @@ const router = express.Router();
 
 import {
   getAllCohortsAdmin,
+  getCohortByIdAdmin,
   createCohort,
   updateCohort,
   deleteCohort,
@@ -30,6 +31,7 @@ router.use(authorize(ROLES.SUPER_ADMIN));
 
 // GET    /api/v1/superadmin/cohorts
 router.get('/', getAllCohortsAdmin);
+router.get('/:id', getCohortByIdAdmin);
 
 // POST   /api/v1/superadmin/cohorts
 router.post('/', createCohortValidator, validate, createCohort);

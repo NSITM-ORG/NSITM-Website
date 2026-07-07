@@ -13,7 +13,7 @@ import asyncHandler from '../utils/asyncHandler.js';
 import ApiError from '../utils/ApiError.js';
 import { sendSuccess, sendPaginated } from '../utils/ApiResponse.js';
 import { getPaginationParams, getPaginationMeta }from '../utils/pagination.js';
-import { HTTP_STATUS, PROGRAMME_STATUS, AUDIT_ACTIONS } from '../config/constants.js';
+import { HTTP_STATUS, PROGRAMME_STATUS, AUDIT_ACTIONS,  PAGINATION  } from '../config/constants.js';
 
 // ─────────────────────────────────────────────────────────────────────
 // PUBLIC: GET /api/v1/public/programmes
@@ -54,21 +54,38 @@ const getProgrammeBySlug = asyncHandler(async (req, res, next) => {
 // ─────────────────────────────────────────────────────────────────────
 // PUBLIC: GET /api/v1/public/programmes/category/:category
 // ─────────────────────────────────────────────────────────────────────
+/**
+ *
+ * Paginated per the confirmed decision — the frontend requests
+ * ?limit=4|6|8 depending on its current breakpoint (mobile/tablet/desktop).
+ * If ?limit is omitted, PAGINATION.PROGRAMMES_DEFAULT_LIMIT (8) applies.
+ */
 const getProgrammesByCategory = asyncHandler(async (req, res, next) => {
   const { category } = req.params;
+  const page = Math.max(1, parseInt(req.query.page, 10) || PAGINATION.DEFAULT_PAGE);
+  const limit = Math.min(
+    PAGINATION.MAX_LIMIT,
+    Math.max(1, parseInt(req.query.limit, 10) || PAGINATION.PROGRAMMES_DEFAULT_LIMIT)
+  );
+  const skip = (page - 1) * limit;
 
-  const programmes = await Programme.find({
-    category,
-    isDeleted: false,
-  })
-    .populate('activeCohort', 'name startDate endDate deliveryFormat status')
-    .sort({ sortOrder: 1, name: 1 });
+  const filter = { category, isDeleted: false };
 
-  return sendSuccess(
+  const [programmes, total] = await Promise.all([
+    Programme.find(filter)
+      .populate('activeCohort', 'name startDate endDate deliveryFormat status')
+      .sort({ sortOrder: 1, name: 1 })
+      .skip(skip)
+      .limit(limit),
+    Programme.countDocuments(filter),
+  ]);
+
+  return sendPaginated(
     res,
     HTTP_STATUS.OK,
-    { programmes },
-    `Programmes in category '${category}' retrieved successfully.`
+    programmes,
+    `Programmes in category '${category}' retrieved successfully.`,
+    getPaginationMeta(total, page, limit)
   );
 });
 
@@ -102,6 +119,26 @@ const getAllProgrammesAdmin = asyncHandler(async (req, res, next) => {
     'Programmes retrieved successfully.',
     getPaginationMeta(total, page, limit)
   );
+});
+
+
+/**
+ * SUPER ADMIN: GET /api/v1/superadmin/programmes/:id
+ * Single programme fetch for the edit-form pre-population use case —
+ * distinct from the public getProgrammeBySlug (which is slug-based and
+ * excludes admin-only metadata like createdBy/updatedBy).
+ */
+const getProgrammeByIdAdmin = asyncHandler(async (req, res, next) => {
+  const programme = await Programme.findOne({ _id: req.params.id, isDeleted: false })
+    .populate('activeCohort', 'name startDate endDate deliveryFormat status')
+    .populate('createdBy', 'email')
+    .populate('updatedBy', 'email');
+
+  if (!programme) {
+    return next(new ApiError(HTTP_STATUS.NOT_FOUND, 'PROGRAMME_NOT_FOUND', 'Programme not found.'));
+  }
+
+  return sendSuccess(res, HTTP_STATUS.OK, { programme }, 'Programme retrieved successfully.');
 });
 
 // ─────────────────────────────────────────────────────────────────────
@@ -192,10 +229,11 @@ const deleteProgramme = asyncHandler(async (req, res, next) => {
 });
 
 export {
-  getAllProgrammes,
+   getAllProgrammes,
   getProgrammeBySlug,
   getProgrammesByCategory,
   getAllProgrammesAdmin,
+  getProgrammeByIdAdmin,
   createProgramme,
   updateProgramme,
   deleteProgramme,

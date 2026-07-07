@@ -8,7 +8,12 @@
     "dev": "nodemon src/index.js",
     "start": "nodemon src/index.js",
     "seed:superadmin": "node scripts/seedSuperAdmin.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "seed:programmes": "node scripts/seedProgrammes.js",
+    "seed:faqs": "node scripts/seedFaqs.js",
+    "seed:settings": "node scripts/seedSettings.js",
+    "seed:all": "npm run seed:superadmin && npm run seed:programmes && npm run seed:faqs && npm run seed:settings"
+    
   },
   "keywords": [],
   "author": "",

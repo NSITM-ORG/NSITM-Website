@@ -54,6 +54,25 @@ const getAllAdminAccounts = asyncHandler(async (req, res, next) => {
   );
 });
 
+/**
+ * SUPER ADMIN: GET /api/v1/superadmin/accounts/:id
+ * Single account fetch — used by the Account Management edit dialog to
+ * pre-populate name/email/phone without relying on whatever page of the
+ * paginated list happened to contain this account.
+ */
+const getAdminAccountById = asyncHandler(async (req, res, next) => {
+  const account = await Account.findById(req.params.id)
+    .populate('profile', 'fullName email phone')
+    .populate('createdBy', 'email')
+    .populate('deactivatedBy', 'email');
+
+  if (!account) {
+    return next(new ApiError(HTTP_STATUS.NOT_FOUND, 'ACCOUNT_NOT_FOUND', 'Account not found.'));
+  }
+
+  return sendSuccess(res, HTTP_STATUS.OK, { account }, 'Account retrieved successfully.');
+});
+
 // ─────────────────────────────────────────────────────────────────────
 // POST /api/v1/superadmin/accounts
 // Create new admin account (BR11 — only Super Admin can create admins)
@@ -330,6 +349,7 @@ const deleteAdminAccount = asyncHandler(async (req, res, next) => {
 
 export {
   getAllAdminAccounts,
+  getAdminAccountById,
   updateAdminAccount,
   deactivateAdminAccount,
   reactivateAdminAccount,

@@ -78,6 +78,23 @@ const getAllCohortsAdmin = asyncHandler(async (req, res, next) => {
   );
 });
 
+/**
+ * SUPER ADMIN: GET /api/v1/superadmin/cohorts/:id
+ * Single cohort fetch for the edit-form pre-population use case.
+ */
+const getCohortByIdAdmin = asyncHandler(async (req, res, next) => {
+  const cohort = await Cohort.findOne({ _id: req.params.id, isDeleted: false })
+    .populate('programme', 'name slug category')
+    .populate('createdBy', 'email')
+    .populate('updatedBy', 'email');
+
+  if (!cohort) {
+    return next(new ApiError(HTTP_STATUS.NOT_FOUND, 'COHORT_NOT_FOUND', 'Cohort not found.'));
+  }
+
+  return sendSuccess(res, HTTP_STATUS.OK, { cohort }, 'Cohort retrieved successfully.');
+});
+
 // ─────────────────────────────────────────────────────────────────────
 // SUPER ADMIN: POST /api/v1/superadmin/cohorts
 // FRD FR-05.2
@@ -185,6 +202,7 @@ export {
   getActiveCohorts,
   getCohortById,
   getAllCohortsAdmin,
+  getCohortByIdAdmin,
   createCohort,
   updateCohort,
   deleteCohort,

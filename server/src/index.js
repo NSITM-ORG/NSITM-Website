@@ -32,6 +32,15 @@ dotenv.config({
   ),
 });
 
+// ── Step 2.5: Validate environment before anything else touches it ──
+const validateEnv = require('./config/validateEnv');
+try {
+  validateEnv();
+} catch (err) {
+  console.error(`\n❌ Environment validation failed: ${err.message}\n`);
+  process.exit(1);
+}
+
 // ── Step 3: Import app and dependencies ────────────────────────────
 import app from "./app.js";
 import connectDB from "./config/db.js";

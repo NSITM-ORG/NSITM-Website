@@ -83,11 +83,41 @@ const verifyToken = (token) => {
  * @param {Date} expiresAt - The JWT's expiry date
  * @returns {Object} Express cookie options
  */
+/**
+ * Cookie options for the session cookie.
+ *
+ * PRODUCTION uses sameSite: 'none' + secure: true.
+ * This is NOT a relaxation of security — it is a REQUIREMENT.
+ *
+ * The frontend (React, hosted on Vercel or similar) and this backend
+ * (hosted on Railway) are on two different registrable domains. A
+ * cookie set with sameSite: 'strict' or even 'lax' will NEVER be sent
+ * by the browser on cross-origin fetch() calls, regardless of
+ * `credentials: 'include'` on the client — the login would appear to
+ * succeed (200 response, cookie technically set) but every subsequent
+ * authenticated request would arrive with no cookie at all, producing
+ * a confusing wall of 401s that has nothing to do with the auth logic
+ * itself.
+ *
+ * sameSite: 'none' explicitly permits cross-site sending, and browsers
+ * mandate secure: true (HTTPS) whenever sameSite is 'none' — Railway
+ * and Vercel both serve HTTPS by default, so this requirement is
+ * already satisfied.
+ *
+ * DEVELOPMENT keeps sameSite: 'lax' + secure: false, since local dev
+ * typically runs both frontend and backend on http://localhost (same
+ * site, different port — 'lax' works fine and avoids needing HTTPS
+ * locally).
+ *
+ * CORS's `credentials: true` + the explicit allowedOrigins allowlist
+ * (see app.js) remain the actual access-control boundary — sameSite:
+ * 'none' does not weaken that; it only permits the cookie to travel
+ * to origins CORS has already agreed to trust.
+ */
 const getCookieOptions = (expiresAt) => ({
-  httpOnly: true,  // Not accessible via document.cookie (prevents XSS theft)
-  expires:  expiresAt,
-  sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
-  // secure: true enforces HTTPS-only. Off in development for http://localhost.
+  httpOnly: true,
+  expires: expiresAt,
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   secure: process.env.NODE_ENV === 'production',
   path: '/',
 });
@@ -114,7 +144,7 @@ const clearSessionCookie = (res) => {
   res.cookie(SESSION_COOKIE_NAME, '', {
     httpOnly: true,
     expires: new Date(0), // Set expiry to epoch — browser deletes immediately
-    sameSite: process.env.NODE_ENV === 'production' ? 'strict' : 'lax',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     secure: process.env.NODE_ENV === 'production',
     path: '/',
   });

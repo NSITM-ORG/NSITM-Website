@@ -11,10 +11,11 @@ const router = express.Router();
 
 import {
   getAllProgrammesAdmin,
+  getProgrammeByIdAdmin,
   createProgramme,
   updateProgramme,
   deleteProgramme,
-} from '../../controllers/programme.controller.js';
+} from '../../controllers/programme.controller';
 
 import { protect } from '../../middleware/auth.middleware.js';
 import { authorize } from '../../middleware/rbac.middleware.js';
@@ -30,6 +31,7 @@ router.use(authorize(ROLES.SUPER_ADMIN));
 
 // GET    /api/v1/superadmin/programmes
 router.get('/', getAllProgrammesAdmin);
+router.get('/:id', getProgrammeByIdAdmin);
 
 // POST   /api/v1/superadmin/programmes
 router.post('/', createProgrammeValidator, validate, createProgramme);

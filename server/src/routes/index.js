@@ -9,6 +9,7 @@ import publicCohortRoutes     from './public/cohort.routes.js';
 import publicSettingsRoutes   from './public/settings.routes.js';
 import publicEnrollmentRoutes from './public/enrollement.routes.js';
 import publicInstalmentRoutes from './public/instalment.routes.js';
+import publicEngagementRoutes  from './public/engagement.routes';
 
 // ── Admin routes ─────────────────────────────────────────────────────
 import adminAuthRoutes         from './admin/auth.routes.js';
@@ -16,6 +17,7 @@ import adminRegistrationRoutes from './admin/registration.routes.js';
 import adminEnrollmentRoutes   from './admin/enrollment.routes.js';
 import adminPaymentRoutes     from './admin/payment.routes.js';
 import adminInstalmentRoutes   from './admin/instalment.routes.js';
+import adminContactMessageRoutes from './admin/contactMessage.routes';
 
 // ── Super Admin routes ───────────────────────────────────────────────
 import superAdminAuthRoutes        from './superAdmin/auth.routes.js';
@@ -26,6 +28,9 @@ import superAdminProgrammeRoutes   from './superAdmin/programme.routes.js';
 import superAdminCohortRoutes      from './superAdmin/cohort.routes.js';
 import superAdminAnalyticsRoutes   from './superAdmin/analytics.routes.js';
 import superAdminSettingsRoutes    from './superAdmin/settings.routes.js';
+import superAdminJoinRequestRoutes from './superAdmin/joinRequest.routes';
+import superAdminFaqRoutes from './superAdmin/faq.routes';
+import superAdminEnrollmentRoutes from './superAdmin/enrollment.routes';
 
 router.get('/', (req, res) => {
   res.status(200).json({
@@ -41,6 +46,8 @@ router.use('/public/cohorts', publicCohortRoutes);
 router.use('/public/settings', publicSettingsRoutes);
 router.use('/public/enrollment', publicEnrollmentRoutes);
 router.use('/public/my-payment', publicInstalmentRoutes);
+router.use('/public', publicEngagementRoutes); // /join-requests, /contact-messages, /faqs
+
 
 // ── ADMIN ──────────────────────────────────────────────────────────────
 router.use('/admin/auth', adminAuthRoutes);
@@ -48,6 +55,8 @@ router.use('/admin/registration', adminRegistrationRoutes); // public, invite-ba
 router.use('/admin/enrollments', adminEnrollmentRoutes);
 router.use('/admin/payments', adminPaymentRoutes);
 router.use('/admin/instalments', adminInstalmentRoutes);
+router.use('/admin/contact-messages', adminContactMessageRoutes);
+
 
 // ── SUPER ADMIN ──────────────────────────────────────────────────────
 router.use('/superadmin/auth', superAdminAuthRoutes);
@@ -58,5 +67,9 @@ router.use('/superadmin/programmes', superAdminProgrammeRoutes);
 router.use('/superadmin/cohorts', superAdminCohortRoutes);
 router.use('/superadmin/analytics', superAdminAnalyticsRoutes);
 router.use('/superadmin/settings', superAdminSettingsRoutes);
+router.use('/superadmin/join-requests', superAdminJoinRequestRoutes);
+router.use('/superadmin/join-requests', superAdminJoinRequestRoutes);
+router.use('/superadmin/faqs', superAdminFaqRoutes);
+router.use('/superadmin/enrollments', superAdminEnrollmentRoutes);
 
 export default router;

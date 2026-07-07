@@ -13,9 +13,9 @@ import express from 'express';
 const router = express.Router();
 
 import {
-  getAllAdminAccounts, updateAdminAccount, deactivateAdminAccount,
+  getAllAdminAccounts, getAdminAccountById, updateAdminAccount, deactivateAdminAccount,
   reactivateAdminAccount, deleteAdminAccount, resetAdminPassword,
-} from '../../controllers/superAdmin.controller.js' ;
+} from '../../controllers/superAdmin.controller';
 
 import { protect } from '../../middleware/auth.middleware.js';
 import { authorize } from '../../middleware/rbac.middleware.js';
@@ -27,6 +27,7 @@ router.use(protect);
 router.use(authorize(ROLES.SUPER_ADMIN));
 
 router.get('/', getAllAdminAccounts);
+router.get('/:id', getAdminAccountById);
 router.patch('/:id', updateAdminAccountValidator, validate, updateAdminAccount);
 router.patch('/:id/deactivate', deactivateAdminAccount);
 router.patch('/:id/reactivate', reactivateAdminAccount);

@@ -425,14 +425,17 @@ enrollmentSchema.statics.getDashboardCounts = async function () {
       statusCounts[_id] = count;
     }
   });
-
-  return {
+return {
     // FRD FR-04.2: "Total Enrolled = Count of Pending + Confirmed"
     totalEnrolled: statusCounts.pending + statusCounts.confirmed,
     pendingReviews: statusCounts.pending,
     confirmedPayments: statusCounts.confirmed,
     rejectedPayments: statusCounts.rejected,
     notPaid: statusCounts.not_paid,
+    // Super Admin dashboard shortcut card — ALL records regardless of status,
+    // i.e. every enrollment attempt ever recorded (not_paid + pending + confirmed + rejected).
+    totalRecordedStudents:
+      statusCounts.not_paid + statusCounts.pending + statusCounts.confirmed + statusCounts.rejected,
   };
 };
 

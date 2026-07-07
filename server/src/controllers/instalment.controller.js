@@ -167,6 +167,15 @@ const validateTokenAndGetSummary = asyncHandler(async (req, res, next) => {
   const summary = await getInstalmentSummary(enrollment._id);
   const settings = await Settings.getSettings();
 
+  // Strip internal file-reference fields from the student-facing view.
+  // Students never need a receipt.url/publicId/provider — that information
+  // exists purely for admin review. Only status, amount, and dates matter here.
+  const studentSafeRecords = summary.records.map((record) => {
+    // eslint-disable-next-line no-unused-vars
+    const { receipt, ...rest } = record;
+    return rest;
+  });
+
   return sendSuccess(
     res,
     HTTP_STATUS.OK,
@@ -179,12 +188,13 @@ const validateTokenAndGetSummary = asyncHandler(async (req, res, next) => {
         deliveryFormat: enrollment.deliveryFormat,
         paymentType:    enrollment.paymentType,
       },
-      instalment: summary,
+      instalment: { ...summary, records: studentSafeRecords },
       bankDetails: settings.bankDetails,
     },
     'Enrollment summary retrieved successfully.'
   );
 });
+
 
 // ─────────────────────────────────────────────────────────────────────
 // PUBLIC: POST /api/v1/public/my-payment/submit

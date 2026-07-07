@@ -1,28 +1,25 @@
 'use strict';
 
 /**
- * Super Admin — Settings Routes
- * Base: /api/v1/superadmin/settings
+ * Super Admin — Join Request Routes
+ * Base: /api/v1/superadmin/join-requests
  * Access: Super Admin only
  */
 
 import express from 'express';
 const router = express.Router();
 
-import { getFullSettings, updateSettings } from '../../controllers/settings.controller';
+import { listJoinRequests, updateJoinRequestStatus } from '../../controllers/joinRequest.controller';
 import { protect } from '../../middleware/auth.middleware';
 import { authorize } from '../../middleware/rbac.middleware';
 import { validate } from '../../middleware/validate.middleware';
-import { updateSettingsValidator } from '../../utils/validators/settings.validator';
+import { updateJoinRequestStatusValidator } from '../../utils/validators/engagement.validator';
 import { ROLES } from '../../config/constants';
 
 router.use(protect);
 router.use(authorize(ROLES.SUPER_ADMIN));
 
-// GET /api/v1/superadmin/settings
-router.get('/', getFullSettings);
-
-// PUT /api/v1/superadmin/settings
-router.put('/', updateSettingsValidator, validate, updateSettings);
+router.get('/', listJoinRequests);
+router.patch('/:id/status', updateJoinRequestStatusValidator, validate, updateJoinRequestStatus);
 
 export default router;

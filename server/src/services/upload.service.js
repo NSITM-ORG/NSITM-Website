@@ -76,7 +76,11 @@ const uploadEnrollmentReceipt = async (file) => {
       resource_type: file.mimetype === 'application/pdf' ? 'raw' : 'image',
       // Use a unique public_id to prevent overwriting
       public_id: `receipt_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
-      // Restrict access — files are not publicly accessible
+      // Restrict access — files are not publicly accessible.
+      // IMPORTANT: because type/access_mode are 'authenticated', the
+      // secure_url below is NOT directly viewable. Callers MUST use
+      // getSignedFileUrl(publicId, resourceType) to produce a viewable
+      // link at display time — see enrollment.controller.js.
       type: 'authenticated',
       access_mode: 'authenticated',
     });
@@ -124,6 +128,11 @@ const uploadInstalmentReceipt = async (file) => {
       folder: CLOUDINARY_FOLDERS.INSTALMENT_RECEIPTS,
       resource_type: file.mimetype === 'application/pdf' ? 'raw' : 'image',
       public_id: `instalment_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+      // Restrict access — files are not publicly accessible.
+      // IMPORTANT: because type/access_mode are 'authenticated', the
+      // secure_url below is NOT directly viewable. Callers MUST use
+      // getSignedFileUrl(publicId, resourceType) to produce a viewable
+      // link at display time — see enrollment.controller.js.
       type: 'authenticated',
       access_mode: 'authenticated',
     });
@@ -145,6 +154,45 @@ const uploadInstalmentReceipt = async (file) => {
     });
     throw err;
   }
+};
+
+
+/**
+ * Generate a fresh, time-limited signed URL for an authenticated Cloudinary
+ * resource.
+ *
+ * WHY THIS EXISTS:
+ *   Receipts are uploaded with `type: 'authenticated'` so they are never
+ *   publicly reachable by direct URL (per FRD: "not publicly accessible
+ *   by direct URL"). Cloudinary requires a cryptographic signature to
+ *   serve an authenticated resource — the bare secure_url returned at
+ *   upload time is NOT sufficient on its own and will return Access
+ *   Denied if requested without one.
+ *
+ *   Rather than generating and permanently storing a signed URL (which
+ *   would either need to never expire — a security smell — or would go
+ *   stale and break), this function generates a SHORT-LIVED signed URL
+ *   ON DEMAND, every time an admin actually opens a record. This is the
+ *   Cloudinary-recommended pattern for authenticated delivery.
+ *
+ * @param {string} publicId - The Cloudinary public_id stored on the record
+ * @param {'image'|'raw'} [resourceType='image'] - 'raw' for PDF receipts
+ * @param {number} [expiresInSeconds=3600] - Signed URL validity window (1 hour default)
+ * @returns {string|null} Signed URL, or null if publicId is missing/local-mode
+ */
+const getSignedFileUrl = (publicId, resourceType = 'image', expiresInSeconds = 3600) => {
+  if (!UPLOAD_ENABLED() || !publicId || publicId === null) {
+    return null; // Local/dev mode — nothing to sign
+  }
+
+  const expiresAt = Math.floor(Date.now() / 1000) + expiresInSeconds;
+
+  return cloudinary.url(publicId, {
+    type: 'authenticated',
+    resource_type: resourceType,
+    sign_url: true,
+    expires_at: expiresAt,
+  });
 };
 
 /**
@@ -177,5 +225,6 @@ const deleteFile = async (publicId, resourceType = 'image') => {
 export {
   uploadEnrollmentReceipt,
   uploadInstalmentReceipt,
+  getSignedFileUrl,
   deleteFile,
 };
