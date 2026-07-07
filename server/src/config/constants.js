@@ -274,6 +274,17 @@ const RATE_LIMITS = Object.freeze({
     WINDOW_MS: 15 * 60 * 1000, // 15 minutes
     MAX_REQUESTS: 10,
   }),
+  // Public "Join Our Community" submissions
+  JOIN_COMMUNITY: Object.freeze({
+    WINDOW_MS: 60 * 60 * 1000, // 1 hour
+    MAX_REQUESTS: 5,
+  }),
+  // Public "Contact Us" footer form submissions
+  CONTACT_MESSAGE: Object.freeze({
+    WINDOW_MS: 60 * 60 * 1000, // 1 hour
+    MAX_REQUESTS: 5,
+  }),
+
   // General API — catch-all protection
   GENERAL_API: Object.freeze({
     WINDOW_MS: 15 * 60 * 1000,
@@ -320,6 +331,45 @@ const PAYMENT_COMPLETION_STATES = Object.freeze({
   PENDING_COMPLETION: "pending_completion", // All submitted but ≥1 still pending admin review
   FULLY_PAID: "fully_paid", // All 3 confirmed
 });
+
+// ─────────────────────────────────────────────────────────────────────
+// JOIN COMMUNITY — Role Options
+// FRD delta: Home page "Join Our Community" dialog (email + role).
+// ─────────────────────────────────────────────────────────────────────
+const JOIN_COMMUNITY_ROLES = Object.freeze({
+  FRONTEND_DEV: "frontend_dev",
+  BACKEND_DEV: "backend_dev",
+});
+
+const JOIN_REQUEST_STATUS = Object.freeze({
+  NEW: "new",
+  REVIEWED: "reviewed",
+  ARCHIVED: "archived",
+});
+
+// ─────────────────────────────────────────────────────────────────────
+// CONTACT MESSAGE STATUS
+// Footer "send us a message" form (name / email / message only).
+// ─────────────────────────────────────────────────────────────────────
+const CONTACT_MESSAGE_STATUS = Object.freeze({
+  NEW: "new",
+  READ: "read",
+  ARCHIVED: "archived",
+});
+
+// ─────────────────────────────────────────────────────────────────────
+// FAQ CONFIGURATION
+// Default category seed set. Super Admin can add/rename/delete freely —
+// category is stored as a free-text string on the FAQ document itself
+// (no separate Category collection needed), so "add a new category" is
+// just "type a new string when creating/editing an FAQ."
+// ─────────────────────────────────────────────────────────────────────
+const DEFAULT_FAQ_CATEGORIES = Object.freeze([
+  "Enrollment",
+  "Payment",
+  "Programmes",
+  "General",
+]);
 
 // ─────────────────────────────────────────────────────────────────────
 // ALL 26 PROGRAMME DEFINITIONS (FRD FR-01.3)
@@ -470,6 +520,8 @@ const PAGINATION = Object.freeze({
   DEFAULT_PAGE: 1,
   DEFAULT_LIMIT: 25,
   MAX_LIMIT: 100,
+  JOIN_REQUESTS_LIMIT: 100, // Fixed page size for Join Community review list
+  PROGRAMMES_DEFAULT_LIMIT: 8, // Server-side default when frontend omits ?limit
 });
 
 // ─────────────────────────────────────────────────────────────────────
@@ -539,6 +591,11 @@ const AUDIT_ACTIONS = Object.freeze({
   // System
   SETTINGS_UPDATED: "SETTINGS_UPDATED",
   CSV_EXPORTED: "CSV_EXPORTED",
+  JOIN_REQUEST_STATUS_UPDATED: "JOIN_REQUEST_STATUS_UPDATED",
+  CONTACT_MESSAGE_STATUS_UPDATED: "CONTACT_MESSAGE_STATUS_UPDATED",
+  FAQ_CREATED: "FAQ_CREATED",
+  FAQ_UPDATED: "FAQ_UPDATED",
+  FAQ_DELETED: "FAQ_DELETED",
   UNAUTHORIZED_ACCESS_ATTEMPT: "UNAUTHORIZED_ACCESS_ATTEMPT",
 });
 
