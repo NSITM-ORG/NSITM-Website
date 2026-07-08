@@ -18,7 +18,7 @@
  */
 
 import mongoose from 'mongoose';
-import { JOIN_COMMUNITY_ROLES, JOIN_REQUEST_STATUS } from '../config/constants';
+import { JOIN_COMMUNITY_ROLES, JOIN_REQUEST_STATUS } from '../config/constants.js';
 
 const joinRequestSchema = new mongoose.Schema(
   {

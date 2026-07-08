@@ -8,7 +8,7 @@
  */
 
 import { body } from 'express-validator';
-import { JOIN_COMMUNITY_ROLES } from '../../config/constants';
+import { JOIN_COMMUNITY_ROLES } from '../../config/constants.js';
 
 // ── Join Our Community ────────────────────────────────────────────────
 const joinRequestValidator = [

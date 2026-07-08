@@ -22,7 +22,7 @@
  * "is it set?" check but is still insecure.
  */
 
-import logger from '../utils/logger';
+import logger from '../utils/logger.js';
 
 const REQUIRED_ALWAYS = [
   'NODE_ENV',

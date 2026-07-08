@@ -16,7 +16,7 @@ import { sendSuccess, sendPaginated } from '../utils/ApiResponse.js';
 import { getPaginationParams, getPaginationMeta } from '../utils/pagination.js';
 import { resolveStudentProfile } from '../helpers/profileResolver.helper.js';
 import { findExistingPartialRecord, assertNoActiveEnrollment, findLatestPartialRecord } from '../helpers/duplicateChecker.helper.js';
-import { uploadEnrollmentReceipt, getSignedFileUrl } from '../services/upload.service';
+import { uploadEnrollmentReceipt, getSignedFileUrl } from '../services/upload.service.js';
 import { sendEnrollmentAcknowledgment } from '../services/email.service.js';
 import { HTTP_STATUS, PAYMENT_STATUS, AUDIT_ACTIONS } from '../config/constants.js';
 import logger from '../utils/logger.js';

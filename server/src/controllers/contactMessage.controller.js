@@ -10,12 +10,12 @@
  * these, matching the existing RBAC pattern used for enrollment records.
  */
 
-import ContactMessage from '../models/ContactMessage.model';
-import asyncHandler from '../utils/asyncHandler';
-import ApiError from '../utils/ApiError';
-import { sendSuccess, sendPaginated } from '../utils/ApiResponse';
-import { getPaginationParams, getPaginationMeta } from '../utils/pagination';
-import { HTTP_STATUS, AUDIT_ACTIONS } from '../config/constants';
+import ContactMessage from '../models/ContactMessage.model.js';
+import asyncHandler from '../utils/asyncHandler.js';
+import ApiError from '../utils/ApiError.js';
+import { sendSuccess, sendPaginated } from '../utils/ApiResponse.js';
+import { getPaginationParams, getPaginationMeta } from '../utils/pagination.js';
+import { HTTP_STATUS, AUDIT_ACTIONS } from '../config/constants.js';
 
 // ─────────────────────────────────────────────────────────────────────
 // PUBLIC: POST /api/v1/public/contact-messages

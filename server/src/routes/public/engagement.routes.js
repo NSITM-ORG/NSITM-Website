@@ -9,16 +9,16 @@
 import express from 'express';
 const router = express.Router();
 
-import { createJoinRequest } from '../../controllers/joinRequest.controller';
-import { createContactMessage } from '../../controllers/contactMessage.controller';
-import { getPublishedFaqs } from '../../controllers/faq.controller';
+import { createJoinRequest } from '../../controllers/joinRequest.controller.js';
+import { createContactMessage } from '../../controllers/contactMessage.controller.js';
+import { getPublishedFaqs } from '../../controllers/faq.controller.js';
 
-import { validate } from '../../middleware/validate.middleware';
-import { joinCommunityLimiter, contactMessageLimiter } from '../../middleware/rateLimiter.middleware';
+import { validate } from '../../middleware/validate.middleware.js';
+import { joinCommunityLimiter, contactMessageLimiter } from '../../middleware/rateLimiter.middleware.js';
 import {
   joinRequestValidator,
   contactMessageValidator,
-} from '../../utils/validators/engagement.validator';
+} from '../../utils/validators/engagement.validator.js';
 
 // POST /api/v1/public/join-requests
 router.post('/join-requests', joinCommunityLimiter, joinRequestValidator, validate, createJoinRequest);

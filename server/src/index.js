@@ -22,18 +22,18 @@ process.on("uncaughtException", (err) => {
 });
 
 // ── Step 2: Load environment variables ─────────────────────────────
-import dotenv from "dotenv";
-import path from "path";
+import dotenv from 'dotenv';
+import path from 'path';
 
 dotenv.config({
   path: path.resolve(
     process.cwd(),
-    `.env.${process.env.NODE_ENV || "development"}`,
+    `.env.${process.env.NODE_ENV || 'development'}`
   ),
 });
 
 // ── Step 2.5: Validate environment before anything else touches it ──
-const validateEnv = require('./config/validateEnv');
+import validateEnv from './config/validateEnv.js';
 try {
   validateEnv();
 } catch (err) {

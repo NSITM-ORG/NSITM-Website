@@ -6,12 +6,12 @@
  * Super Admin only: listAllFaqs, createFaq, updateFaq, deleteFaq, getFaqCategories
  */
 
-import Faq from '../models/Faq.model';
-import asyncHandler from '../utils/asyncHandler';
-import ApiError from '../utils/ApiError';
-import { sendSuccess, sendPaginated } from '../utils/ApiResponse';
-import { getPaginationParams, getPaginationMeta } from '../utils/pagination';
-import { HTTP_STATUS, AUDIT_ACTIONS, DEFAULT_FAQ_CATEGORIES } from '../config/constants';
+import Faq from '../models/Faq.model.js';
+import asyncHandler from '../utils/asyncHandler.js';
+import ApiError from '../utils/ApiError.js';
+import { sendSuccess, sendPaginated } from '../utils/ApiResponse.js';
+import { getPaginationParams, getPaginationMeta } from '../utils/pagination.js';
+import { HTTP_STATUS, AUDIT_ACTIONS, DEFAULT_FAQ_CATEGORIES } from '../config/constants.js';
 
 // ─────────────────────────────────────────────────────────────────────
 // PUBLIC: GET /api/v1/public/faqs

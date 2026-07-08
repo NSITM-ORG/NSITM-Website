@@ -15,7 +15,7 @@ import {
   createProgramme,
   updateProgramme,
   deleteProgramme,
-} from '../../controllers/programme.controller';
+} from '../../controllers/programme.controller.js';
 
 import { protect } from '../../middleware/auth.middleware.js';
 import { authorize } from '../../middleware/rbac.middleware.js';

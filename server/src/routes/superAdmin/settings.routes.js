@@ -9,12 +9,12 @@
 import express from 'express';
 const router = express.Router();
 
-import { getFullSettings, updateSettings } from '../../controllers/settings.controller';
-import { protect } from '../../middleware/auth.middleware';
-import { authorize } from '../../middleware/rbac.middleware';
-import { validate } from '../../middleware/validate.middleware';
-import { updateSettingsValidator } from '../../utils/validators/settings.validator';
-import { ROLES } from '../../config/constants';
+import { getFullSettings, updateSettings } from '../../controllers/settings.controller.js';
+import { protect } from '../../middleware/auth.middleware.js';
+import { authorize } from '../../middleware/rbac.middleware.js';
+import { validate } from '../../middleware/validate.middleware.js';
+import { updateSettingsValidator } from '../../utils/validators/settings.validator.js';
+import { ROLES } from '../../config/constants.js';
 
 router.use(protect);
 router.use(authorize(ROLES.SUPER_ADMIN));

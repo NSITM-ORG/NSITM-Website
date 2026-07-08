@@ -9,7 +9,7 @@ import publicCohortRoutes     from './public/cohort.routes.js';
 import publicSettingsRoutes   from './public/settings.routes.js';
 import publicEnrollmentRoutes from './public/enrollement.routes.js';
 import publicInstalmentRoutes from './public/instalment.routes.js';
-import publicEngagementRoutes  from './public/engagement.routes';
+import publicEngagementRoutes  from './public/engagement.routes.js';
 
 // ── Admin routes ─────────────────────────────────────────────────────
 import adminAuthRoutes         from './admin/auth.routes.js';
@@ -17,7 +17,7 @@ import adminRegistrationRoutes from './admin/registration.routes.js';
 import adminEnrollmentRoutes   from './admin/enrollment.routes.js';
 import adminPaymentRoutes     from './admin/payment.routes.js';
 import adminInstalmentRoutes   from './admin/instalment.routes.js';
-import adminContactMessageRoutes from './admin/contactMessage.routes';
+import adminContactMessageRoutes from './admin/contactMessage.routes.js';
 
 // ── Super Admin routes ───────────────────────────────────────────────
 import superAdminAuthRoutes        from './superAdmin/auth.routes.js';
@@ -28,9 +28,9 @@ import superAdminProgrammeRoutes   from './superAdmin/programme.routes.js';
 import superAdminCohortRoutes      from './superAdmin/cohort.routes.js';
 import superAdminAnalyticsRoutes   from './superAdmin/analytics.routes.js';
 import superAdminSettingsRoutes    from './superAdmin/settings.routes.js';
-import superAdminJoinRequestRoutes from './superAdmin/joinRequest.routes';
-import superAdminFaqRoutes from './superAdmin/faq.routes';
-import superAdminEnrollmentRoutes from './superAdmin/enrollment.routes';
+import superAdminJoinRequestRoutes from './superAdmin/joinRequest.routes.js';
+import superAdminFaqRoutes from './superAdmin/faq.routes.js';
+import superAdminEnrollmentRoutes from './superAdmin/enrollment.routes.js';
 
 router.get('/', (req, res) => {
   res.status(200).json({

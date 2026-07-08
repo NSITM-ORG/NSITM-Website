@@ -13,10 +13,10 @@
 import express from 'express';
 const router = express.Router();
 
-import { archivePartialEnrollment } from '../../controllers/enrollment.controller';
-import { protect } from '../../middleware/auth.middleware';
-import { authorize } from '../../middleware/rbac.middleware';
-import { ROLES } from '../../config/constants';
+import { archivePartialEnrollment } from '../../controllers/enrollment.controller.js';
+import { protect } from '../../middleware/auth.middleware.js';
+import { authorize } from '../../middleware/rbac.middleware.js';
+import { ROLES } from '../../config/constants.js';
 
 router.use(protect);
 router.use(authorize(ROLES.SUPER_ADMIN));

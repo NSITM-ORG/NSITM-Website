@@ -6,12 +6,12 @@
  * Super Admin only: listJoinRequests, updateJoinRequestStatus
  */
 
-import JoinRequest from '../models/JoinRequest.model';
-import asyncHandler from '../utils/asyncHandler';
-import ApiError from '../utils/ApiError';
-import { sendSuccess, sendPaginated } from '../utils/ApiResponse';
-import { getPaginationMeta } from '../utils/pagination';
-import { HTTP_STATUS, PAGINATION, AUDIT_ACTIONS } from '../config/constants';
+import JoinRequest from '../models/JoinRequest.model.js';
+import asyncHandler from '../utils/asyncHandler.js';
+import ApiError from '../utils/ApiError.js';
+import { sendSuccess, sendPaginated } from '../utils/ApiResponse.js';
+import { getPaginationMeta } from '../utils/pagination.js';
+import { HTTP_STATUS, PAGINATION, AUDIT_ACTIONS } from '../config/constants.js';
 
 // ─────────────────────────────────────────────────────────────────────
 // PUBLIC: POST /api/v1/public/join-requests

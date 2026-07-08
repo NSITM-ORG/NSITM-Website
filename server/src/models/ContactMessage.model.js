@@ -13,7 +13,7 @@
  */
 
 import mongoose from 'mongoose';
-import { CONTACT_MESSAGE_STATUS } from '../config/constants';
+import { CONTACT_MESSAGE_STATUS } from '../config/constants.js';
 
 const contactMessageSchema = new mongoose.Schema(
   {

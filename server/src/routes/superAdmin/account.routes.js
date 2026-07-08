@@ -15,7 +15,7 @@ const router = express.Router();
 import {
   getAllAdminAccounts, getAdminAccountById, updateAdminAccount, deactivateAdminAccount,
   reactivateAdminAccount, deleteAdminAccount, resetAdminPassword,
-} from '../../controllers/superAdmin.controller';
+} from '../../controllers/superAdmin.controller.js';
 
 import { protect } from '../../middleware/auth.middleware.js';
 import { authorize } from '../../middleware/rbac.middleware.js';
