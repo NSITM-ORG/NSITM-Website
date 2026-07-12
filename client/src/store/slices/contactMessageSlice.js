@@ -4,8 +4,8 @@
  */
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import httpClient from '../../api/httpClient';
-import API from '../../api/endpoints';
+import httpClient from '../../api/httpClient.js';
+import API from '../../api/endpoints.js';
 
 export const createContactMessage = createAsyncThunk(
   'contactMessages/create',

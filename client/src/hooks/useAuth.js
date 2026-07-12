@@ -16,7 +16,7 @@
  */
 
 import { useCallback, useEffect } from 'react';
-import { useManageState } from './useManageState';
+import { useManageState } from './useManageState.js';
 
 export function useAuth() {
   const { auth, actions } = useManageState();

@@ -46,21 +46,21 @@
 import { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import * as authActions from '../store/slices/authSlice';
-import * as programmeActions from '../store/slices/programmeSlice';
-import * as cohortActions from '../store/slices/cohortSlice';
-import * as enrollmentActions from '../store/slices/enrollmentSlice';
-import * as paymentActions from '../store/slices/paymentSlice';
-import * as instalmentActions from '../store/slices/instalmentSlice';
-import * as accountActions from '../store/slices/accountSlice';
-import * as invitationActions from '../store/slices/invitationSlice';
-import * as joinRequestActions from '../store/slices/joinRequestSlice';
-import * as contactMessageActions from '../store/slices/contactMessageSlice';
-import * as faqActions from '../store/slices/faqSlice';
-import * as analyticsActions from '../store/slices/analyticsSlice';
-import * as settingsActions from '../store/slices/settingsSlice';
-import * as auditActions from '../store/slices/auditSlice';
-import { addToast, removeToast, openModal, closeModal, toggleSidebar, setSidebarCollapsed } from '../store/slices/uiSlice';
+import * as authActions from '../store/slices/authSlice.js';
+import * as programmeActions from '../store/slices/programmeSlice.js';
+import * as cohortActions from '../store/slices/cohortSlice.js';
+import * as enrollmentActions from '../store/slices/enrollmentSlice.js';
+import * as paymentActions from '../store/slices/paymentSlice.js';
+import * as instalmentActions from '../store/slices/instalmentSlice.js';
+import * as accountActions from '../store/slices/accountSlice.js';
+import * as invitationActions from '../store/slices/invitationSlice.js';
+import * as joinRequestActions from '../store/slices/joinRequestSlice.js';
+import * as contactMessageActions from '../store/slices/contactMessageSlice.js';
+import * as faqActions from '../store/slices/faqSlice.js';
+import * as analyticsActions from '../store/slices/analyticsSlice.js';
+import * as settingsActions from '../store/slices/settingsSlice.js';
+import * as auditActions from '../store/slices/auditSlice.js';
+import { addToast, removeToast, openModal, closeModal, toggleSidebar, setSidebarCollapsed } from '../store/slices/uiSlice.js';
 
 export function useManageState() {
   const dispatch = useDispatch();

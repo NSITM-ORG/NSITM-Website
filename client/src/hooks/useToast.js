@@ -10,7 +10,7 @@
  */
 
 import { useCallback } from 'react';
-import { useManageState } from './useManageState';
+import { useManageState } from './useManageState.js';
 
 export function useToast() {
   const { ui, actions } = useManageState();

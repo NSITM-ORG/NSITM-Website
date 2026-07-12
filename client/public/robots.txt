@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /superadmin
+Disallow: /my-payment/access
+
+Sitemap: https://nsitm.example.com/sitemap.xml
