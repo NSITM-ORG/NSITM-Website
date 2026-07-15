@@ -6,12 +6,12 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { AuthCard } from '../../components/site/AuthCard.jsx';
-import { FormField } from '../../components/ui/FormField.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { validators, validateForm } from '../../utils/validation.js';
+import { useAuth } from '../../hooks/useAuth';
+import { useSEO } from '../../hooks/useSEO';
+import { AuthCard } from '../../components/site/AuthCard';
+import { FormField } from '../../components/ui/FormField';
+import { Button } from '../../components/ui/Button';
+import { validators, validateForm } from '../../utils/validation';
 import { CheckCircle2 } from 'lucide-react';
 
 const SCHEMA = { email: [validators.required(), validators.email()] };

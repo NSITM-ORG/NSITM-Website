@@ -5,10 +5,10 @@
  */
 
 import { useState, useEffect } from 'react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { FormField } from '../ui/FormField.jsx';
-import { Button } from '../ui/Button.jsx';
-import { DELIVERY_FORMATS } from '../../utils/constants.js';
+import { useManageState } from '../../hooks/useManageState';
+import { FormField } from '../ui/FormField';
+import { Button } from '../ui/Button';
+import { DELIVERY_FORMATS } from '../../utils/constants';
 
 const emptyForm = {
   name: '', programme: '', startDate: '', endDate: '', deliveryFormat: '',

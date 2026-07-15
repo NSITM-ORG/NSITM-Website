@@ -12,7 +12,7 @@
 
 import { useEffect } from 'react';
 import { CheckCircle2, XCircle, Info, X } from 'lucide-react';
-import { useToast } from '../../hooks/useToast.js';
+import { useToast } from '../../hooks/useToast';
 
 const ICONS = { success: CheckCircle2, error: XCircle, info: Info };
 

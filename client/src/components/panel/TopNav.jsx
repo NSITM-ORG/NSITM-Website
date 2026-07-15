@@ -5,10 +5,10 @@
 
 import { Link } from 'react-router-dom';
 import { Menu, LogOut } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth.js';
-import { useLogout } from '../../hooks/useLogout.js';
-import { ThemeToggle } from '../ui/ThemeToggle.jsx';
-import { Button } from '../ui/Button.jsx';
+import { useAuth } from '../../hooks/useAuth';
+import { useLogout } from '../../hooks/useLogout';
+import { ThemeToggle } from '../ui/ThemeToggle';
+import { Button } from '../ui/Button';
 
 export function TopNav({ title, onOpenMobileSidebar }) {
   const { user, isSuperAdmin } = useAuth();

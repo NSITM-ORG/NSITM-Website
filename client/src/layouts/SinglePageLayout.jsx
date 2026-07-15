@@ -14,7 +14,7 @@
 import { Outlet, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MessageCircle } from 'lucide-react';
 import { useEffect } from 'react';
-import { useManageState } from '../hooks/useManageState.js';
+import { useManageState } from '../hooks/useManageState';
 
 export function SinglePageLayout() {
   const navigate = useNavigate();

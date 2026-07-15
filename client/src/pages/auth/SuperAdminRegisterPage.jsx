@@ -8,13 +8,13 @@
 
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { AuthCard } from '../../components/site/AuthCard.jsx';
-import { FormField } from '../../components/ui/FormField.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { PasswordRequirementsChecklist } from '../../components/site/PasswordRequirementsChecklist.jsx';
-import { validators, validateForm } from '../../utils/validation.js';
+import { useAuth } from '../../hooks/useAuth';
+import { useSEO } from '../../hooks/useSEO';
+import { AuthCard } from '../../components/site/AuthCard';
+import { FormField } from '../../components/ui/FormField';
+import { Button } from '../../components/ui/Button';
+import { PasswordRequirementsChecklist } from '../../components/site/PasswordRequirementsChecklist';
+import { validators, validateForm } from '../../utils/validation';
 
 export function SuperAdminRegisterPage() {
   const { superAdminRegister, submitting } = useAuth();

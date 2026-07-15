@@ -7,8 +7,8 @@
 
 import { useState } from 'react';
 import { SlidersHorizontal, X } from 'lucide-react';
-import { FormField } from '../ui/FormField.jsx';
-import { Button } from '../ui/Button.jsx';
+import { FormField } from '../ui/FormField';
+import { Button } from '../ui/Button';
 
 const STATUS_OPTIONS = [
   { value: '', label: 'All Statuses' },
@@ -22,7 +22,7 @@ export function EnrollmentFilterBar({ filters, onChange, onClear, hideStatusFilt
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const body = (
-    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+    <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5">
       <FormField
         placeholder="Search name or email"
         value={filters.search}
@@ -36,8 +36,8 @@ export function EnrollmentFilterBar({ filters, onChange, onClear, hideStatusFilt
           onChange={(v) => onChange({ status: v })}
         />
       )}
-      <FormField type="text" placeholder="From date (YYYY-MM-DD)" value={filters.fromDate} onChange={(v) => onChange({ fromDate: v })} />
-      <FormField type="text" placeholder="To date (YYYY-MM-DD)" value={filters.toDate} onChange={(v) => onChange({ toDate: v })} />
+      <FormField type="date" placeholder="From date (YYYY-MM-DD)" value={filters.fromDate} onChange={(v) => onChange({ fromDate: v })} />
+      <FormField type="date" placeholder="To date (YYYY-MM-DD)" value={filters.toDate} onChange={(v) => onChange({ toDate: v })} />
       <Button variant="outline" onClick={onClear}>
         Clear Filters
       </Button>

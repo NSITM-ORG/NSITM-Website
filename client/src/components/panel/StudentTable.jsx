@@ -10,9 +10,9 @@
 
 import { useNavigate } from 'react-router-dom';
 import { StatusBadge } from './StatusBadge';
-import { SkeletonTableRow } from '../ui/Skeleton.jsx';
-import { EmptyState } from '../ui/EmptyState.jsx';
-import { formatDate, formatCurrency } from '../../utils/formatters.js';
+import { SkeletonTableRow } from '../ui/Skeleton';
+import { EmptyState } from '../ui/EmptyState';
+import { formatDate, formatCurrency } from '../../utils/formatters';
 import { Users } from 'lucide-react';
 
 export function StudentTable({ records, loading, variant = 'default' }) {

@@ -6,19 +6,19 @@
 
 import { useEffect, useState } from 'react';
 import { Send, RefreshCcw, Ban } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useToast } from '../../hooks/useToast.js';
-import { usePagination } from '../../hooks/usePagination.js';
-import { FormField } from '../../components/ui/FormField.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { Badge } from '../../components/ui/Badge.jsx';
-import { ConfirmModal } from '../../components/ui/ConfirmModal.jsx';
-import { Pagination } from '../../components/ui/Pagination.jsx';
-import { EmptyState } from '../../components/ui/EmptyState.jsx';
-import { SkeletonTableRow } from '../../components/ui/Skeleton.jsx';
-import { formatDateTime } from '../../utils/formatters.js';
-import { validators, validateForm } from '../../utils/validation.js';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { useToast } from '../../hooks/useToast';
+import { usePagination } from '../../hooks/usePagination';
+import { FormField } from '../../components/ui/FormField';
+import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
+import { ConfirmModal } from '../../components/ui/ConfirmModal';
+import { Pagination } from '../../components/ui/Pagination';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { SkeletonTableRow } from '../../components/ui/Skeleton';
+import { formatDateTime } from '../../utils/formatters';
+import { validators, validateForm } from '../../utils/validation';
 import { UserPlus } from 'lucide-react';
 
 const STATUS_MAP = (inv) => {

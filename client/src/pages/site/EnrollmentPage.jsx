@@ -21,14 +21,14 @@
 
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { EnrollmentFormProvider, useEnrollmentForm } from '../../hooks/useEnrollmentForm.js';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { EnrollmentStepper } from '../../components/site/EnrollmentStepper.jsx';
-import { StepPersonalDetails } from './enrollment-steps/StepPersonalDetails.jsx';
-import { StepPolicyAcknowledgment } from './enrollment-steps/StepPolicyAcknowledgment.jsx';
-import { StepPaymentDetails } from './enrollment-steps/StepPaymentDetails.jsx';
-import { StepReceiptUpload } from './enrollment-steps/StepReceiptUpload.jsx';
+import { EnrollmentFormProvider, useEnrollmentForm } from '../../hooks/useEnrollmentForm';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { EnrollmentStepper } from '../../components/site/EnrollmentStepper';
+import { StepPersonalDetails } from './enrollment-steps/StepPersonalDetails';
+import { StepPolicyAcknowledgment } from './enrollment-steps/StepPolicyAcknowledgment';
+import { StepPaymentDetails } from './enrollment-steps/StepPaymentDetails';
+import { StepReceiptUpload } from './enrollment-steps/StepReceiptUpload';
 
 function EnrollmentFormBody() {
   const [searchParams] = useSearchParams();

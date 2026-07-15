@@ -4,8 +4,8 @@
  */
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import httpClient from '../../api/httpClient.js';
-import API from '../../api/endpoints.js';
+import httpClient from '../../api/httpClient';
+import API from '../../api/endpoints';
 
 // ── Super Admin ───────────────────────────────────────────────────
 export const createInvitation = createAsyncThunk(

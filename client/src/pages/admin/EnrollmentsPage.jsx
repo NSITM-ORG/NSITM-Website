@@ -7,12 +7,12 @@
 
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { usePagination } from '../../hooks/usePagination.js';
-import { EnrollmentFilterBar } from '../../components/panel/EnrollmentFilterBar.jsx';
-import { StudentTable } from '../../components/panel/StudentTable.jsx';
-import { Pagination } from '../../components/ui/Pagination.jsx';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { usePagination } from '../../hooks/usePagination';
+import { EnrollmentFilterBar } from '../../components/panel/EnrollmentFilterBar';
+import { StudentTable } from '../../components/panel/StudentTable';
+import { Pagination } from '../../components/ui/Pagination';
 
 const EMPTY_FILTERS = { status: '', programme: '', cohort: '', fromDate: '', toDate: '', search: '' };
 

@@ -6,13 +6,13 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Download } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { FormField } from '../../components/ui/FormField.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { SkeletonCard } from '../../components/ui/Skeleton.jsx';
-import { EnrollmentTrendChart } from '../../components/panel/AnalyticsCharts.jsx';
-import { formatCurrency } from '../../utils/formatters.js';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { FormField } from '../../components/ui/FormField';
+import { Button } from '../../components/ui/Button';
+import { SkeletonCard } from '../../components/ui/Skeleton';
+import { EnrollmentTrendChart } from '../../components/panel/AnalyticsCharts';
+import { formatCurrency } from '../../utils/formatters';
 
 export function AnalyticsPage() {
   const { analytics, actions } = useManageState();

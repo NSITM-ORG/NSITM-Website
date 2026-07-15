@@ -6,7 +6,7 @@
 
 import { Link, useLocation } from 'react-router-dom';
 import { Compass } from 'lucide-react';
-import { useSEO } from '../hooks/useSEO.js';
+import { useSEO } from '../hooks/useSEO';
 
 export function NotFoundPage() {
   const location = useLocation();

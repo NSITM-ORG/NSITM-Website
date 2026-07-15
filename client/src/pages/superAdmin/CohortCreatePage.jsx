@@ -4,10 +4,10 @@
 
 import { useNavigate, Link } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useToast } from '../../hooks/useToast.js';
-import { CohortForm } from '../../components/panel/CohortForm.jsx';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { useToast } from '../../hooks/useToast';
+import { CohortForm } from '../../components/panel/CohortForm';
 
 export function CohortCreatePage() {
   const { cohorts, actions } = useManageState();

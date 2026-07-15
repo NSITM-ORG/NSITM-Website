@@ -19,15 +19,15 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { CheckCircle2, Clock, AlertTriangle, Landmark } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useFileUpload } from '../../hooks/useFileUpload.js';
-import { Badge } from '../../components/ui/Badge.jsx';
-import { FormField } from '../../components/ui/FormField.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { RouteFallback } from '../../components/ui/Preloader.jsx';
-import { formatCurrency, formatDate } from '../../utils/formatters.js';
-import { INSTALMENT_STATUS } from '../../utils/constants.js';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { useFileUpload } from '../../hooks/useFileUpload';
+import { Badge } from '../../components/ui/Badge';
+import { FormField } from '../../components/ui/FormField';
+import { Button } from '../../components/ui/Button';
+import { RouteFallback } from '../../components/ui/Preloader';
+import { formatCurrency, formatDate } from '../../utils/formatters';
+import { INSTALMENT_STATUS } from '../../utils/constants';
 
 const STATUS_BADGE = {
   not_submitted: { color: 'grey', label: 'Outstanding' },

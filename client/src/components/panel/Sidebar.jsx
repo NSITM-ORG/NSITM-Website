@@ -10,8 +10,8 @@ import {
   LayoutDashboard, Users, CreditCard, BookOpen, Calendar, ShieldCheck,
   BarChart3, Settings, FileText, ChevronLeft, ChevronRight, X, MessageSquare,
 } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth.js';
-import { useManageState } from '../../hooks/useManageState.js';
+import { useAuth } from '../../hooks/useAuth';
+import { useManageState } from '../../hooks/useManageState';
 
 const ICONS = {
   LayoutDashboard, Users, CreditCard, BookOpen, Calendar, ShieldCheck,

@@ -6,9 +6,9 @@
  */
 
 import { useState, useEffect } from 'react';
-import { FormField } from '../ui/FormField.jsx';
-import { Button } from '../ui/Button.jsx';
-import { PROGRAMME_CATEGORIES, PROGRAMME_CATEGORY_LABELS, PROGRAMME_STATUS } from '../../utils/constants.js';
+import { FormField } from '../ui/FormField';
+import { Button } from '../ui/Button';
+import { PROGRAMME_CATEGORIES, PROGRAMME_CATEGORY_LABELS, PROGRAMME_STATUS } from '../../utils/constants';
 
 const CATEGORY_OPTIONS = Object.entries(PROGRAMME_CATEGORY_LABELS).map(([value, label]) => ({ value, label }));
 const STATUS_OPTIONS = [

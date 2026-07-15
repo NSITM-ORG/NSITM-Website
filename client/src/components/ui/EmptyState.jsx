@@ -6,7 +6,7 @@
  */
 
 import { Inbox } from 'lucide-react';
-import { Button } from './Button.jsx';
+import { Button } from './Button';
 
 export function EmptyState({
   icon: Icon = Inbox,

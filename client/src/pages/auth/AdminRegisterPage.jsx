@@ -19,14 +19,14 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { AlertTriangle, CheckCircle2 } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { AuthCard } from '../../components/site/AuthCard.jsx';
-import { FormField } from '../../components/ui/FormField.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { PasswordRequirementsChecklist } from '../../components/site/PasswordRequirementsChecklist.jsx';
-import { RouteFallback } from '../../components/ui/Preloader.jsx';
-import { validators, validateForm } from '../../utils/validation.js';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { AuthCard } from '../../components/site/AuthCard';
+import { FormField } from '../../components/ui/FormField';
+import { Button } from '../../components/ui/Button';
+import { PasswordRequirementsChecklist } from '../../components/site/PasswordRequirementsChecklist';
+import { RouteFallback } from '../../components/ui/Preloader';
+import { validators, validateForm } from '../../utils/validation';
 
 export function AdminRegisterPage() {
   const [searchParams] = useSearchParams();

@@ -10,9 +10,9 @@
  * component changes.
  */
 
-import { useEnrollmentForm } from '../../../hooks/useEnrollmentForm.js';
-import { FormField } from '../../../components/ui/FormField.jsx';
-import { Button } from '../../../components/ui/Button.jsx';
+import { useEnrollmentForm } from '../../../hooks/useEnrollmentForm';
+import { FormField } from '../../../components/ui/FormField';
+import { Button } from '../../../components/ui/Button';
 
 const POLICIES = [
   {

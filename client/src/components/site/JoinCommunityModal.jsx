@@ -8,12 +8,12 @@
  */
 
 import { useState } from 'react';
-import Modal from '../ui/Modal.jsx';
-import { FormField } from '../ui/FormField.jsx';
-import { Button } from '../ui/Button.jsx';
-import { useManageState } from '../../hooks/useManageState.js';
-import { validators, validateForm } from '../../utils/validation.js';
-import { JOIN_COMMUNITY_ROLE_LABELS } from '../../utils/constants.js';
+import Modal from '../ui/Modal';
+import { FormField } from '../ui/FormField';
+import { Button } from '../ui/Button';
+import { useManageState } from '../../hooks/useManageState';
+import { validators, validateForm } from '../../utils/validation';
+import { JOIN_COMMUNITY_ROLE_LABELS } from '../../utils/constants';
 import { CheckCircle2 } from 'lucide-react';
 
 const SCHEMA = {

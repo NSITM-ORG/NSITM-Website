@@ -10,14 +10,14 @@
 
 import { useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth.js';
-import { useSEO } from '../../hooks/useSEO.js';
+import { useAuth } from '../../hooks/useAuth.jsx';
+import { useSEO } from '../../hooks/useSEO.jsx';
 import { useToast } from '../../hooks/useToast.js';
-import { AuthCard } from '../../components/site/AuthCard.jsx';
-import { FormField } from '../../components/ui/FormField.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { PasswordRequirementsChecklist } from '../../components/site/PasswordRequirementsChecklist.jsx';
-import { validators, validateForm } from '../../utils/validation.js';
+import { AuthCard } from '../../components/site/AuthCard';
+import { FormField } from '../../components/ui/FormField';
+import { Button } from '../../components/ui/Button';
+import { PasswordRequirementsChecklist } from '../../components/site/PasswordRequirementsChecklist';
+import { validators, validateForm } from '../../utils/validation';
 
 export function AdminResetPasswordPage() {
   const { token } = useParams();

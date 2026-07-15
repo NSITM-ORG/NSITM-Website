@@ -8,9 +8,9 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Target, Lightbulb, TrendingUp, HelpCircle, ArrowRight } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { SkeletonText } from '../../components/ui/Skeleton.jsx';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { SkeletonText } from '../../components/ui/Skeleton';
 
 export function AboutPage() {
   const { faqs, actions } = useManageState();

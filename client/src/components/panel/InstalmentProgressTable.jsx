@@ -5,13 +5,13 @@
  */
 
 import { useState } from 'react';
-import { StatusBadge } from './StatusBadge.jsx';
-import { Button } from '../ui/Button.jsx';
-import { ConfirmModal } from '../ui/ConfirmModal.jsx';
-import { ReceiptViewer } from './ReceiptViewer.jsx';
-import { formatCurrency, formatDate } from '../../utils/formatters.js';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useToast } from '../../hooks/useToast.js';
+import { StatusBadge } from './StatusBadge';
+import { Button } from '../ui/Button';
+import { ConfirmModal } from '../ui/ConfirmModal';
+import { ReceiptViewer } from './ReceiptViewer';
+import { formatCurrency, formatDate } from '../../utils/formatters';
+import { useManageState } from '../../hooks/useManageState';
+import { useToast } from '../../hooks/useToast';
 
 export function InstalmentProgressTable({ instalmentSummary, onUpdated }) {
   const { actions, instalments } = useManageState();

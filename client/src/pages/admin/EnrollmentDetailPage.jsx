@@ -9,17 +9,17 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ChevronLeft, AlertTriangle } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth.js';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useToast } from '../../hooks/useToast.js';
-import { StatusBadge } from '../../components/panel/StatusBadge.jsx';
-import { ReceiptViewer } from '../../components/panel/ReceiptViewer.jsx';
-import { InstalmentProgressTable } from '../../components/panel/InstalmentProgressTable.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { ConfirmModal } from '../../components/ui/ConfirmModal.jsx';
-import { RouteFallback } from '../../components/ui/Preloader.jsx';
-import { formatDate, formatCurrency, humanizeEnum } from '../../utils/formatters.js';
+import { useAuth } from '../../hooks/useAuth';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { useToast } from '../../hooks/useToast';
+import { StatusBadge } from '../../components/panel/StatusBadge';
+import { ReceiptViewer } from '../../components/panel/ReceiptViewer';
+import { InstalmentProgressTable } from '../../components/panel/InstalmentProgressTable';
+import { Button } from '../../components/ui/Button';
+import { ConfirmModal } from '../../components/ui/ConfirmModal';
+import { RouteFallback } from '../../components/ui/Preloader';
+import { formatDate, formatCurrency, humanizeEnum } from '../../utils/formatters';
 
 export function EnrollmentDetailPage() {
   const { id } = useParams();

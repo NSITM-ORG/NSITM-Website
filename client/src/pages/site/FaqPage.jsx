@@ -6,12 +6,12 @@
  */
 
 import { useEffect, useState } from 'react';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useManageState } from '../../hooks/useManageState.js';
-import { Tabs } from '../../components/ui/Tabs.jsx';
-import { Accordion } from '../../components/ui/Accordion.jsx';
-import { SkeletonText } from '../../components/ui/Skeleton.jsx';
-import { EmptyState } from '../../components/ui/EmptyState.jsx';
+import { useSEO } from '../../hooks/useSEO';
+import { useManageState } from '../../hooks/useManageState';
+import { Tabs } from '../../components/ui/Tabs';
+import { Accordion } from '../../components/ui/Accordion';
+import { SkeletonText } from '../../components/ui/Skeleton';
+import { EmptyState } from '../../components/ui/EmptyState';
 import { HelpCircle } from 'lucide-react';
 
 export function FaqPage() {

@@ -4,7 +4,7 @@
  */
 
 import { Sun, Moon, Palette } from 'lucide-react';
-import { useTheme } from '../../hooks/useTheme.js';
+import { useTheme } from '../../hooks/useTheme';
 
 const ICONS = { light: Sun, dark: Moon, brand: Palette };
 const LABELS = { light: 'Light mode', dark: 'Dark mode', brand: 'Brand mode' };

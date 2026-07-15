@@ -5,17 +5,17 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useToast } from '../../hooks/useToast.js';
-import { usePagination } from '../../hooks/usePagination.js';
-import { Button } from '../../components/ui/Button.jsx';
-import { Badge } from '../../components/ui/Badge.jsx';
-import { ConfirmModal } from '../../components/ui/ConfirmModal.jsx';
-import { Pagination } from '../../components/ui/Pagination.jsx';
-import { EmptyState } from '../../components/ui/EmptyState.jsx';
-import { SkeletonTableRow } from '../../components/ui/Skeleton.jsx';
-import { formatDate, humanizeEnum } from '../../utils/formatters.js';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { useToast } from '../../hooks/useToast';
+import { usePagination } from '../../hooks/usePagination';
+import { Button } from '../../components/ui/Button';
+import { Badge } from '../../components/ui/Badge';
+import { ConfirmModal } from '../../components/ui/ConfirmModal';
+import { Pagination } from '../../components/ui/Pagination';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { SkeletonTableRow } from '../../components/ui/Skeleton';
+import { formatDate, humanizeEnum } from '../../utils/formatters';
 import { Calendar } from 'lucide-react';
 
 const STATUS_COLORS = { upcoming: 'blue', active: 'green', completed: 'grey' };

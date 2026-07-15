@@ -7,12 +7,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useToast } from '../../hooks/useToast.js';
-import { ProgrammeForm } from '../../components/panel/ProgrammeForm.jsx';
-import { ConfirmModal } from '../../components/ui/ConfirmModal.jsx';
-import { RouteFallback } from '../../components/ui/Preloader.jsx';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { useToast } from '../../hooks/useToast';
+import { ProgrammeForm } from '../../components/panel/ProgrammeForm';
+import { ConfirmModal } from '../../components/ui/ConfirmModal';
+import { RouteFallback } from '../../components/ui/Preloader';
 
 export function ProgrammeEditPage() {
   const { id } = useParams();

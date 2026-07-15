@@ -5,8 +5,8 @@
  * every list/table/detail view renders statuses identically.
  */
 
-import { Badge } from '../ui/Badge.jsx';
-import { PAYMENT_STATUS_LABELS, PAYMENT_STATUS_COLORS } from '../../utils/constants.js';
+import { Badge } from '../ui/Badge';
+import { PAYMENT_STATUS_LABELS, PAYMENT_STATUS_COLORS } from '../../utils/constants';
 
 const INSTALMENT_LABELS = {
   not_submitted: 'Outstanding',

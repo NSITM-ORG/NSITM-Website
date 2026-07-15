@@ -5,11 +5,11 @@
 import { useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useToast } from '../../hooks/useToast.js';
-import { CohortForm } from '../../components/panel/CohortForm.jsx';
-import { RouteFallback } from '../../components/ui/Preloader.jsx';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { useToast } from '../../hooks/useToast';
+import { CohortForm } from '../../components/panel/CohortForm';
+import { RouteFallback } from '../../components/ui/Preloader';
 
 export function CohortEditPage() {
   const { id } = useParams();

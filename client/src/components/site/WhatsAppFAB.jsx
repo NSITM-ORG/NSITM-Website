@@ -6,7 +6,7 @@
 
 import { useEffect } from 'react';
 import { MessageCircle } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
+import { useManageState } from '../../hooks/useManageState';
 
 export function WhatsAppFAB() {
   const { settings, actions } = useManageState();

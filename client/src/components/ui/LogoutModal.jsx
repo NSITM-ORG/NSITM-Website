@@ -5,8 +5,8 @@
  * owns the confirm/cancel wiring via the same hook.
  */
 
-import { useLogout } from '../../hooks/useLogout.js';
-import ConfirmModal from './ConfirmModal.jsx';
+import { useLogout } from '../../hooks/useLogout';
+import ConfirmModal from './ConfirmModal';
 
 export function LogoutModal() {
   const { isLogoutModalOpen, confirmLogout, cancelLogout } = useLogout();

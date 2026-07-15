@@ -6,10 +6,10 @@
 
 import { Link } from 'react-router-dom';
 import { Calendar, Globe, Building2 } from 'lucide-react';
-import { Card } from '../ui/Card.jsx';
-import { Button } from '../ui/Button.jsx';
-import { formatDate } from '../../utils/formatters.js';
-import { DELIVERY_FORMATS } from '../../utils/constants.js';
+import { Card } from '../ui/Card';
+import { Button } from '../ui/Button';
+import { formatDate } from '../../utils/formatters';
+import { DELIVERY_FORMATS } from '../../utils/constants';
 
 export function CohortCard({ cohort }) {
   const isOnline = cohort.deliveryFormat === DELIVERY_FORMATS.ONLINE;

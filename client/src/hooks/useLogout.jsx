@@ -12,8 +12,8 @@
  */
 
 import { useCallback } from 'react';
-import { useManageState } from './useManageState.js';
-import { useModal } from './useModal.js';
+import { useManageState } from './useManageState';
+import { useModal } from './useModal';
 
 export function useLogout() {
   const { actions } = useManageState();

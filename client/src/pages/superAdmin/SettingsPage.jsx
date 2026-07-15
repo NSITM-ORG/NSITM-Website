@@ -5,13 +5,13 @@
  */
 
 import { useEffect, useState } from 'react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useToast } from '../../hooks/useToast.js';
-import { Tabs } from '../../components/ui/Tabs.jsx';
-import { FormField } from '../../components/ui/FormField.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { RouteFallback } from '../../components/ui/Preloader.jsx';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { useToast } from '../../hooks/useToast';
+import { Tabs } from '../../components/ui/Tabs';
+import { FormField } from '../../components/ui/FormField';
+import { Button } from '../../components/ui/Button';
+import { RouteFallback } from '../../components/ui/Preloader';
 
 const TABS = [
   { value: 'bank', label: 'Bank Details' },

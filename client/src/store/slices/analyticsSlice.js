@@ -5,8 +5,8 @@
  */
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import httpClient from '../../api/httpClient.js';
-import API from '../../api/endpoints.js';
+import httpClient from '../../api/httpClient';
+import API from '../../api/endpoints';
 
 export const fetchAnalyticsOverview = createAsyncThunk(
   'analytics/fetchOverview',

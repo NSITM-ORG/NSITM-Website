@@ -13,7 +13,7 @@
  * requires zero extra code.
  */
 
-import { addToast } from './slices/uiSlice.js';
+import { addToast } from './slices/uiSlice';
 
 export const toastMiddleware = (storeApi) => (next) => (action) => {
   if (action.type?.endsWith('/rejected') && action.payload?.message) {

@@ -7,9 +7,9 @@
 
 import { Link } from 'react-router-dom';
 import { Clock, ArrowRight } from 'lucide-react';
-import { Card } from '../ui/Card.jsx';
-import { Badge } from '../ui/Badge.jsx';
-import { PROGRAMME_STATUS } from '../../utils/constants.js';
+import { Card } from '../ui/Card';
+import { Badge } from '../ui/Badge';
+import { PROGRAMME_STATUS } from '../../utils/constants';
 
 export function ProgrammeCard({ programme }) {
   const isActive = programme.status === PROGRAMME_STATUS.ACTIVE;
@@ -17,7 +17,7 @@ export function ProgrammeCard({ programme }) {
   const content = (
     <Card hoverable={isActive} className={`h-full ${!isActive ? 'opacity-70' : ''}`}>
       <div className="mb-3 flex items-start justify-between gap-2">
-        <h3 className="font-heading text-base font-semibold text-text-primary">{programme.name}</h3>
+        <h3 className="font-heading text-base font-semibold text-text-primary truncate">{programme.name}</h3>
         <Badge color={isActive ? 'green' : 'grey'}>{isActive ? 'Active' : 'Coming Soon'}</Badge>
       </div>
       <p className="mb-4 flex items-center gap-1.5 text-sm text-text-secondary">

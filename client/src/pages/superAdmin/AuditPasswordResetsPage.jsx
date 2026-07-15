@@ -4,15 +4,15 @@
  */
 
 import { useEffect, useState } from 'react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { usePagination } from '../../hooks/usePagination.js';
-import { FormField } from '../../components/ui/FormField.jsx';
-import { Badge } from '../../components/ui/Badge.jsx';
-import { Pagination } from '../../components/ui/Pagination.jsx';
-import { EmptyState } from '../../components/ui/EmptyState.jsx';
-import { SkeletonText } from '../../components/ui/Skeleton.jsx';
-import { formatDateTime } from '../../utils/formatters.js';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { usePagination } from '../../hooks/usePagination';
+import { FormField } from '../../components/ui/FormField';
+import { Badge } from '../../components/ui/Badge';
+import { Pagination } from '../../components/ui/Pagination';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { SkeletonText } from '../../components/ui/Skeleton';
+import { formatDateTime } from '../../utils/formatters';
 import { FileText } from 'lucide-react';
 
 const ACTION_LABELS = {

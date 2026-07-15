@@ -3,19 +3,19 @@
  * instead of one import line per file. Purely a convenience layer.
  */
 
-export { Button } from './Button.jsx';
-export { FormField } from './FormField.jsx';
-export { Badge } from './Badge.jsx';
-export { Card } from './Card.jsx';
-export { Modal } from './Modal.jsx';
-export { ConfirmModal } from './ConfirmModal.jsx';
-export { LogoutModal } from './LogoutModal.jsx';
-export { ToastContainer } from './Toast.jsx';
-export { Skeleton, SkeletonText, SkeletonCard, SkeletonTableRow } from './Skeleton.jsx';
-export { EmptyState } from './EmptyState.jsx';
-export { Pagination } from './Pagination.jsx';
-export { Accordion } from './Accordion.jsx';
-export { Tabs } from './Tabs.jsx';
-export { ThemeToggle } from './ThemeToggle.jsx';
-export { BackToTop } from './BackToTop.jsx';
-export { AppPreloader, RouteFallback } from './Preloader.jsx';
+export { Button } from './Button';
+export { FormField } from './FormField';
+export { Badge } from './Badge';
+export { Card } from './Card';
+export { Modal } from './Modal';
+export { ConfirmModal } from './ConfirmModal';
+export { LogoutModal } from './LogoutModal';
+export { ToastContainer } from './Toast';
+export { Skeleton, SkeletonText, SkeletonCard, SkeletonTableRow } from './Skeleton';
+export { EmptyState } from './EmptyState';
+export { Pagination } from './Pagination';
+export { Accordion } from './Accordion';
+export { Tabs } from './Tabs';
+export { ThemeToggle } from './ThemeToggle';
+export { BackToTop } from './BackToTop';
+export { AppPreloader, RouteFallback } from './Preloader';

@@ -8,15 +8,15 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { GraduationCap, Users, Award, ArrowRight, Laptop2, Briefcase, Wrench } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useModal } from '../../hooks/useModal.js';
-import { CohortCard } from '../../components/site/CohortCard.jsx';
-import { JoinCommunityModal } from '../../components/site/JoinCommunityModal.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { EmptyState } from '../../components/ui/EmptyState.jsx';
-import { SkeletonCard } from '../../components/ui/Skeleton.jsx';
-import { PROGRAMME_CATEGORY_LABELS } from '../../utils/constants.js';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { useModal } from '../../hooks/useModal';
+import { CohortCard } from '../../components/site/CohortCard';
+import { JoinCommunityModal } from '../../components/site/JoinCommunityModal';
+import { Button } from '../../components/ui/Button';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { SkeletonCard } from '../../components/ui/Skeleton';
+import { PROGRAMME_CATEGORY_LABELS } from '../../utils/constants';
 
 const CATEGORY_ICONS = { tech_development: Laptop2, management: Briefcase, short_term: Wrench };
 

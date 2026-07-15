@@ -7,10 +7,10 @@
  */
 
 import { Outlet, useMatches } from 'react-router-dom';
-import { Header } from '../components/site/Header.jsx';
-import { Footer } from '../components/site/Footer.jsx';
-import { WhatsAppFAB } from '../components/site/WhatsAppFAB.jsx';
-import { BackToTop } from '../components/ui/BackToTop.jsx';
+import { Header } from '../components/site/Header';
+import { Footer } from '../components/site/Footer';
+import { WhatsAppFAB } from '../components/site/WhatsAppFAB';
+import { BackToTop } from '../components/ui/BackToTop';
 
 export function SiteLayout() {
   const matches = useMatches();

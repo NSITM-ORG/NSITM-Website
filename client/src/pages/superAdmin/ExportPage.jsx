@@ -5,11 +5,11 @@
 
 import { useEffect, useState } from 'react';
 import { Download } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useToast } from '../../hooks/useToast.js';
-import { FormField } from '../../components/ui/FormField.jsx';
-import { Button } from '../../components/ui/Button.jsx';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { useToast } from '../../hooks/useToast';
+import { FormField } from '../../components/ui/FormField';
+import { Button } from '../../components/ui/Button';
 
 const STATUS_OPTIONS = [{ value: '', label: 'All' }, { value: 'not_paid', label: 'Not Paid' }, { value: 'pending', label: 'Pending' }, { value: 'confirmed', label: 'Confirmed' }, { value: 'rejected', label: 'Rejected' }];
 

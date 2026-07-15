@@ -8,7 +8,7 @@
  */
 
 import { Check } from 'lucide-react';
-import { useEnrollmentForm } from '../../hooks/useEnrollmentForm.js';
+import { useEnrollmentForm } from '../../hooks/useEnrollmentForm';
 
 const STEP_LABELS = ['Personal Details', 'Policies', 'Payment', 'Receipt'];
 

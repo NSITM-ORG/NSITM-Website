@@ -4,10 +4,10 @@
 
 import { useNavigate, Link } from 'react-router-dom';
 import { ChevronLeft } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useToast } from '../../hooks/useToast.js';
-import { ProgrammeForm } from '../../components/panel/ProgrammeForm.jsx';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { useToast } from '../../hooks/useToast';
+import { ProgrammeForm } from '../../components/panel/ProgrammeForm';
 
 export function ProgrammeCreatePage() {
   const { programmes, actions } = useManageState();

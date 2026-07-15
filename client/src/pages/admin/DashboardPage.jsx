@@ -7,13 +7,13 @@
 
 import { useEffect } from 'react';
 import { Users, Clock, CheckCircle2, XCircle, UserX, Calendar, Database } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { MetricCard } from '../../components/panel/MetricCard.jsx';
-import { StatusBadge } from '../../components/panel/StatusBadge.jsx';
-import { SkeletonCard } from '../../components/ui/Skeleton.jsx';
-import { EmptyState } from '../../components/ui/EmptyState.jsx';
-import { formatRelativeTime } from '../../utils/formatters.js';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { MetricCard } from '../../components/panel/MetricCard';
+import { StatusBadge } from '../../components/panel/StatusBadge';
+import { SkeletonCard } from '../../components/ui/Skeleton';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { formatRelativeTime } from '../../utils/formatters';
 import { Activity } from 'lucide-react';
 
 export function DashboardPage() {

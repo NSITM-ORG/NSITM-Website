@@ -13,12 +13,12 @@
  */
 
 import { useMemo } from 'react';
-import { useEnrollmentForm } from '../../../hooks/useEnrollmentForm.js';
-import { useManageState } from '../../../hooks/useManageState.js';
-import { FormField } from '../../../components/ui/FormField.jsx';
-import { Button } from '../../../components/ui/Button.jsx';
-import { validators, validateForm } from '../../../utils/validation.js';
-import { DELIVERY_FORMATS, PROGRAMME_STATUS } from '../../../utils/constants.js';
+import { useEnrollmentForm } from '../../../hooks/useEnrollmentForm';
+import { useManageState } from '../../../hooks/useManageState';
+import { FormField } from '../../../components/ui/FormField';
+import { Button } from '../../../components/ui/Button';
+import { validators, validateForm } from '../../../utils/validation';
+import { DELIVERY_FORMATS, PROGRAMME_STATUS } from '../../../utils/constants';
 import { useState } from 'react';
 
 const SCHEMA = {

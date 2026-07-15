@@ -12,8 +12,8 @@
 import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { CheckCircle2, MessageCircle } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
 
 export function EnrollmentConfirmationPage() {
   const { enrollments, settings, actions } = useManageState();

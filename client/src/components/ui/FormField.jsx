@@ -28,8 +28,8 @@
 
 import { useState, useId } from 'react';
 import { Eye, EyeOff, Upload, X, FileText, Calendar } from 'lucide-react';
-import { runValidators } from '../../utils/validation.js';
-import { formatFileSize } from '../../utils/formatters.js';
+import { runValidators } from '../../utils/validation';
+import { formatFileSize } from '../../utils/formatters';
 
 export function FormField({
   type = 'text',

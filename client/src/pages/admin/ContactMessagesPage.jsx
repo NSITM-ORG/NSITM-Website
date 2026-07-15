@@ -5,17 +5,17 @@
  */
 
 import { useEffect, useState } from 'react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useToast } from '../../hooks/useToast.js';
-import { usePagination } from '../../hooks/usePagination.js';
-import { Badge } from '../../components/ui/Badge.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { FormField } from '../../components/ui/FormField.jsx';
-import { Pagination } from '../../components/ui/Pagination.jsx';
-import { EmptyState } from '../../components/ui/EmptyState.jsx';
-import { SkeletonText } from '../../components/ui/Skeleton.jsx';
-import { formatRelativeTime } from '../../utils/formatters.js';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { useToast } from '../../hooks/useToast';
+import { usePagination } from '../../hooks/usePagination';
+import { Badge } from '../../components/ui/Badge';
+import { Button } from '../../components/ui/Button';
+import { FormField } from '../../components/ui/FormField';
+import { Pagination } from '../../components/ui/Pagination';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { SkeletonText } from '../../components/ui/Skeleton';
+import { formatRelativeTime } from '../../utils/formatters';
 import { MailOpen, Mail, Archive } from 'lucide-react';
 
 const STATUS_COLORS = { new: 'blue', read: 'grey', archived: 'grey' };

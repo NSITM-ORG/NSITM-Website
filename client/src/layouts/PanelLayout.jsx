@@ -6,9 +6,9 @@
 
 import { useState } from 'react';
 import { Outlet, useMatches } from 'react-router-dom';
-import { Sidebar } from '../components/panel/Sidebar.jsx';
-import { TopNav } from '../components/panel/TopNav.jsx';
-import { useManageState } from '../hooks/useManageState.js';
+import { Sidebar } from '../components/panel/Sidebar';
+import { TopNav } from '../components/panel/TopNav';
+import { useManageState } from '../hooks/useManageState';
 
 export function PanelLayout() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);

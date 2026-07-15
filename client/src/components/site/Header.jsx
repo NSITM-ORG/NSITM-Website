@@ -12,8 +12,8 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import { siteRoutes } from '../../routes/siteRoutes.js';
-import { ThemeToggle } from '../ui/ThemeToggle.jsx';
+import { siteRoutes } from '../../routes/siteRoutes';
+import { ThemeToggle } from '../ui/ThemeToggle';
 
 const navLinks = siteRoutes.filter((r) => r.showInNav);
 

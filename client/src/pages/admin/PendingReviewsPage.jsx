@@ -4,11 +4,11 @@
  */
 
 import { useEffect } from 'react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { usePagination } from '../../hooks/usePagination.js';
-import { StudentTable } from '../../components/panel/StudentTable.jsx';
-import { Pagination } from '../../components/ui/Pagination.jsx';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { usePagination } from '../../hooks/usePagination';
+import { StudentTable } from '../../components/panel/StudentTable';
+import { Pagination } from '../../components/ui/Pagination';
 
 export function PendingReviewsPage() {
   const { enrollments, actions } = useManageState();

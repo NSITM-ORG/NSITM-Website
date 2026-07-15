@@ -7,14 +7,14 @@
 
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { usePagination } from '../../hooks/usePagination.js';
-import { StatusBadge } from '../../components/panel/StatusBadge.jsx';
-import { SkeletonTableRow } from '../../components/ui/Skeleton.jsx';
-import { EmptyState } from '../../components/ui/EmptyState.jsx';
-import { Pagination } from '../../components/ui/Pagination.jsx';
-import { formatCurrency, formatDate } from '../../utils/formatters.js';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { usePagination } from '../../hooks/usePagination';
+import { StatusBadge } from '../../components/panel/StatusBadge';
+import { SkeletonTableRow } from '../../components/ui/Skeleton';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { Pagination } from '../../components/ui/Pagination';
+import { formatCurrency, formatDate } from '../../utils/formatters';
 import { CreditCard } from 'lucide-react';
 
 export function OutstandingInstalmentsPage() {

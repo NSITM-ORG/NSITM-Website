@@ -15,22 +15,22 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 
-import authReducer from './slices/authSlice.js';
-import programmeReducer from './slices/programmeSlice.js';
-import cohortReducer from './slices/cohortSlice.js';
-import enrollmentReducer from './slices/enrollmentSlice.js';
-import paymentReducer from './slices/paymentSlice.js';
-import instalmentReducer from './slices/instalmentSlice.js';
-import accountReducer from './slices/accountSlice.js';
-import invitationReducer from './slices/invitationSlice.js';
-import joinRequestReducer from './slices/joinRequestSlice.js';
-import contactMessageReducer from './slices/contactMessageSlice.js';
-import faqReducer from './slices/faqSlice.js';
-import analyticsReducer from './slices/analyticsSlice.js';
-import settingsReducer from './slices/settingsSlice.js';
-import auditReducer from './slices/auditSlice.js';
-import uiReducer from './slices/uiSlice.js';
-import { toastMiddleware } from './toastMiddleware.js';
+import authReducer from './slices/authSlice';
+import programmeReducer from './slices/programmeSlice';
+import cohortReducer from './slices/cohortSlice';
+import enrollmentReducer from './slices/enrollmentSlice';
+import paymentReducer from './slices/paymentSlice';
+import instalmentReducer from './slices/instalmentSlice';
+import accountReducer from './slices/accountSlice';
+import invitationReducer from './slices/invitationSlice';
+import joinRequestReducer from './slices/joinRequestSlice';
+import contactMessageReducer from './slices/contactMessageSlice';
+import faqReducer from './slices/faqSlice';
+import analyticsReducer from './slices/analyticsSlice';
+import settingsReducer from './slices/settingsSlice';
+import auditReducer from './slices/auditSlice';
+import uiReducer from './slices/uiSlice';
+import { toastMiddleware } from './toastMiddleware';
 
 export const store = configureStore({
   reducer: {

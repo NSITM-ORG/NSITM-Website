@@ -8,11 +8,11 @@
 
 import { useState } from 'react';
 import { Send } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { FormField } from '../../components/ui/FormField.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { validators, validateForm } from '../../utils/validation.js';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { FormField } from '../../components/ui/FormField';
+import { Button } from '../../components/ui/Button';
+import { validators, validateForm } from '../../utils/validation';
 
 const SCHEMA = { emailAddress: [validators.required(), validators.email()] };
 

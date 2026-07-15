@@ -10,13 +10,13 @@
 
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useToast } from '../../hooks/useToast.js';
-import { AuthCard } from '../../components/site/AuthCard.jsx';
-import { FormField } from '../../components/ui/FormField.jsx';
-import { Button } from '../../components/ui/Button.jsx';
-import { validators, validateForm } from '../../utils/validation.js';
+import { useAuth } from '../../hooks/useAuth';
+import { useSEO } from '../../hooks/useSEO';
+import { useToast } from '../../hooks/useToast';
+import { AuthCard } from '../../components/site/AuthCard';
+import { FormField } from '../../components/ui/FormField';
+import { Button } from '../../components/ui/Button';
+import { validators, validateForm } from '../../utils/validation';
 import { useEffect } from 'react';
 
 const SCHEMA = {

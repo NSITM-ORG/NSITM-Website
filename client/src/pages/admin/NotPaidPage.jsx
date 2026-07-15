@@ -7,14 +7,14 @@
  */
 
 import { useEffect } from 'react';
-import { useAuth } from '../../hooks/useAuth.js';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useToast } from '../../hooks/useToast.js';
-import { usePagination } from '../../hooks/usePagination.js';
-import { StudentTable } from '../../components/panel/StudentTable.jsx';
-import { Pagination } from '../../components/ui/Pagination.jsx';
-import { ConfirmModal } from '../../components/ui/ConfirmModal.jsx';
+import { useAuth } from '../../hooks/useAuth';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { useToast } from '../../hooks/useToast';
+import { usePagination } from '../../hooks/usePagination';
+import { StudentTable } from '../../components/panel/StudentTable';
+import { Pagination } from '../../components/ui/Pagination';
+import { ConfirmModal } from '../../components/ui/ConfirmModal';
 import { useState } from 'react';
 
 export function NotPaidPage() {

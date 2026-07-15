@@ -13,13 +13,13 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useEnrollmentForm } from '../../../hooks/useEnrollmentForm.js';
-import { useManageState } from '../../../hooks/useManageState.js';
-import { useFileUpload } from '../../../hooks/useFileUpload.js';
-import { FormField } from '../../../components/ui/FormField.jsx';
-import { Button } from '../../../components/ui/Button.jsx';
-import { formatCurrency } from '../../../utils/formatters.js';
-import { PAYMENT_TYPES } from '../../../utils/constants.js';
+import { useEnrollmentForm } from '../../../hooks/useEnrollmentForm';
+import { useManageState } from '../../../hooks/useManageState';
+import { useFileUpload } from '../../../hooks/useFileUpload';
+import { FormField } from '../../../components/ui/FormField';
+import { Button } from '../../../components/ui/Button';
+import { formatCurrency } from '../../../utils/formatters';
+import { PAYMENT_TYPES } from '../../../utils/constants';
 import { useMemo } from 'react';
 
 export function StepReceiptUpload() {

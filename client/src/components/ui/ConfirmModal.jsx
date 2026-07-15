@@ -6,9 +6,9 @@
  */
 
 import { useState } from 'react';
-import Modal from './Modal.jsx';
-import { Button } from './Button.jsx';
-import { FormField } from './FormField.jsx';
+import Modal from './Modal';
+import { Button } from './Button';
+import { FormField } from './FormField';
 import { AlertTriangle } from 'lucide-react';
 
 export function ConfirmModal({

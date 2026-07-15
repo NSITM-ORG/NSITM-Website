@@ -11,14 +11,14 @@
  */
 
 import { useMemo } from 'react';
-import { useEnrollmentForm } from '../../../hooks/useEnrollmentForm.js';
-import { useManageState } from '../../../hooks/useManageState.js';
-import { FormField } from '../../../components/ui/FormField.jsx';
-import { Button } from '../../../components/ui/Button.jsx';
-import { formatCurrency } from '../../../utils/formatters.js';
-import { PAYMENT_TYPES } from '../../../utils/constants.js';
+import { useEnrollmentForm } from '../../../hooks/useEnrollmentForm';
+import { useManageState } from '../../../hooks/useManageState';
+import { FormField } from '../../../components/ui/FormField';
+import { Button } from '../../../components/ui/Button';
+import { formatCurrency } from '../../../utils/formatters';
+import { PAYMENT_TYPES } from '../../../utils/constants';
 import { Landmark, Copy } from 'lucide-react';
-import { useCopyToClipboard } from '../../../hooks/useCopyToClipboard.js';
+import { useCopyToClipboard } from '../../../hooks/useCopyToClipboard';
 
 export function StepPaymentDetails() {
   const { state, setField, nextStep, previousStep } = useEnrollmentForm();

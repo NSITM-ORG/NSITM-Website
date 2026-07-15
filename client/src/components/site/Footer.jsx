@@ -13,14 +13,14 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useToast } from '../../hooks/useToast.js';
-import { FormField } from '../ui/FormField.jsx';
-import { Button } from '../ui/Button.jsx';
-import { validators, validateForm } from '../../utils/validation.js';
-import { InstagramIcon, } from '../icons/Instagram.jsx';
-import { LinkedinIcon } from '../icons/LinkedIn.jsx';
-import { FacebookIcon } from '../icons/FacebookIcon.jsx';
+import { useManageState } from '../../hooks/useManageState';
+import { useToast } from '../../hooks/useToast';
+import { FormField } from '../ui/FormField';
+import { Button } from '../ui/Button';
+import { validators, validateForm } from '../../utils/validation';
+import { InstagramIcon, } from '../icons/Instagram';
+import { LinkedinIcon } from '../icons/LinkedIn';
+import { FacebookIcon } from '../icons/FacebookIcon';
 
 const CONTACT_SCHEMA = {
   name: [validators.required(), validators.minLength(2)],

@@ -5,17 +5,17 @@
  */
 
 import { useEffect } from 'react';
-import { useManageState } from '../../hooks/useManageState.js';
-import { useSEO } from '../../hooks/useSEO.js';
-import { useToast } from '../../hooks/useToast.js';
-import { usePagination } from '../../hooks/usePagination.js';
-import { FormField } from '../../components/ui/FormField.jsx';
-import { Badge } from '../../components/ui/Badge.jsx';
-import { Pagination } from '../../components/ui/Pagination.jsx';
-import { EmptyState } from '../../components/ui/EmptyState.jsx';
-import { SkeletonTableRow } from '../../components/ui/Skeleton.jsx';
-import { formatDateTime } from '../../utils/formatters.js';
-import { JOIN_COMMUNITY_ROLE_LABELS } from '../../utils/constants.js';
+import { useManageState } from '../../hooks/useManageState';
+import { useSEO } from '../../hooks/useSEO';
+import { useToast } from '../../hooks/useToast';
+import { usePagination } from '../../hooks/usePagination';
+import { FormField } from '../../components/ui/FormField';
+import { Badge } from '../../components/ui/Badge';
+import { Pagination } from '../../components/ui/Pagination';
+import { EmptyState } from '../../components/ui/EmptyState';
+import { SkeletonTableRow } from '../../components/ui/Skeleton';
+import { formatDateTime } from '../../utils/formatters';
+import { JOIN_COMMUNITY_ROLE_LABELS } from '../../utils/constants';
 import { useState } from 'react';
 import { Users } from 'lucide-react';
 
