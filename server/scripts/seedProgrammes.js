@@ -30,14 +30,14 @@ dotenv.config({
   path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV || 'development'}`),
 });
 
-const mongoose = require('mongoose');
-const Programme = require('../src/models/Programme.model');
-const {
+import mongoose from 'mongoose';
+import Programme from '../src/models/Programme.model.js';
+import {
   ALL_PROGRAMMES,
   PROGRAMME_CATEGORIES,
   PROGRAMME_STATUS,
   KNOWN_PROGRAMME_FEES,
-} = require('../src/config/constants');
+} from '../src/config/constants.js';
 
 // ── Placeholder fee bands by category (Super Admin must correct these) ──
 const PLACEHOLDER_FEES = {

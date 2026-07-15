@@ -29,11 +29,16 @@ export const API = {
   },
 
   ADMIN_AUTH: {
-    LOGIN: '/admin/auth/login',
-    LOGOUT: '/admin/auth/logout',
+    LOGIN:           '/admin/auth/login',
+    LOGOUT:          '/admin/auth/logout',
     FORGOT_PASSWORD: '/admin/auth/forgot-password',
-    RESET_PASSWORD: '/admin/auth/reset-password',
-    ME: '/admin/auth/me',
+    RESET_PASSWORD:  '/admin/auth/reset-password',
+    ME:              '/admin/auth/me',
+    PROFILE:              '/admin/auth/profile',
+    CHANGE_PASSWORD:      '/admin/auth/change-password',
+    SESSIONS:             '/admin/auth/sessions',
+    SESSIONS_REVOKE_OTHERS: '/admin/auth/sessions/others',
+    SESSION_BY_ID:        (id) => `/admin/auth/sessions/${id}`,
   },
 
   ADMIN_REGISTRATION: {
@@ -43,12 +48,17 @@ export const API = {
   },
 
   SUPERADMIN_AUTH: {
-    REGISTER: '/superadmin/auth/register',
-    LOGIN: '/superadmin/auth/login',
-    LOGOUT: '/superadmin/auth/logout',
+    REGISTER:        '/superadmin/auth/register',
+    LOGIN:           '/superadmin/auth/login',
+    LOGOUT:          '/superadmin/auth/logout',
     FORGOT_PASSWORD: '/superadmin/auth/forgot-password',
-    RESET_PASSWORD: '/superadmin/auth/reset-password',
-    ME: '/superadmin/auth/me',
+    RESET_PASSWORD:  '/superadmin/auth/reset-password',
+    ME:              '/superadmin/auth/me',
+    PROFILE:              '/superadmin/auth/profile',
+    CHANGE_PASSWORD:      '/superadmin/auth/change-password',
+    SESSIONS:             '/superadmin/auth/sessions',
+    SESSIONS_REVOKE_OTHERS: '/superadmin/auth/sessions/others',
+    SESSION_BY_ID:        (id) => `/superadmin/auth/sessions/${id}`,
   },
 
   ADMIN: {

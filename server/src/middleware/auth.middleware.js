@@ -33,6 +33,7 @@ import Account from '../models/Account.model.js' ;
 import TokenBlocklist from '../models/TokenBlocklist.model.js';
 import { HTTP_STATUS, AUTH } from '../config/constants.js';
 import logger from '../utils/logger.js';
+import Session from '../models/Session.model.js';
 
 // ── Cookie name for the session JWT ──────────────────────────────────
 // Must match the name used when setting the cookie in auth.controller.js.
@@ -137,12 +138,17 @@ const protect = asyncHandler(async (req, res, next) => {
 
   // ── Step 8: Update lastActivity (non-blocking, fire-and-forget)
   // Implements the sliding window inactivity timer.
-  account.touchActivity().catch((err) => {
+   account.touchActivity().catch((err) => {
     logger.warn('Failed to update lastActivity on account', {
       accountId: account._id,
       error: err.message,
     });
   });
+
+   if (decoded.jti) {
+    Session.touchActivity(decoded.jti).catch(() => {});
+  }
+  
 
   // ── Attach to request ─────────────────────────────────────────
   req.account = account;

@@ -32,7 +32,7 @@ const confirmPasswordRule = [
 // ── Admin / Super Admin login (shared shape, used by both endpoints) ──
 const loginValidator = [
   body('email').trim().notEmpty().withMessage('Email address is required.')
-    .isEmail().withMessage('Please provide a valid email address.').normalizeEmail(),
+    .isEmail().withMessage('Please provide a valid email address.') ,
   body('password').notEmpty().withMessage('Password is required.'),
 ];
 

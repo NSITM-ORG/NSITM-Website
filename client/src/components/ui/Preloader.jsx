@@ -12,7 +12,7 @@
 
 export function AppPreloader() {
   return (
-    <div className="fixed inset-0 z-[200] flex flex-col items-center justify-center gap-4 bg-background">
+    <div className="fixed inset-0 z-200 flex flex-col items-center justify-center gap-4 bg-background">
       <div className="h-12 w-12 animate-spin rounded-full border-4 border-surface border-t-primary" />
       <p className="font-heading text-lg font-semibold text-primary">Nextserve</p>
     </div>

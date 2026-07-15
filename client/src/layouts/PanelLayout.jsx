@@ -19,7 +19,7 @@ export function PanelLayout() {
   return (
     <div className="min-h-screen bg-background">
       <Sidebar mobileOpen={mobileSidebarOpen} onCloseMobile={() => setMobileSidebarOpen(false)} />
-      <div className={`transition-all duration-200 ${ui.sidebarCollapsed ? 'lg:pl-[70px]' : 'lg:pl-60'}`}>
+      <div className={`transition-all duration-200 ${ui.sidebarCollapsed ? 'lg:pl-17.5' : 'lg:pl-60'}`}>
         <TopNav title={title} onOpenMobileSidebar={() => setMobileSidebarOpen(true)} />
         <main className="p-4 sm:p-6 lg:p-8">
           <Outlet />

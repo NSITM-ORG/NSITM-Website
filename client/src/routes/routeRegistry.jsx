@@ -18,11 +18,11 @@
  */
 
 import { lazy } from 'react';
-import { siteRoutes } from './siteRoutes.js';
-import { enrollmentRoutes } from './enrollmentRoutes.js';
-import { authRoutes } from './authRoutes.js';
-import { adminRoutes } from './adminRoutes.js';
-import { superAdminRoutes } from './superAdminRoutes.js';
+import { siteRoutes } from './siteRoutes';
+import { enrollmentRoutes } from './enrollmentRoutes';
+import { authRoutes } from './authRoutes';
+import { adminRoutes } from './adminRoutes';
+import { superAdminRoutes } from './superAdminRoutes';
 
 export const allRoutes = [
   ...siteRoutes,
@@ -41,6 +41,7 @@ const pageModules = import.meta.glob('/src/pages/**/*.jsx');
  * doesn't exist in the current batch state. Purely a development-time
  * safety net; every route will resolve to a real page by the end of F10.
  */
+// eslint-disable-next-line react-refresh/only-export-components
 function PageNotBuiltYet({ pageName, title }) {
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center gap-2 text-center">

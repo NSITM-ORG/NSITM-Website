@@ -88,8 +88,8 @@ export function CohortForm({ initialData, onSubmit, submitting, submitLabel = 'S
       )}
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <FormField type="text" label="Start Date" value={form.startDate} onChange={(v) => handleField('startDate', v)} error={errors.startDate} placeholder="YYYY-MM-DD" required />
-        <FormField type="text" label="End Date" value={form.endDate} onChange={(v) => handleField('endDate', v)} error={errors.endDate} placeholder="YYYY-MM-DD" required />
+        <FormField type="date" label="Start Date" value={form.startDate} onChange={(v) => handleField('startDate', v)} error={errors.startDate} placeholder="YYYY-MM-DD" required />
+        <FormField type="date" label="End Date" value={form.endDate} onChange={(v) => handleField('endDate', v)} error={errors.endDate} placeholder="YYYY-MM-DD" required />
       </div>
 
       <FormField

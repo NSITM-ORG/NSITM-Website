@@ -23,8 +23,8 @@ dotenv.config({
   path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV || 'development'}`),
 });
 
-const mongoose = require('mongoose');
-const Settings = require('../src/models/Settings.model');
+import mongoose from 'mongoose'
+import Settings from '../src/models/Settings.model.js'
 
 const seed = async () => {
   const { MONGO_URI } = process.env;

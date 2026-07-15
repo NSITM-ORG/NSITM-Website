@@ -33,6 +33,7 @@
 
 import mongoose from 'mongoose';
 import { SETTINGS_SINGLETON_KEY } from '../config/constants.js';
+import './Account.model.js'; // Register Account model so populate('updatedBy')
 
 // ── Embedded: Bank Details ────────────────────────────────────────────
 const bankDetailsSchema = new mongoose.Schema(
@@ -214,7 +215,7 @@ settingsSchema.statics.getSettings = function () {
     { key: SETTINGS_SINGLETON_KEY },
     { $setOnInsert: { key: SETTINGS_SINGLETON_KEY } },
     {
-      new: true,           // Return the document after the operation
+      returnDocument: 'after',  // Return the document after the operation
       upsert: true,        // Create if it doesn't exist
       setDefaultsOnInsert: true, // Apply schema defaults on creation
     }
@@ -256,7 +257,7 @@ settingsSchema.statics.updateSettings = function (updates, updatedByAccountId) {
     { key: SETTINGS_SINGLETON_KEY },
     { $set: setPayload },
     {
-      new: true,
+      returnDocument: 'after',
       upsert: true,
       setDefaultsOnInsert: true,
       runValidators: true,

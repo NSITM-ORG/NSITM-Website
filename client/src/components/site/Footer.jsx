@@ -12,12 +12,15 @@
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Instagram, Linkedin, Facebook, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { useManageState } from '../../hooks/useManageState.js';
 import { useToast } from '../../hooks/useToast.js';
 import { FormField } from '../ui/FormField.jsx';
 import { Button } from '../ui/Button.jsx';
 import { validators, validateForm } from '../../utils/validation.js';
+import { InstagramIcon, } from '../icons/Instagram.jsx';
+import { LinkedinIcon } from '../icons/LinkedIn.jsx';
+import { FacebookIcon } from '../icons/FacebookIcon.jsx';
 
 const CONTACT_SCHEMA = {
   name: [validators.required(), validators.minLength(2)],
@@ -93,17 +96,17 @@ export function Footer() {
           <div className="mt-4 flex gap-3">
             {institution?.instagram && (
               <a href={institution.instagram} target="_blank" rel="noreferrer" className="text-text-secondary hover:text-primary">
-                <Instagram size={20} />
+                <InstagramIcon size={20} />
               </a>
             )}
             {institution?.linkedin && (
               <a href={institution.linkedin} target="_blank" rel="noreferrer" className="text-text-secondary hover:text-primary">
-                <Linkedin size={20} />
+                <LinkedinIcon size={20} />
               </a>
             )}
             {institution?.facebook && (
               <a href={institution.facebook} target="_blank" rel="noreferrer" className="text-text-secondary hover:text-primary">
-                <Facebook size={20} />
+                <FacebookIcon size={20} />
               </a>
             )}
             {whatsapp?.link && (

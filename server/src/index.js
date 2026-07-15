@@ -45,6 +45,7 @@ try {
 import app from "./app.js";
 import connectDB from "./config/db.js";
 import logger from "./utils/logger.js";
+import chalk from 'chalk'; // Add this at the top of index.js
 
 const PORT = process.env.PORT || 5000;
 const NODE_ENV = process.env.NODE_ENV || "development";
@@ -54,7 +55,7 @@ const startServer = async () => {
   try {
     await connectDB();
 
-    const server = app.listen(PORT, () => {
+    const server = app.listen(PORT, '127.0.0.1', () => {
       logger.info("══════════════════════════════════════════════════");
       logger.info("   NSITM Backend API — Server Started");
       logger.info(`   Environment : ${NODE_ENV}`);
@@ -62,6 +63,25 @@ const startServer = async () => {
       logger.info(`   Base URL    : http://localhost:${PORT}/api/v1`);
       logger.info("══════════════════════════════════════════════════");
     });
+
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        logger.error(`❌ Port ${PORT} is already in use by another process.`);
+        logger.error('   Change PORT in your .env file or kill the other process.');
+        process.exit(1);
+      } else {
+        logger.error('Server error:', err);
+        process.exit(1);
+      }
+    });
+
+    // Request logging middleware (development only)
+    if (NODE_ENV === 'development') {
+      app.use((req, res, next) => {
+        console.log('okay', chalk.cyan(`[${new Date().toLocaleTimeString()}] ${req.method} ${req.path}`));
+        next();
+      });
+    }
 
     // ── Step 6: Process-level event handlers ─────────────────────
 

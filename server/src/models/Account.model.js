@@ -193,8 +193,8 @@ accountSchema.virtual("isLocked").get(function () {
  * Hash password before saving if it has been modified.
  * Sets passwordChangedAt for existing accounts (not on initial creation).
  */
-accountSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
+accountSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
 
   try {
     this.password = await bcrypt.hash(this.password, AUTH.BCRYPT_SALT_ROUNDS);
@@ -205,9 +205,9 @@ accountSchema.pre("save", async function (next) {
       this.passwordChangedAt = new Date(Date.now() - 1000);
     }
 
-    next();
+    // next();
   } catch (err) {
-    next(err);
+    // next(err);
   }
 });
 

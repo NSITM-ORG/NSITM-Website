@@ -168,7 +168,7 @@ profileSchema.index(
 // ─────────────────────────────────────────────────────────────────────
 // PRE-SAVE HOOK — Name Field Synchronization
 // ─────────────────────────────────────────────────────────────────────
-profileSchema.pre("save", function (next) {
+profileSchema.pre("save", async function () {
   // Case 1: firstName and lastName are explicitly set — compute fullName from them
   if (
     (this.isModified("firstName") || this.isModified("lastName")) &&
@@ -176,7 +176,8 @@ profileSchema.pre("save", function (next) {
     this.lastName
   ) {
     this.fullName = `${this.firstName.trim()} ${this.lastName.trim()}`;
-    return next();
+    return;
+    // return next();
   }
 
   // Case 2: fullName is set — attempt to split into firstName and lastName
@@ -192,7 +193,7 @@ profileSchema.pre("save", function (next) {
     }
   }
 
-  next();
+  // next();
 });
 
 // ─────────────────────────────────────────────────────────────────────

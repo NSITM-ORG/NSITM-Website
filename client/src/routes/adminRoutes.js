@@ -10,6 +10,7 @@ export const adminRoutes = [
   { id: 'admin-pending-reviews', path: '/admin/enrollments/pending', page: 'PendingReviewsPage', layout: 'PanelLayout', access: 'admin', meta: { title: 'Pending Reviews' } },
   { id: 'admin-outstanding-instalments', path: '/admin/instalments/outstanding', page: 'OutstandingInstalmentsPage', layout: 'PanelLayout', access: 'admin', meta: { title: 'Outstanding Instalments' } },
   { id: 'admin-contact-messages', path: '/admin/contact-messages', page: 'ContactMessagesPage', layout: 'PanelLayout', access: 'admin', meta: { title: 'Contact Messages' } },
+  { id: 'admin-account', path: '/admin/account', page: 'AccountSettingsPage', layout: 'PanelLayout', access: 'admin', meta: { title: 'My Account' } },
 ];
 
 export default adminRoutes;

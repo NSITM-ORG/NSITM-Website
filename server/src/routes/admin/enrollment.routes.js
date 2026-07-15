@@ -22,6 +22,8 @@ import { ROLES } from '../../config/constants.js';
 // All routes in this file require authentication
 router.use(protect);
 router.use(authorize(ROLES.ADMIN, ROLES.SUPER_ADMIN));
+console.log('ADMIN:', ROLES.ADMIN);
+console.log('SUPER_ADMIN:', ROLES.SUPER_ADMIN);
 
 // GET /api/v1/admin/enrollments/dashboard
 // Must be before /:id to prevent 'dashboard' being treated as an id

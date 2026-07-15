@@ -19,6 +19,7 @@ import crypto from 'crypto';
 import Account from '../models/Account.model.js';
 import Profile from '../models/Profile.model.js';
 import PasswordResetToken from '../models/PasswordResetToken.model.js';
+import Session from '../models/Session.model.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import ApiError from '../utils/ApiError.js';
 import { sendSuccess } from '../utils/ApiResponse.js';
@@ -27,6 +28,7 @@ import { sendPasswordResetLink } from '../services/email.service.js';
 import { generateToken, hashToken, secureCompare } from '../helpers/tokenGenerator.helper.js';
 import { HTTP_STATUS, AUTH, AUDIT_ACTIONS, ROLES, PROFILE_TYPES } from '../config/constants.js';
 import logger from '../utils/logger.js';
+
 
 // ─────────────────────────────────────────────────────────────────────
 // POST /api/v1/superadmin/auth/register
@@ -86,6 +88,7 @@ const register = asyncHandler(async (req, res, next) => {
 const login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
+  console.log(req.body)
   const account = await Account.findByEmailWithPassword(email);
 
   if (!account || account.role !== ROLES.SUPER_ADMIN) {
@@ -127,8 +130,9 @@ const login = asyncHandler(async (req, res, next) => {
   }
 
   await account.resetLoginAttempts();
-  const { token, expiresAt } = signAccessToken(account);
+  const { token, jti, expiresAt } = signAccessToken(account);
   setSessionCookie(res, token, expiresAt);
+  await Session.createForLogin({ accountId: account._id, jti, expiresAt, req });
   await account.populate('profile', 'fullName email phone whatsappNumber avatarUrl');
 
   await req.logAction(AUDIT_ACTIONS.LOGIN, {

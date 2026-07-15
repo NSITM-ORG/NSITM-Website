@@ -16,17 +16,19 @@
 
 import { createBrowserRouter } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
-import { SiteLayout } from '../layouts/SiteLayout.jsx';
-import { PanelLayout } from '../layouts/PanelLayout.jsx';
-import { SinglePageLayout } from '../layouts/SinglePageLayout.jsx';
-import { ProtectedRoute } from '../components/ui/ProtectedRoute.jsx';
-import { RouteFallback } from '../components/ui/Preloader.jsx';
-import { resolvedRoutes } from './routeRegistry.js';
+import { SiteLayout } from '../layouts/SiteLayout';
+import { PanelLayout } from '../layouts/PanelLayout';
+import { SinglePageLayout } from '../layouts/SinglePageLayout';
+import { ProtectedRoute } from '../components/ui/ProtectedRoute';
+import { RouteFallback } from '../components/ui/Preloader';
+import { resolvedRoutes } from './routeRegistry';
 
+// eslint-disable-next-line react-refresh/only-export-components
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 
 
 function buildChildRoute(route) {
+  // eslint-disable-next-line no-unused-vars
   const { Component, ...routeMeta } = route;
   return {
     path: route.path,

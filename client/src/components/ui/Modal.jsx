@@ -29,14 +29,17 @@ export function Modal({ isOpen, onClose, title, children, size = 'md', closeOnBa
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
       onClick={closeOnBackdrop ? onClose : undefined}
     >
+      {/* Backdrop tint layer — behind the modal, separate from the blur */}
+      <div className="absolute inset-0 bg-primary/30 backdrop-blur-sm" aria-hidden="true" />
+      
       <div
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
-        className={`w-full ${sizeClasses[size]} rounded-lg bg-surface-elevated p-6 shadow-elevated animate-[fadeIn_200ms_ease-out]`}
+        className={`relative w-full ${sizeClasses[size]} rounded-lg bg-[color-mix(in_oklab,var(--color-surface-elevated),white_12%)] backdrop-blur-md ring-1 ring-white/20 p-6 shadow-elevated animate-[fadeIn_200ms_ease-out]`}
       >
         <div className="mb-4 flex items-center justify-between">
           {title && <h3 className="text-lg font-semibold font-heading text-text-primary">{title}</h3>}

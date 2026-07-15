@@ -1,36 +1,30 @@
 /**
  * ProtectedRoute — reads a single generic `access` value ('allow' |
- * 'admin' | 'super-admin') off the matched route, per build instruction
- * #16 ("centralize page authorization"). No per-route role arrays
- * hardcoded anywhere else in the app — this is the ONE place access
- * logic lives.
+ * 'admin' | 'super-admin') off the matched route.
  *
- * BEHAVIOR:
- *   - Waits for auth.bootstrapped before deciding anything (prevents a
- *     flash-redirect to /login while the initial getMe() call is still
- *     in flight on page refresh).
- *   - 'admin'      → allows role admin OR super_admin
- *   - 'super-admin'→ allows role super_admin only; an authenticated
- *     Admin hitting a Super-Admin-only route sees an inline 403 message
- *     (not a redirect) — this mirrors the backend's actual behavior
- *     (403 Forbidden) rather than silently bouncing them, and keeps the
- *     URL visible for debugging exactly as specified in the earlier
- *     locked plan.
- *   - Unauthenticated on a protected route → redirect to the correct
- *     login page based on the route's own namespace (admin vs superadmin),
- *     preserving the originally-requested path via `state.from` so the
- *     login page can redirect back after success.
+ * ISSUE 1 FIX: For access:'allow' routes, this component returns the
+ * children IMMEDIATELY — before even reading auth.bootstrapped — so a
+ * public page never waits on, depends on, or is influenced by any auth
+ * state whatsoever. The session check is only ever triggered (via the
+ * useEffect below) when a route with access !== 'allow' is rendered,
+ * making the auth check fully on-demand rather than app-wide.
  */
 
+import { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth.js';
-import { AppPreloader } from './Preloader.jsx';
+import { useAuth } from '../../hooks/useAuth';
+import { AppPreloader } from './Preloader';
 import { ShieldAlert } from 'lucide-react';
 
 export function ProtectedRoute({ access, children }) {
-  const { isAuthenticated, bootstrapped, isAdmin, isSuperAdmin, isAdminOrAbove } = useAuth();
+  const { isAuthenticated, bootstrapped, isAdminOrAbove, isSuperAdmin, ensureSessionChecked } = useAuth();
   const location = useLocation();
 
+  useEffect(() => {
+    if (access !== 'allow') ensureSessionChecked();
+  }, [access, ensureSessionChecked]);
+
+  // Public routes: zero dependency on auth state, zero network calls, zero waiting.
   if (access === 'allow') return children;
 
   if (!bootstrapped) return <AppPreloader />;
@@ -40,13 +34,8 @@ export function ProtectedRoute({ access, children }) {
     return <Navigate to={loginPath} state={{ from: location.pathname }} replace />;
   }
 
-  if (access === 'admin' && !isAdminOrAbove) {
-    return <ForbiddenNotice />;
-  }
-
-  if (access === 'super-admin' && !isSuperAdmin) {
-    return <ForbiddenNotice />;
-  }
+  if (access === 'admin' && !isAdminOrAbove) return <ForbiddenNotice />;
+  if (access === 'super-admin' && !isSuperAdmin) return <ForbiddenNotice />;
 
   return children;
 }

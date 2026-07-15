@@ -95,6 +95,11 @@ export function useManageState() {
       superAdminResetPassword: (p) => dispatch(authActions.superAdminResetPassword(p)).unwrap(),
       logout: () => dispatch(authActions.logout()).unwrap(),
       getMe: (roleHint) => dispatch(authActions.getMe(roleHint)).unwrap(),
+       fetchSessions: () => dispatch(authActions.fetchSessions()).unwrap(),
+      revokeSession: (id) => dispatch(authActions.revokeSession(id)).unwrap(),
+      revokeOtherSessions: () => dispatch(authActions.revokeOtherSessions()).unwrap(),
+      updateOwnProfile: (p) => dispatch(authActions.updateOwnProfile(p)).unwrap(),
+      changeOwnPassword: (p) => dispatch(authActions.changeOwnPassword(p)).unwrap(),
       clearAuthError: () => dispatch(authActions.clearAuthError()),
       clearUser: () => dispatch(authActions.clearUser()),
 

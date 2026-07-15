@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * Centralized fetch() Wrapper — The ONLY place in the app that calls fetch().
  *
@@ -59,6 +60,7 @@ export class ApiError extends Error {
 async function request(path, options = {}) {
   const url = `${BASE_URL}${path}`;
 
+  console.log('url', url)
   let response;
   try {
     response = await fetch(url, {

@@ -175,7 +175,7 @@ const seed = async () => {
         `   A duplicate key error occurred. An account with this email may already exist.`,
       );
     }
-    await mongoose.disconnect().catch(() => {});
+    await mongoose.disconnect().catch(() => { });
     process.exit(1);
   }
 };

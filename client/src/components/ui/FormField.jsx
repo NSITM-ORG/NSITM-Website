@@ -2,7 +2,7 @@
  * FormField — THE universal form field component (build instruction #13).
  *
  * Handles every input shape the project needs via the `type` prop:
- *   text | email | tel | password | number | textarea | select |
+ *   text | email | tel | password | number | date | textarea | select |
  *   radio-group | checkbox | file-dropzone
  *
  * FEATURES:
@@ -10,6 +10,9 @@
  *   - Optional character counter (for maxLength-bound fields like
  *     Referral Code — "12/20 characters")
  *   - Password fields get a built-in show/hide toggle
+ *   - Date fields get a themed calendar icon affordance (native
+ *     picker indicator is stretched invisibly over the full field
+ *     so the whole input opens the picker, not just the icon)
  *   - Focus ring matches the design spec: ring-2 ring-primary,
  *     offset-4, border shifts to primary
  *   - `validate` prop accepts an array of validator functions from
@@ -24,7 +27,7 @@
  */
 
 import { useState, useId } from 'react';
-import { Eye, EyeOff, Upload, X, FileText } from 'lucide-react';
+import { Eye, EyeOff, Upload, X, FileText, Calendar } from 'lucide-react';
 import { runValidators } from '../../utils/validation.js';
 import { formatFileSize } from '../../utils/formatters.js';
 
@@ -63,13 +66,17 @@ export function FormField({
     onBlur?.(e);
   };
 
+  /* ── Frosted / theme-blendable field background (same treatment as Modal) ── */
   const baseFieldClasses = `
-    w-full px-4 py-2.5 rounded-sm border bg-surface-elevated text-text-primary
-    placeholder:text-text-secondary transition-colors duration-150
+    w-full px-4 py-2.5 rounded-sm border 
+    bg-[color-mix(in_oklab,var(--color-surface-elevated),white_10%)] 
+    backdrop-blur-sm ring-1 ring-white/10
+    text-text-primary placeholder:text-text-secondary transition-colors duration-150
     focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-4 focus:border-primary
     disabled:opacity-50 disabled:cursor-not-allowed
     ${error ? 'border-error' : 'border-border'}
   `;
+
 
   // ── File Dropzone ────────────────────────────────────────────────
   if (type === 'file-dropzone') {
@@ -80,9 +87,14 @@ export function FormField({
           <label
             htmlFor={id}
             {...file.dragHandlers}
+            // className={`
+            //   flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed
+            //   px-6 py-10 text-center cursor-pointer transition-colors
+            //   ${file.isDragActive ? 'border-primary bg-primary/5' : 'border-border hover:border-primary'}
             className={`
               flex flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed
               px-6 py-10 text-center cursor-pointer transition-colors
+              bg-[color-mix(in_oklab,var(--color-surface-elevated),white_8%)] backdrop-blur-sm
               ${file.isDragActive ? 'border-primary bg-primary/5' : 'border-border hover:border-primary'}
             `}
           >
@@ -100,7 +112,10 @@ export function FormField({
             />
           </label>
         ) : (
-          <div className="flex items-center gap-3 rounded-md border border-border bg-surface-elevated p-3">
+            <div className="flex items-center gap-3 rounded-md border border-border 
+            bg-[color-mix(in_oklab,var(--color-surface-elevated),white_10%)] 
+            backdrop-blur-sm ring-1 ring-white/10 p-3">
+          {/* <div className="flex items-center gap-3 rounded-md border border-border bg-surface-elevated p-3"> */}
             {file.previewUrl ? (
               <img src={file.previewUrl} alt="Receipt preview" className="h-14 w-14 rounded-sm object-cover" />
             ) : (
@@ -248,6 +263,34 @@ export function FormField({
           >
             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>
+        </div>
+        {error && <FieldError message={error} />}
+        {hint && !error && <FieldHint>{hint}</FieldHint>}
+      </div>
+    );
+  }
+
+  // ── Date ─────────────────────────────────────────────────────────
+  if (type === 'date') {
+    return (
+      <div className={className}>
+        {label && <FieldLabel htmlFor={id} required={required}>{label}</FieldLabel>}
+        <div className="relative">
+          <input
+            id={id}
+            type="date"
+            name={name}
+            value={value ?? ''}
+            onChange={(e) => onChange?.(e.target.value)}
+            onBlur={handleBlur}
+            disabled={disabled}
+            className={`${baseFieldClasses} pr-11 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:opacity-0`}
+            {...rest}
+          />
+          <Calendar
+            size={18}
+            className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-text-secondary"
+          />
         </div>
         {error && <FieldError message={error} />}
         {hint && !error && <FieldHint>{hint}</FieldHint>}

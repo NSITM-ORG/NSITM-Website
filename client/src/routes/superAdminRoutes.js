@@ -18,6 +18,7 @@ export const superAdminRoutes = [
   { id: 'sa-settings', path: '/superadmin/settings', page: 'SettingsPage', layout: 'PanelLayout', access: 'super-admin', meta: { title: 'Settings' } },
   { id: 'sa-audit-password-resets', path: '/superadmin/audit/password-resets', page: 'AuditPasswordResetsPage', layout: 'PanelLayout', access: 'super-admin', meta: { title: 'Password Reset Audit' } },
   { id: 'sa-audit-unauthorized', path: '/superadmin/audit/unauthorized-access', page: 'AuditUnauthorizedPage', layout: 'PanelLayout', access: 'super-admin', meta: { title: 'Unauthorized Access Audit' } },
+  { id: 'sa-account', path: '/superadmin/account', page: 'AccountSettingsPage', layout: 'PanelLayout', access: 'super-admin', meta: { title: 'My Account' } },
 ];
 
 export default superAdminRoutes;

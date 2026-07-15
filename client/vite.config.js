@@ -50,7 +50,10 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   plugins: [
     react(),
-    babel({ presets: [reactCompilerPreset({ target: '19' })] }),
+    babel({
+      presets: [reactCompilerPreset({ target: '19' })],
+      parserOpts: { plugins: ['jsx'] }, // ← add this
+    }),
     tailwindcss(),
   ],
   server: {

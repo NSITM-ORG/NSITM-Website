@@ -22,8 +22,8 @@ dotenv.config({
   path: path.resolve(process.cwd(), `.env.${process.env.NODE_ENV || 'development'}`),
 });
 
-const mongoose = require('mongoose');
-const Faq = require('../src/models/Faq.model');
+import mongoose from 'mongoose'
+import Faq from '../src/models/Faq.model.js'
 
 const STARTER_FAQS = [
   {

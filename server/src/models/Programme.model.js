@@ -259,12 +259,12 @@ programmeSchema.index(
 // ─────────────────────────────────────────────────────────────────────
 // PRE-SAVE HOOK — Auto-generate Slug
 // ─────────────────────────────────────────────────────────────────────
-programmeSchema.pre('save', function (next) {
+programmeSchema.pre('save', async function () {
   // Only regenerate slug if name has changed or slug is not yet set
   if (this.isModified('name') || !this.slug) {
     this.slug = generateSlug(this.name);
   }
-  next();
+  // next();
 });
 
 // ─────────────────────────────────────────────────────────────────────

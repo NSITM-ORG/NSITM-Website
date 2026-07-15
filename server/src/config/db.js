@@ -17,6 +17,9 @@
 import mongoose from 'mongoose';
 import logger from '../utils/logger.js';
 
+// Enable Mongoose's built-in query filter sanitization
+mongoose.set('sanitizeFilter', true);
+
 const connectDB = async () => {
   const mongoURI = process.env.MONGO_URI;
 

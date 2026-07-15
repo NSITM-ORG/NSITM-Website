@@ -15,6 +15,7 @@
 import Account from '../models/Account.model.js';
 import PasswordResetToken from '../models/PasswordResetToken.model.js';
 import TokenBlocklist from '../models/TokenBlocklist.model.js';
+import Session from '../models/Session.model.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import ApiError from '../utils/ApiError.js';
 import { sendSuccess } from '../utils/ApiResponse.js';
@@ -35,6 +36,7 @@ import {
   ROLES,
 } from '../config/constants.js';
 import logger from '../utils/logger.js';
+import jwt from 'jsonwebtoken'
 
 // ─────────────────────────────────────────────────────────────────────
 // POST /api/v1/admin/auth/login — role-restricted to ADMIN only
@@ -119,12 +121,14 @@ const login = asyncHandler(async (req, res, next) => {
   }
 
   await account.resetLoginAttempts();
-  const { token, expiresAt } = signAccessToken(account);
+  const { token, jti, expiresAt } = signAccessToken(account);
   setSessionCookie(res, token, expiresAt);
-  await account.populate(
-    "profile",
-    "fullName email phone whatsappNumber avatarUrl",
-  );
+
+  // Track this login as a new active session (Issue 2 — multi-device support)
+  await Session.createForLogin({ accountId: account._id, jti, expiresAt, req });
+
+  // Populate profile for response
+  await account.populate('profile', 'fullName email phone avatarUrl');
 
   await req.logAction(AUDIT_ACTIONS.LOGIN, {
     targetModel: "Account",
@@ -299,11 +303,10 @@ const logout = asyncHandler(async (req, res, next) => {
   const account = req.account;
 
   if (tokenJti) {
-    const decoded = require("jsonwebtoken").decode(token);
-    const expiresAt = decoded?.exp
-      ? new Date(decoded.exp * 1000)
-      : new Date(Date.now() + 3600000);
+    const decoded = jwt.decode(token);
+    const expiresAt = decoded?.exp ? new Date(decoded.exp * 1000) : new Date(Date.now() + 3600000);
     await TokenBlocklist.blacklist(tokenJti, account._id, expiresAt);
+    await Session.revokeByJti(tokenJti);
   }
 
   await Account.findByIdAndUpdate(account._id, { loggedOutAt: new Date() });

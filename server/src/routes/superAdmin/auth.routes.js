@@ -7,7 +7,6 @@
  */
 
 import express from 'express';
-const router = express.Router();
 
 import { logout, getMe } from '../../controllers/auth.controller.js'; // role-agnostic, reused
 import {
@@ -21,6 +20,13 @@ import {
   loginValidator, forgotPasswordValidator, resetPasswordValidator,
   superAdminRegisterValidator,
 } from '../../utils/validators/auth.validator.js';
+import { updateOwnProfile, changeOwnPassword } from '../../controllers/selfAccount.controller.js';
+import { listSessions, revokeSession, revokeOtherSessions } from '../../controllers/session.controller.js';
+import { updateOwnProfileValidator, changeOwnPasswordValidator } from '../../utils/validators/selfAccount.validator.js';
+
+
+const router = express.Router();
+
 
 router.post('/register', superAdminRegisterLimiter, superAdminRegisterValidator, validate, register);
 router.post('/login', loginLimiter, loginValidator, validate, login);
@@ -29,5 +35,14 @@ router.post('/reset-password', resetPasswordValidator, validate, resetPassword);
 
 router.post('/logout', protect, logout);
 router.get('/me', protect, getMe);
+
+// ── Self-service profile & password (Issue 3) ────────────────────────
+router.patch('/profile', protect, updateOwnProfileValidator, validate, updateOwnProfile);
+router.post('/change-password', protect, changeOwnPasswordValidator, validate, changeOwnPassword);
+
+// ── Multi-device session management (Issue 2) ─────────────────────────
+router.get('/sessions', protect, listSessions);
+router.delete('/sessions/others', protect, revokeOtherSessions);
+router.delete('/sessions/:id', protect, revokeSession);
 
 export default router;

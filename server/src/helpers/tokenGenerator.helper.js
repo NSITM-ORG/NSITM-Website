@@ -22,7 +22,7 @@
  */
 
 import crypto from 'crypto';
-import { AUTH } from '../config/constants.js';
+import { AUTH, INVITATION } from '../config/constants.js';
 
 /**
  * Generate a cryptographically secure random token and its SHA-256 hash.
@@ -132,7 +132,7 @@ const getInstalmentTokenExpiry = () => {
  * @param {number} [length=INVITATION.CODE_LENGTH]
  * @returns {{ rawCode: string, codeHash: string }}
  */
-const generateShortCode = (length = require('../config/constants').INVITATION.CODE_LENGTH) => {
+const generateShortCode = (length = INVITATION.CODE_LENGTH) => {
   const alphabet = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
   let rawCode = '';
   for (let i = 0; i < length; i++) {
@@ -149,7 +149,7 @@ const generateShortCode = (length = require('../config/constants').INVITATION.CO
  * @param {number} [length=INVITATION.NOISE_TEXT_LENGTH]
  * @returns {string}
  */
-const generateNoiseText = (length = require('../config/constants').INVITATION.NOISE_TEXT_LENGTH) => {
+const generateNoiseText = (length = INVITATION.NOISE_TEXT_LENGTH) => {
   return crypto.randomBytes(Math.ceil(length / 2)).toString('hex').slice(0, length);
 };
 
@@ -160,7 +160,7 @@ const generateNoiseText = (length = require('../config/constants').INVITATION.NO
  * @returns {Date}
  */
 const getInvitationCodeExpiry = () => {
-  const { INVITATION } = require('../config/constants');
+  // const { INVITATION } = require('../config/constants');
   return new Date(Date.now() + INVITATION.CODE_EXPIRY_MS);
 };
 

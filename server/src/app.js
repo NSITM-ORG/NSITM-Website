@@ -27,7 +27,7 @@ import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
-import mongoSanitize from 'express-mongo-sanitize';
+// import mongoSanitize from 'express-mongo-sanitize';
 import hpp from 'hpp';
 
 
@@ -72,6 +72,7 @@ const allowedOrigins = [
 
 app.use(
   cors({
+    // origin: true,           // Reflects the actual request origin
     origin: (origin, callback) => {
       // Allow requests with no origin header (Postman, curl, server-to-server, mobile apps)
       if (!origin) return callback(null, true);
@@ -137,19 +138,19 @@ if (process.env.NODE_ENV === 'development') {
 
 // Prevent MongoDB NoSQL injection attacks.
 // Strips characters like '$' and '.' from req.body, req.query, req.params.
-app.use(
-  mongoSanitize({
-    replaceWith: '_',
-    onSanitize: ({ req, key }) => {
-      logger.warn('Potential NoSQL injection attempt intercepted', {
-        ip: req.ip,
-        method: req.method,
-        url: req.originalUrl,
-        sanitizedKey: key,
-      });
-    },
-  })
-);
+// app.use(
+//   mongoSanitize({
+//     replaceWith: '_',
+//     onSanitize: ({ req, key }) => {
+//       logger.warn('Potential NoSQL injection attempt intercepted', {
+//         ip: req.ip,
+//         method: req.method,
+//         url: req.originalUrl,
+//         sanitizedKey: key,
+//       });
+//     },
+//   })
+// );
 
 // Prevent HTTP Parameter Pollution attacks.
 // E.g., prevents ?status=confirmed&status=not_paid breaking query logic.

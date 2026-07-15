@@ -116,6 +116,65 @@ export const getMe = createAsyncThunk('auth/getMe', async (roleHint, { rejectWit
   }
 });
 
+/**
+ * fetchSessions / revokeSession / revokeOtherSessions — Issue 2.
+ * updateOwnProfile / changeOwnPassword — Issue 3.
+ *
+ * All five pick their endpoint based on the CURRENTLY logged-in user's
+ * role (mirroring the existing `logout` thunk's pattern) since these
+ * routes exist identically under both /admin and /superadmin namespaces.
+ */
+export const fetchSessions = createAsyncThunk('auth/fetchSessions', async (_, { getState, rejectWithValue }) => {
+  const role = getState().auth.user?.role;
+  const endpoint = role === 'super_admin' ? API.SUPERADMIN_AUTH.SESSIONS : API.ADMIN_AUTH.SESSIONS;
+  try {
+    return (await httpClient.get(endpoint)).data;
+  } catch (err) {
+    return rejectWithValue(err);
+  }
+});
+
+export const revokeSession = createAsyncThunk('auth/revokeSession', async (sessionId, { getState, rejectWithValue }) => {
+  const role = getState().auth.user?.role;
+  const endpoint = role === 'super_admin' ? API.SUPERADMIN_AUTH.SESSION_BY_ID(sessionId) : API.ADMIN_AUTH.SESSION_BY_ID(sessionId);
+  try {
+    await httpClient.del(endpoint);
+    return sessionId;
+  } catch (err) {
+    return rejectWithValue(err);
+  }
+});
+
+export const revokeOtherSessions = createAsyncThunk('auth/revokeOtherSessions', async (_, { getState, rejectWithValue }) => {
+  const role = getState().auth.user?.role;
+  const endpoint = role === 'super_admin' ? API.SUPERADMIN_AUTH.SESSIONS_REVOKE_OTHERS : API.ADMIN_AUTH.SESSIONS_REVOKE_OTHERS;
+  try {
+    return (await httpClient.del(endpoint)).data;
+  } catch (err) {
+    return rejectWithValue(err);
+  }
+});
+
+export const updateOwnProfile = createAsyncThunk('auth/updateOwnProfile', async (payload, { getState, rejectWithValue }) => {
+  const role = getState().auth.user?.role;
+  const endpoint = role === 'super_admin' ? API.SUPERADMIN_AUTH.PROFILE : API.ADMIN_AUTH.PROFILE;
+  try {
+    return (await httpClient.patch(endpoint, payload)).data;
+  } catch (err) {
+    return rejectWithValue(err);
+  }
+});
+
+export const changeOwnPassword = createAsyncThunk('auth/changeOwnPassword', async (payload, { getState, rejectWithValue }) => {
+  const role = getState().auth.user?.role;
+  const endpoint = role === 'super_admin' ? API.SUPERADMIN_AUTH.CHANGE_PASSWORD : API.ADMIN_AUTH.CHANGE_PASSWORD;
+  try {
+    return (await httpClient.post(endpoint, payload)).message;
+  } catch (err) {
+    return rejectWithValue(err);
+  }
+});
+
 const initialState = {
   user: null, // { id, email, role, profile: { fullName, email, phone } }
   isAuthenticated: false,
@@ -123,6 +182,11 @@ const initialState = {
   submitting: false,
   error: null,
   bootstrapped: false, // true once the initial getMe() check has resolved (any outcome)
+  sessions: [],
+  sessionsLoading: false,
+  profileUpdating: false,
+  passwordChanging: false,
+
 };
 
 const authSlice = createSlice({
@@ -139,30 +203,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Login (both namespaces resolve identically)
-      .addMatcher(
-        (action) => [adminLogin.pending.type, superAdminLogin.pending.type].includes(action.type),
-        (state) => {
-          state.submitting = true;
-          state.error = null;
-        }
-      )
-      .addMatcher(
-        (action) => [adminLogin.fulfilled.type, superAdminLogin.fulfilled.type].includes(action.type),
-        (state, action) => {
-          state.submitting = false;
-          state.user = action.payload.account;
-          state.isAuthenticated = true;
-          state.bootstrapped = true;
-        }
-      )
-      .addMatcher(
-        (action) => [adminLogin.rejected.type, superAdminLogin.rejected.type].includes(action.type),
-        (state, action) => {
-          state.submitting = false;
-          state.error = action.payload;
-        }
-      )
+    
       // getMe (session bootstrap)
       .addCase(getMe.pending, (state) => {
         state.loading = true;
@@ -196,6 +237,74 @@ const authSlice = createSlice({
         state.submitting = false;
         state.error = action.payload;
       })
+      
+      // Session
+      .addCase(fetchSessions.pending, (state) => {
+        state.sessionsLoading = true;
+      })
+      .addCase(fetchSessions.fulfilled, (state, action) => {
+        state.sessionsLoading = false;
+        state.sessions = action.payload.sessions;
+      })
+      .addCase(fetchSessions.rejected, (state, action) => {
+        state.sessionsLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(revokeSession.fulfilled, (state, action) => {
+        state.sessions = state.sessions.filter((s) => s.id !== action.payload);
+      })
+      .addCase(revokeOtherSessions.fulfilled, (state) => {
+        state.sessions = state.sessions.filter((s) => s.isCurrent);
+      })
+      // Profile
+      .addCase(updateOwnProfile.pending, (state) => {
+        state.profileUpdating = true;
+        state.error = null;
+      })
+      .addCase(updateOwnProfile.fulfilled, (state, action) => {
+        state.profileUpdating = false;
+        state.user = action.payload.account;
+      })
+      .addCase(updateOwnProfile.rejected, (state, action) => {
+        state.profileUpdating = false;
+        state.error = action.payload;
+      })
+      .addCase(changeOwnPassword.pending, (state) => {
+        state.passwordChanging = true;
+        state.error = null;
+      })
+      .addCase(changeOwnPassword.fulfilled, (state) => {
+        state.passwordChanging = false;
+      })
+      .addCase(changeOwnPassword.rejected, (state, action) => {
+        state.passwordChanging = false;
+        state.error = action.payload;
+      })
+
+      // Login (both namespaces resolve identically)
+      .addMatcher(
+        (action) => [adminLogin.pending.type, superAdminLogin.pending.type].includes(action.type),
+        (state) => {
+          state.submitting = true;
+          state.error = null;
+        }
+      )
+      .addMatcher(
+        (action) => [adminLogin.fulfilled.type, superAdminLogin.fulfilled.type].includes(action.type),
+        (state, action) => {
+          state.submitting = false;
+          state.user = action.payload.account;
+          state.isAuthenticated = true;
+          state.bootstrapped = true;
+        }
+      )
+      .addMatcher(
+        (action) => [adminLogin.rejected.type, superAdminLogin.rejected.type].includes(action.type),
+        (state, action) => {
+          state.submitting = false;
+          state.error = action.payload;
+        }
+      )
       // Forgot/Reset password (both namespaces — no state patch beyond flags,
       // message is returned directly to the calling component)
       .addMatcher(
@@ -237,6 +346,8 @@ const authSlice = createSlice({
         }
       );
   },
+
+
 });
 
 export const { clearAuthError, clearUser } = authSlice.actions;

@@ -50,7 +50,7 @@ export function SinglePageLayout() {
             <MessageCircle size={22} />
           </a>
         ) : (
-          <span className="w-[22px]" />
+          <span className="w-5.5" />
         )}
       </header>
       <main className="flex-1">

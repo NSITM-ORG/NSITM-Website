@@ -10,13 +10,17 @@
 import Enrollment from '../models/Enrollment.model.js';
 import Programme from '../models/Programme.model.js';
 import Cohort from '../models/Cohort.model.js';
+import Settings from '../models/Settings.model.js';
+import Profile from '../models/Profile.model.js';
+import AuditLog from '../models/AuditLog.model.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import ApiError from '../utils/ApiError.js';
 import { sendSuccess, sendPaginated } from '../utils/ApiResponse.js';
 import { getPaginationParams, getPaginationMeta } from '../utils/pagination.js';
 import { resolveStudentProfile } from '../helpers/profileResolver.helper.js';
 import { findExistingPartialRecord, assertNoActiveEnrollment, findLatestPartialRecord } from '../helpers/duplicateChecker.helper.js';
-import { uploadEnrollmentReceipt, getSignedFileUrl } from '../services/upload.service.js';
+import { uploadEnrollmentReceipt, getSignedFileUrl, deleteFile } from '../services/upload.service.js';
+import { getInstalmentSummary } from '../services/instalment.service.js';
 import { sendEnrollmentAcknowledgment } from '../services/email.service.js';
 import { HTTP_STATUS, PAYMENT_STATUS, AUDIT_ACTIONS } from '../config/constants.js';
 import logger from '../utils/logger.js';
@@ -57,21 +61,21 @@ const createPartialRecord = asyncHandler(async (req, res, next) => {
 
   if (existingPartial) {
     // FRD FR-07.3: "Update the existing record's fields with newly submitted values"
-    existingPartial.programme     = programme._id;
-    existingPartial.cohort        = programme.activeCohort?._id || null;
+    existingPartial.programme = programme._id;
+    existingPartial.cohort = programme.activeCohort?._id || null;
     existingPartial.deliveryFormat = deliveryFormat || existingPartial.deliveryFormat;
-    existingPartial.referralCode  = referralCode !== undefined ? referralCode || null : existingPartial.referralCode;
+    existingPartial.referralCode = referralCode !== undefined ? referralCode || null : existingPartial.referralCode;
     await existingPartial.save();
     enrollment = existingPartial;
   } else {
     // Create new partial enrollment record
     enrollment = await Enrollment.create({
-      profile:          profile._id,
-      programme:        programme._id,
-      cohort:           programme.activeCohort?._id || null,
-      deliveryFormat:   deliveryFormat || null,
-      referralCode:     referralCode || null,
-      paymentStatus:    PAYMENT_STATUS.NOT_PAID,
+      profile: profile._id,
+      programme: programme._id,
+      cohort: programme.activeCohort?._id || null,
+      deliveryFormat: deliveryFormat || null,
+      referralCode: referralCode || null,
+      paymentStatus: PAYMENT_STATUS.NOT_PAID,
       isPartialEnrollment: true,
     });
 
@@ -91,9 +95,9 @@ const createPartialRecord = asyncHandler(async (req, res, next) => {
     res,
     HTTP_STATUS.CREATED,
     {
-      enrollmentId:  enrollment._id,
+      enrollmentId: enrollment._id,
       programmeSlug: programme.slug,
-      isExisting:    !!existingPartial,
+      isExisting: !!existingPartial,
     },
     'Enrollment record created. Please proceed to the next step.'
   );
@@ -195,20 +199,20 @@ const completeEnrollment = asyncHandler(async (req, res, next) => {
 
   // ── Update enrollment record to Pending ───────────────────────
   const now = new Date();
-  enrollment.paymentType        = paymentType;
-  enrollment.depositAmount      = depositAmount ? Number(depositAmount) : null;
-  enrollment.receipt            = receiptData;
-  enrollment.paymentStatus      = PAYMENT_STATUS.PENDING;
+  enrollment.paymentType = paymentType;
+  enrollment.depositAmount = depositAmount ? Number(depositAmount) : null;
+  enrollment.receipt = receiptData;
+  enrollment.paymentStatus = PAYMENT_STATUS.PENDING;
   enrollment.isPartialEnrollment = false;
   enrollment.submissionTimestamp = now;
   await enrollment.save();
 
   // ── Send NTF-01 acknowledgment email ──────────────────────────
-  const settings = await require('../models/Settings.model').getSettings();
+  const settings = await Settings.getSettings();
   const emailResult = await sendEnrollmentAcknowledgment(
     enrollment.profile.email,
     {
-      studentName:  enrollment.profile.fullName,
+      studentName: enrollment.profile.fullName,
       programmeName: enrollment.programme.name,
       whatsappLink: settings.whatsapp?.link || '',
     }
@@ -217,11 +221,11 @@ const completeEnrollment = asyncHandler(async (req, res, next) => {
   // Update email delivery status (NTF-01)
   await Enrollment.findByIdAndUpdate(enrollment._id, {
     $set: {
-      'emailDeliveryStatus.ntf01.attempted':    true,
-      'emailDeliveryStatus.ntf01.sent':         emailResult.success,
-      'emailDeliveryStatus.ntf01.sentAt':       emailResult.success ? now : null,
-      'emailDeliveryStatus.ntf01.failed':       !emailResult.success,
-      'emailDeliveryStatus.ntf01.failedAt':     !emailResult.success ? now : null,
+      'emailDeliveryStatus.ntf01.attempted': true,
+      'emailDeliveryStatus.ntf01.sent': emailResult.success,
+      'emailDeliveryStatus.ntf01.sentAt': emailResult.success ? now : null,
+      'emailDeliveryStatus.ntf01.failed': !emailResult.success,
+      'emailDeliveryStatus.ntf01.failedAt': !emailResult.success ? now : null,
       'emailDeliveryStatus.ntf01.errorMessage': emailResult.error || null,
     },
   });
@@ -243,21 +247,21 @@ const getAllEnrollments = asyncHandler(async (req, res, next) => {
   const { status, programme, cohort, fromDate, toDate, search } = req.query;
 
   const filter = {};
-  if (status)    filter.paymentStatus = status;
+  if (status) filter.paymentStatus = status;
   if (programme) filter.programme = programme;
-  if (cohort)    filter.cohort = cohort;
+  if (cohort) filter.cohort = cohort;
 
   // Date range filter on enrollment timestamp
   if (fromDate || toDate) {
     filter.createdAt = {};
     if (fromDate) filter.createdAt.$gte = new Date(fromDate);
-    if (toDate)   filter.createdAt.$lte = new Date(toDate);
+    if (toDate) filter.createdAt.$lte = new Date(toDate);
   }
 
   // Search by student name or email — requires profile join
   let profileIds;
   if (search) {
-    const matchingProfiles = await require('../models/Profile.model').find({
+    const matchingProfiles = await Profile.find({
       $or: [
         { fullName: { $regex: search, $options: 'i' } },
         { email: { $regex: search, $options: 'i' } },
@@ -321,7 +325,6 @@ const getEnrollmentById = asyncHandler(async (req, res, next) => {
   // ── Attach instalment records if paymentType is instalment ────────
   let instalmentSummary = null;
   if (enrollment.paymentType === 'instalment' && enrollment.paymentStatus === PAYMENT_STATUS.CONFIRMED) {
-    const { getInstalmentSummary } = require('../services/instalment.service');
     instalmentSummary = await getInstalmentSummary(enrollment._id);
 
     // Sign each instalment's receipt (instalments 2 and 3 may have one)
@@ -349,12 +352,12 @@ const getEnrollmentById = asyncHandler(async (req, res, next) => {
 const getDashboardOverview = asyncHandler(async (req, res, next) => {
   const [statusCounts, activeCohortCount, recentActivity] = await Promise.all([
     Enrollment.getDashboardCounts(),
-    require('../models/Cohort.model').countDocuments({
+    Cohort.countDocuments({
       status: 'active',
       isDeleted: false,
     }),
     // Recent activity: last 10 payment status changes in audit log
-    require('../models/AuditLog.model').find({
+    AuditLog.find({
       action: {
         $in: [
           AUDIT_ACTIONS.PAYMENT_CONFIRMED,
@@ -367,20 +370,24 @@ const getDashboardOverview = asyncHandler(async (req, res, next) => {
     })
       .populate('actor', 'email role')
       .sort({ createdAt: -1 })
-      .limit(10),
+      .limit(10)
   ]);
+
+  console.log(statusCounts)
+  console.log(recentActivity)
+  console.log(activeCohortCount)
 
   return sendSuccess(
     res,
     HTTP_STATUS.OK,
     {
       metrics: {
-        totalEnrolled:     statusCounts.totalEnrolled,
-        pendingReviews:    statusCounts.pendingReviews,
+        totalEnrolled: statusCounts.totalEnrolled,
+        pendingReviews: statusCounts.pendingReviews,
         confirmedPayments: statusCounts.confirmedPayments,
-        rejectedPayments:  statusCounts.rejectedPayments,
-        notPaid:           statusCounts.notPaid,
-        activeCohorts:     activeCohortCount,
+        rejectedPayments: statusCounts.rejectedPayments,
+        notPaid: statusCounts.notPaid,
+        activeCohorts: activeCohortCount,
       },
       recentActivity,
     },
@@ -421,7 +428,6 @@ const archivePartialEnrollment = asyncHandler(async (req, res, next) => {
   // Defensive cleanup: not_paid records should never have a receipt, but
   // if one somehow exists, remove the Cloudinary file before deleting the record.
   if (enrollment.receipt?.provider === 'cloudinary' && enrollment.receipt.publicId) {
-    const { deleteFile } = require('../services/upload.service');
     const resourceType = enrollment.receipt.url?.includes('/raw/') ? 'raw' : 'image';
     await deleteFile(enrollment.receipt.publicId, resourceType);
   }
