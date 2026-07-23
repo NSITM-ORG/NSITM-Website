@@ -65,6 +65,21 @@ const signAccessToken = (account) => {
 };
 
 /**
+ * refreshAccessToken — issues a brand-new JWT for an already-authenticated
+ * account, reusing the SAME jti is deliberately NOT done here — a fresh
+ * jti is generated so the Session/TokenBlocklist records stay 1:1 with
+ * actual live tokens. The OLD jti is blocklisted immediately as part of
+ * this rotation (handled by the caller, auth.middleware.js), preventing
+ * a stolen-but-expired-looking old cookie from remaining valid.
+ *
+ * @param {object} account - The authenticated Account document
+ * @returns {{ token: string, jti: string, expiresAt: Date }}
+ */
+export function refreshAccessToken(account) {
+  return signAccessToken(account); // Same signing logic — new jti, fresh exp
+}
+
+/**
  * Verify and decode a JWT token.
  * Throws JsonWebTokenError or TokenExpiredError on failure
  * (caught by auth.middleware.js and errorHandler).

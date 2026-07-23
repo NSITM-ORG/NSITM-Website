@@ -89,7 +89,7 @@ const cohortSchema = new mongoose.Schema(
     },
 
     // ── Status & Enrollment Control ───────────────────────────────
-    status: {
+ status: {
       type: String,
       required: true,
       enum: {
@@ -98,10 +98,26 @@ const cohortSchema = new mongoose.Schema(
       },
       default: COHORT_STATUS.UPCOMING,
     },
-    // Independent toggle. A cohort can be 'active' but with enrollment closed.
-    enrollmentOpen: {
-      type: Boolean,
-      default: false,
+    // ── Enrollment Window (client decision) ─────────────────────────
+    // Replaces the old manual `enrollmentOpen` boolean toggle entirely.
+    // Enrollment availability is now COMPUTED from these two dates via
+    // the `enrollmentOpen` virtual below — never stored, never manually
+    // set. This keeps a single source of truth: an admin sets a start
+    // and end date once, and the public-facing "Enroll Now" visibility
+    // follows automatically without further intervention.
+    enrollmentStartDate: {
+      type: Date,
+      required: [true, 'Enrollment start date is required.'],
+    },
+    enrollmentEndDate: {
+      type: Date,
+      required: [true, 'Enrollment end date is required.'],
+      validate: {
+        validator(endDate) {
+          return endDate > this.enrollmentStartDate;
+        },
+        message: 'Enrollment end date must be after enrollment start date.',
+      },
     },
 
     // ── Capacity ──────────────────────────────────────────────────
@@ -200,12 +216,28 @@ cohortSchema.virtual('isAtCapacity').get(function () {
  * enrollmentAvailable — true if cohort is active, enrollment is open,
  * and the cohort is not at capacity.
  */
+/**
+ * enrollmentOpen — COMPUTED, never stored. True when:
+ *   1. Cohort status is 'active'
+ *   2. Current date falls within [enrollmentStartDate, enrollmentEndDate]
+ *   3. Cohort is not at capacity
+ * This is the single source of truth consumed by both the public
+ * "Enroll Now" button visibility AND the backend's own enrollment
+ * write-path guard (see enrollment.controller.js's assertEnrollmentWindowOpen).
+ */
+cohortSchema.virtual('enrollmentOpen').get(function () {
+  const now = new Date();
+  const withinWindow =
+    this.enrollmentStartDate <= now && now <= this.enrollmentEndDate;
+  return this.status === COHORT_STATUS.ACTIVE && withinWindow && !this.isAtCapacity;
+});
+
+/**
+ * enrollmentAvailable — kept as an alias of enrollmentOpen for backward
+ * compatibility with any existing frontend code still reading this name.
+ */
 cohortSchema.virtual('enrollmentAvailable').get(function () {
-  return (
-    this.status === COHORT_STATUS.ACTIVE &&
-    this.enrollmentOpen === true &&
-    !this.isAtCapacity
-  );
+  return this.enrollmentOpen;
 });
 
 /**
@@ -257,13 +289,29 @@ cohortSchema.methods.decrementConfirmedCount = function () {
  * @returns {Promise<Cohort[]>}
  */
 cohortSchema.statics.getActiveCohorts = function () {
+  const now = new Date();
   return this.find({
     status: COHORT_STATUS.ACTIVE,
-    enrollmentOpen: true,
+    enrollmentStartDate: { $lte: now },
+    enrollmentEndDate: { $gte: now },
     isDeleted: false,
   })
     .populate('programme', 'name slug category fees')
     .sort({ startDate: 1 });
+};
+
+/**
+ * isFieldLockedForCohort — checks whether a given field name is locked
+ * for edit given the cohort's current status, per COHORT_LOCKED_FIELDS_WHEN_ACTIVE.
+ * status itself is NEVER locked (always allowed to transition).
+ *
+ * @param {string} currentStatus
+ * @param {string} fieldName
+ * @returns {boolean}
+ */
+cohortSchema.statics.isFieldLocked = function (currentStatus, fieldName) {
+  if (fieldName === 'status') return false;
+  return currentStatus === COHORT_STATUS.ACTIVE;
 };
 
 const Cohort = mongoose.model('Cohort', cohortSchema);

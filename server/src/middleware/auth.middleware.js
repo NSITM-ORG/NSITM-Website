@@ -30,6 +30,7 @@ import jwt from 'jsonwebtoken';
 import asyncHandler from '../utils/asyncHandler.js';
 import ApiError from '../utils/ApiError.js';
 import Account from '../models/Account.model.js' ;
+import { refreshAccessToken, setSessionCookie } from '../services/token.service.js';
 import TokenBlocklist from '../models/TokenBlocklist.model.js';
 import { HTTP_STATUS, AUTH } from '../config/constants.js';
 import logger from '../utils/logger.js';
@@ -156,6 +157,40 @@ const protect = asyncHandler(async (req, res, next) => {
   req.tokenJti = decoded.jti;
 
   next();
+
+  // ── Step 9: Sliding-window session refresh (client Issue 6) ────────
+  // If the current JWT is past a threshold of its total lifetime, issue
+  // a brand-new token transparently — no extra round-trip, no frontend
+  // change required. This is what makes an ACTIVELY-used session never
+  // hit the hard JWT expiry ceiling: every request made while the token
+  // is more than halfway to expiry silently extends the session.
+  // Genuine inactivity (no requests at all for the full remaining
+  // window) is the only way the token is allowed to actually expire.
+  const REFRESH_THRESHOLD_RATIO = 0.5; // Refresh once past 50% of token lifetime
+  const tokenIssuedAtMs = decoded.iat * 1000;
+  const tokenExpiresAtMs = decoded.exp * 1000;
+  const tokenLifetimeMs = tokenExpiresAtMs - tokenIssuedAtMs;
+  const elapsedMs = Date.now() - tokenIssuedAtMs;
+
+  if (elapsedMs / tokenLifetimeMs >= REFRESH_THRESHOLD_RATIO) {
+    const { token: newToken, jti: newJti, expiresAt: newExpiresAt } = refreshAccessToken(account);
+    setSessionCookie(res, newToken, newExpiresAt);
+
+    // Update the Session record in place (same session, new token) rather
+    // than creating a new Session entry — this is a refresh of an existing
+    // active session, not a new login, so the device list stays accurate.
+    if (decoded.jti) {
+      await Session.findOneAndUpdate(
+        { jti: decoded.jti },
+        { $set: { jti: newJti, expiresAt: newExpiresAt, lastActiveAt: new Date() } }
+      );
+    }
+    // Blocklist the OLD jti immediately — it's been superseded, and any
+    // request still carrying the stale cookie value should not work.
+    await TokenBlocklist.blacklist(decoded.jti, account._id, new Date(tokenExpiresAtMs));
+
+    req.tokenJti = newJti; // Ensure downstream logAction/session-management calls use the new jti
+  }
 });
 
 export { protect, SESSION_COOKIE_NAME };

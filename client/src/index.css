@@ -48,6 +48,13 @@
   /* ── Shadows ──────────────────────────────────────────────────────*/
   --shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
   --shadow-elevated: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.08);
+
+  /* ── Structural ──────────────────────────────────────────────────────*/
+  --radius-pill: 9999px;
+  --shadow-card-lift: 0 20px 40px -12px rgba(0, 0, 0, 0.18);
+  --banner-height: 44px;
+  --nav-height: 84px;
+  --card-hover-duration: 500ms;
 }
 
 /* ── LIGHT THEME (default — applied on :root, no class needed) ──────*/
@@ -150,4 +157,113 @@ h6 {
 }
 .link-underline:hover::after {
   width: 100%;
+}
+
+.footer-link {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  transition: color 150ms ease;
+}
+.footer-link:hover {
+  color: var(--color-primary);
+}
+
+/* ── Programme Card Hover-Slide (reference: .course-item / .course-hover) ── */
+.programme-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+
+.programme-card-hover-panel {
+  position: absolute;
+  inset: 0;
+  background: var(--color-surface-elevated);
+  transform: translateX(-100%);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    transform var(--card-hover-duration) ease,
+    opacity var(--card-hover-duration) ease;
+  display: flex;
+  align-items: center;
+  padding: 1.75rem;
+}
+
+.programme-card:hover .programme-card-hover-panel {
+  transform: translateX(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ── Counter card icon badge (reference: .single-counter span) ── */
+.counter-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ── WhatsApp pill float (reference: .wa-float) ── */
+.wa-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-radius: var(--radius-pill);
+  font-weight: 500;
+  font-size: 13px;
+  box-shadow: 0 4px 20px rgba(0, 168, 89, 0.35);
+  transition: all 250ms ease;
+}
+.wa-pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0, 168, 89, 0.45);
+}
+
+/* ── Video play button pulsing double-ring (reference: .video-button) ── */
+
+/* ADD to index.css, near the existing @keyframes shimmer block: */
+
+@keyframes preloaderReveal {
+  0% { width: 0%; }
+  60% { width: 100%; }
+  100% { width: 100%; }
+}
+
+@keyframes videoPulseRing {
+  0% {
+    border-radius: 33.33% 50%;
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    border-radius: 50% 33.33%;
+    transform: translate(-50%, -50%) rotate(1800deg);
+  }
+}
+.video-play-button {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-primary);
+  color: #fff;
+}
+.video-play-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120px;
+  height: 120px;
+  background: var(--color-primary);
+  opacity: 0.4;
+  animation: videoPulseRing 20s linear infinite;
+  z-index: -1;
 }

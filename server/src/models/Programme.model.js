@@ -139,12 +139,29 @@ const programmeSchema = new mongoose.Schema(
     },
 
     // ── Content ────────────────────────────────────────────────────
-    description: {
+   description: {
       type: String,
       required: [true, 'Programme description is required.'],
       trim: true,
       minlength: [20, 'Description must be at least 20 characters.'],
       maxlength: [2000, 'Description must not exceed 2000 characters.'],
+    },
+    // ── Expanded Detail Content (client Issue 4) ──────────────────
+    subDescription: {
+      type: String,
+      trim: true,
+      default: null,
+      maxlength: [3000, 'Sub-description must not exceed 3000 characters.'],
+    },
+    bulletPoints: {
+      type: [String],
+      default: [],
+      validate: {
+        validator(points) {
+          return points.length <= 15;
+        },
+        message: 'A programme may have at most 15 bullet points.',
+      },
     },
     // Stored as a string for flexibility (e.g., "9 months", "6 weeks", "3 days")
     duration: {
@@ -191,6 +208,20 @@ const programmeSchema = new mongoose.Schema(
     sortOrder: {
       type: Number,
       default: 0,
+    },
+    // ── Popularity Tracking (client Issue 8) ─────────────────────────
+    // All-time total count of enrollment records ever created for this
+    // programme (any payment status — a genuine attempt counts).
+    // Incremented at the exact same point Cohort.currentEnrollmentCount
+    // is incremented: Step 1 partial record creation in
+    // enrollment.controller.js's createPartialRecord. Never decremented
+    // by archivePartialEnrollment — popularity reflects historical
+    // interest, not current pipeline state (Cohort's count is the one
+    // that decrements on archive, this one does not).
+    enrollmentCount: {
+      type: Number,
+      default: 0,
+      min: 0,
     },
 
     // ── Audit ──────────────────────────────────────────────────────
@@ -313,10 +344,16 @@ programmeSchema.statics.findBySlug = function (slug) {
  *
  * @returns {Promise<Object>} { tech_development: [], management: [], short_term: [] }
  */
+/**
+ * getGroupedByCategory — public programme listing, ordered by all-time
+ * popularity (client Issue 8: "most active, most enrolled for" first).
+ * Sort priority: status (active programmes surface before Coming Soon),
+ * then enrollmentCount descending, then sortOrder/name as tiebreakers.
+ */
 programmeSchema.statics.getGroupedByCategory = async function () {
   const programmes = await this.find({ isDeleted: false })
     .populate('activeCohort', 'name startDate endDate deliveryFormat status')
-    .sort({ category: 1, sortOrder: 1, name: 1 })
+    .sort({ category: 1, status: -1, enrollmentCount: -1, sortOrder: 1, name: 1 })
     .lean();
 
   return programmes.reduce((groups, programme) => {

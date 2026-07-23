@@ -1,170 +1,153 @@
 /**
- * Footer — absorbs ALL content from the removed public Contact page
- * (address, phone, email, WhatsApp, social links) plus the plain
- * "Send Us a Message" form (name/email/message → POST /public/contact-messages),
- * per the confirmed decisions.
+ * src/components/site/Footer.jsx (REPLACES the F5 version)
  *
- * Settings (address/phone/email/social/WhatsApp) come from
- * settingsSlice.publicSettings — fetched once if not already loaded
- * (WhatsAppFAB may have already triggered this fetch; either component
- * mounting first satisfies it, since Redux state is shared).
+ * Footer — fuses index.html's footer_section-padding structure (4-column:
+ * brand+social / programs list / quick links / contact info, plus the
+ * .fc copyright bar) with footer.html's structural treatment (circular
+ * social icon buttons, icon-prefixed contact rows, accent-underline
+ * section headings) — reskinned into our fixed primary/secondary palette.
+ *
+ * REMOVED per client instruction: the "Send Us a Message" form and its
+ * entire submission flow (backend removal tracked separately in F18 —
+ * this component simply no longer renders or imports it).
+ *
+ * Programme list column now pulls the top-N most popular ACTIVE
+ * programmes live from programmeSlice (consistent with the new
+ * popularity-driven ordering from F13), instead of a static hardcoded
+ * list — "Programs" footer column stays accurate without manual upkeep.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Instagram, Linkedin, Facebook, Send, ArrowRight } from 'lucide-react';
 import { useManageState } from '../../hooks/useManageState';
-import { useToast } from '../../hooks/useToast';
-import { FormField } from '../ui/FormField';
-import { Button } from '../ui/Button';
-import { validators, validateForm } from '../../utils/validation';
-import { InstagramIcon, } from '../icons/Instagram';
-import { LinkedinIcon } from '../icons/LinkedIn';
-import { FacebookIcon } from '../icons/FacebookIcon';
-
-const CONTACT_SCHEMA = {
-  name: [validators.required(), validators.minLength(2)],
-  email: [validators.required(), validators.email()],
-  message: [validators.required(), validators.minLength(10), validators.maxLength(2000)],
-};
 
 export function Footer() {
-  const { settings, actions } = useManageState();
-  const { showSuccess } = useToast();
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
-  const [errors, setErrors] = useState({});
-  const [submitting, setSubmitting] = useState(false);
+  const { settings, programmes, actions } = useManageState();
 
   useEffect(() => {
     if (!settings.publicSettings) actions.fetchPublicSettings();
+    if (Object.keys(programmes.list).length === 0) actions.fetchAllProgrammes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const institution = settings.publicSettings?.institution;
   const whatsapp = settings.publicSettings?.whatsapp;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { errors: validationErrors, isValid } = validateForm(form, CONTACT_SCHEMA);
-    setErrors(validationErrors);
-    if (!isValid) return;
-
-    setSubmitting(true);
-    try {
-      const message = await actions.createContactMessage(form);
-      showSuccess(message);
-      setForm({ name: '', email: '', message: '' });
-    } catch {
-      // Error toast already shown by the centralized toast middleware.
-    } finally {
-      setSubmitting(false);
-    }
-  };
+  // Top 6 most-popular active programmes across all categories, for the
+  // "Programs" footer column — already popularity-sorted server-side.
+  const popularProgrammes = Object.values(programmes.list)
+    .flat()
+    .filter((p) => p.status === 'active')
+    .slice(0, 6);
 
   return (
     <footer className="mt-20 border-t border-border bg-surface-elevated">
-      <div className="mx-auto grid max-w-content gap-10 px-4 py-12 sm:px-6 lg:grid-cols-3 lg:px-8">
-        {/* ── Institution Info ─────────────────────────────────── */}
-        <div>
-          <h3 className="mb-3 font-heading text-lg font-bold text-primary">Nextserve</h3>
-          <p className="mb-4 text-sm text-text-secondary">
-            School of Information Technology and Management — hands-on, cohort-based training since 2012.
+      <div className="mx-auto grid max-w-content gap-10 px-4 py-14 sm:px-6 lg:grid-cols-4 lg:px-8">
+        {/* ── Brand + Social ───────────────────────────────────── */}
+        <div className="lg:col-span-1">
+          <Link to="/" className="mb-4 flex items-center gap-2">
+            <img src="/nsitm-logo.svg" alt="Nextserve" className="h-10 w-10 rounded-md" />
+            <span className="font-heading text-lg font-bold text-primary">Nextserve</span>
+          </Link>
+          <p className="mb-5 text-sm leading-relaxed text-text-secondary">
+            Nextserve is more than a school. It is a community of practitioners, alumni, instructors, and
+            supporters who believe in what technology education can do for Nigeria's workforce and for
+            individual lives.
           </p>
-          <ul className="space-y-2 text-sm text-text-secondary">
-            {institution?.address && (
-              <li className="flex items-start gap-2">
-                <MapPin size={16} className="mt-0.5 shrink-0" /> {institution.address}
-              </li>
-            )}
-            {institution?.phone && (
-              <li className="flex items-center gap-2">
-                <Phone size={16} className="shrink-0" />
-                <a href={`tel:${institution.phone}`} className="hover:text-primary">
-                  {institution.phone}
-                </a>
-              </li>
-            )}
-            {institution?.email && (
-              <li className="flex items-center gap-2">
-                <Mail size={16} className="shrink-0" />
-                <a href={`mailto:${institution.email}`} className="hover:text-primary">
-                  {institution.email}
-                </a>
-              </li>
-            )}
-          </ul>
-          <div className="mt-4 flex gap-3">
-            {institution?.instagram && (
-              <a href={institution.instagram} target="_blank" rel="noreferrer" className="text-text-secondary hover:text-primary">
-                <InstagramIcon size={20} />
-              </a>
-            )}
-            {institution?.linkedin && (
-              <a href={institution.linkedin} target="_blank" rel="noreferrer" className="text-text-secondary hover:text-primary">
-                <LinkedinIcon size={20} />
-              </a>
-            )}
-            {institution?.facebook && (
-              <a href={institution.facebook} target="_blank" rel="noreferrer" className="text-text-secondary hover:text-primary">
-                <FacebookIcon size={20} />
-              </a>
-            )}
-            {whatsapp?.link && (
-              <a href={whatsapp.link} target="_blank" rel="noreferrer" className="text-text-secondary hover:text-secondary">
-                <Send size={20} />
-              </a>
-            )}
+          <div className="flex gap-2">
+            <SocialCircle href={institution?.instagram} icon={Instagram} />
+            <SocialCircle href={institution?.linkedin} icon={Linkedin} />
+            <SocialCircle href={institution?.facebook} icon={Facebook} />
+            <SocialCircle href={whatsapp?.link} icon={Send} />
           </div>
         </div>
 
-        {/* ── Quick Links ──────────────────────────────────────── */}
-        <div>
-          <h4 className="mb-3 font-heading text-sm font-semibold text-text-primary">Quick Links</h4>
-          <ul className="space-y-2 text-sm text-text-secondary">
-            <li><Link to="/programmes" className="hover:text-primary">Programmes</Link></li>
-            <li><Link to="/about" className="hover:text-primary">About Us</Link></li>
-            <li><Link to="/faq" className="hover:text-primary">FAQs</Link></li>
-            <li><Link to="/my-payment" className="hover:text-primary">Submit Instalment Payment</Link></li>
-          </ul>
-        </div>
+        {/* ── Programs ─────────────────────────────────────────── */}
+        <FooterColumn title="Programs">
+          {popularProgrammes.length > 0 ? (
+            popularProgrammes.map((p) => (
+              <li key={p.id}>
+                <Link to={`/programmes/${p.slug}`} className="footer-link">
+                  {p.name}
+                </Link>
+              </li>
+            ))
+          ) : (
+            <li className="text-sm text-text-secondary">Loading programmes…</li>
+          )}
+          <li className="pt-2">
+            <Link to="/programmes" className="flex items-center gap-1 text-sm font-semibold text-primary">
+              All Programmes <ArrowRight size={14} />
+            </Link>
+          </li>
+        </FooterColumn>
 
-        {/* ── Send Us a Message (replaces the removed Contact page) ── */}
-        <div>
-          <h4 className="mb-3 font-heading text-sm font-semibold text-text-primary">Send Us a Message</h4>
-          <form onSubmit={handleSubmit} className="space-y-3">
-            <FormField
-              type="text"
-              placeholder="Your name"
-              value={form.name}
-              onChange={(v) => setForm((f) => ({ ...f, name: v }))}
-              error={errors.name}
-            />
-            <FormField
-              type="email"
-              placeholder="Your email"
-              value={form.email}
-              onChange={(v) => setForm((f) => ({ ...f, email: v }))}
-              error={errors.email}
-            />
-            <FormField
-              type="textarea"
-              placeholder="Your message"
-              rows={3}
-              value={form.message}
-              onChange={(v) => setForm((f) => ({ ...f, message: v }))}
-              error={errors.message}
-            />
-            <Button type="submit" size="sm" loading={submitting} fullWidth>
-              Send Message
-            </Button>
-          </form>
-        </div>
+        {/* ── Quick Links ──────────────────────────────────────── */}
+        <FooterColumn title="Quick Links">
+          <li><Link to="/" className="footer-link">Home</Link></li>
+          <li><Link to="/about" className="footer-link">About Us</Link></li>
+          <li><Link to="/programmes" className="footer-link">Programmes</Link></li>
+          <li><Link to="/cohorts" className="footer-link">Active Cohorts</Link></li>
+          <li><Link to="/faq" className="footer-link">FAQs</Link></li>
+          <li><Link to="/my-payment" className="footer-link">Submit Instalment Payment</Link></li>
+        </FooterColumn>
+
+        {/* ── Contact Info ─────────────────────────────────────── */}
+        <FooterColumn title="Contact Info">
+          <ContactRow icon={Phone} title="Phone" value={institution?.phone} href={`tel:${institution?.phone}`} />
+          <ContactRow icon={Mail} title="Email" value={institution?.email} href={`mailto:${institution?.email}`} />
+          <ContactRow icon={MapPin} title="Office Address" value={institution?.address} />
+        </FooterColumn>
       </div>
 
-      <div className="border-t border-border py-4 text-center text-xs text-text-secondary">
-        © {new Date().getFullYear()} Nextserve School of Information Technology and Management. All rights reserved.
+      <div className="border-t border-border py-5 text-center text-xs text-text-secondary">
+        © {new Date().getFullYear()} {institution?.name || 'Nextserve School of Information Technology and Management'}. All rights reserved.
       </div>
     </footer>
+  );
+}
+
+function FooterColumn({ title, children }) {
+  return (
+    <div>
+      <h4 className="relative mb-5 pb-3 font-heading text-sm font-bold uppercase tracking-wide text-text-primary">
+        {title}
+        <span className="absolute bottom-0 left-0 h-[3px] w-9 rounded-full bg-secondary" />
+      </h4>
+      <ul className="space-y-3">{children}</ul>
+    </div>
+  );
+}
+
+function SocialCircle({ href, icon: Icon }) {
+  if (!href) return null;
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="flex h-9 w-9 items-center justify-center rounded-full bg-surface text-text-secondary shadow-card transition-colors hover:bg-primary hover:text-white"
+    >
+      <Icon size={15} />
+    </a>
+  );
+}
+
+function ContactRow({ icon: Icon, title, value, href }) {
+  if (!value) return null;
+  return (
+    <li className="flex items-start gap-3">
+      <Icon size={17} className="mt-0.5 shrink-0 text-primary" />
+      <div>
+        <p className="text-xs font-semibold text-text-primary">{title}</p>
+        {href ? (
+          <a href={href} className="text-sm text-text-secondary hover:text-primary">{value}</a>
+        ) : (
+          <p className="text-sm text-text-secondary">{value}</p>
+        )}
+      </div>
+    </li>
   );
 }
 

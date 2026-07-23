@@ -10,11 +10,17 @@
  *      route-level code-split boundaries.
  */
 
+
 export function AppPreloader() {
   return (
-    <div className="fixed inset-0 z-200 flex flex-col items-center justify-center gap-4 bg-background">
-      <div className="h-12 w-12 animate-spin rounded-full border-4 border-surface border-t-primary" />
-      <p className="font-heading text-lg font-semibold text-primary">Nextserve</p>
+    <div className="fixed inset-0 z-[200] flex flex-col items-center justify-center gap-5 bg-background">
+      <img src="/nsitm-logo.svg" alt="" className="h-14 w-14 animate-pulse rounded-md" />
+      <div className="relative font-heading text-2xl font-bold text-primary">
+        <span className="opacity-20">Nextserve</span>
+        <span className="absolute inset-0 overflow-hidden text-primary" style={{ animation: 'preloaderReveal 1.6s ease-in-out infinite' }}>
+          Nextserve
+        </span>
+      </div>
     </div>
   );
 }

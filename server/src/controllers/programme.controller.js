@@ -74,7 +74,7 @@ const getProgrammesByCategory = asyncHandler(async (req, res, next) => {
   const [programmes, total] = await Promise.all([
     Programme.find(filter)
       .populate('activeCohort', 'name startDate endDate deliveryFormat status')
-      .sort({ sortOrder: 1, name: 1 })
+      .sort({ status: -1, enrollmentCount: -1, sortOrder: 1, name: 1 })
       .skip(skip)
       .limit(limit),
     Programme.countDocuments(filter),
@@ -228,8 +228,108 @@ const deleteProgramme = asyncHandler(async (req, res, next) => {
   return sendSuccess(res, HTTP_STATUS.OK, null, `Programme "${programme.name}" has been removed.`);
 });
 
+/**
+ * SUPER ADMIN: PATCH /api/v1/superadmin/programmes/bulk-update
+ * Bulk edit: status, duration, and fees (flat override or percentage
+ * adjustment) across selected programmes.
+ *
+ * Fee bulk-edit modes (mutually exclusive per request):
+ *   - updates.fees.full            → flat override, same value for every selected programme
+ *   - updates.fees.percentageAdjust → e.g. 10 means "+10%" applied individually to EACH
+ *                                      programme's own current fees.full (and, if it has
+ *                                      an instalment plan, its instalment.total scales by
+ *                                      the same percentage, with the 3-entry breakdown
+ *                                      recalculated via the existing 40/30/30-preserving
+ *                                      instalmentCalculator helper logic inline below).
+ */
+const bulkUpdateProgrammes = asyncHandler(async (req, res, next) => {
+  const { ids, updates } = req.body;
+
+  if (!Array.isArray(ids) || ids.length === 0) {
+    return next(new ApiError(HTTP_STATUS.BAD_REQUEST, 'NO_IDS_PROVIDED', 'Please select at least one programme.'));
+  }
+
+  const programmes = await Programme.find({ _id: { $in: ids }, isDeleted: false });
+  const results = { updated: [] };
+
+  for (const programme of programmes) {
+    if (updates.status !== undefined) programme.status = updates.status;
+    if (updates.duration !== undefined) programme.duration = updates.duration;
+
+    if (updates.fees?.full !== undefined) {
+      // Flat override mode
+      programme.fees.full = Number(updates.fees.full);
+    } else if (updates.fees?.percentageAdjust !== undefined) {
+      // Percentage-adjustment mode — applied per-programme against its OWN current value
+      const pct = Number(updates.fees.percentageAdjust) / 100;
+      const newFull = Math.round(programme.fees.full * (1 + pct));
+      programme.fees.full = newFull;
+
+      if (programme.fees.instalment?.total) {
+        const newTotal = Math.round(programme.fees.instalment.total * (1 + pct));
+        const first = Math.round(newTotal * 0.4);
+        const second = Math.round(newTotal * 0.3);
+        const third = newTotal - first - second;
+        programme.fees.instalment.total = newTotal;
+        programme.fees.instalment.breakdown = [
+          { instalmentNumber: 1, amount: first, dueDayOffset: 0 },
+          { instalmentNumber: 2, amount: second, dueDayOffset: 30 },
+          { instalmentNumber: 3, amount: third, dueDayOffset: 60 },
+        ];
+      }
+    }
+
+    programme.updatedBy = req.account._id;
+    await programme.save();
+    results.updated.push({ id: programme._id, name: programme.name });
+  }
+
+  await req.logAction(AUDIT_ACTIONS.PROGRAMME_BULK_UPDATED, {
+    targetModel: 'Programme',
+    description: `Bulk programme update applied to ${ids.length} programme(s)`,
+    metadata: { fields: Object.keys(updates), results },
+  });
+
+  return sendSuccess(res, HTTP_STATUS.OK, results, `${results.updated.length} programme(s) updated successfully.`);
+});
+
+/**
+ * SUPER ADMIN: DELETE /api/v1/superadmin/programmes/bulk
+ * Bulk soft-delete — no status-lock concept exists for Programme (only
+ * Cohort has the active-lock rule), so this is unconditional per-item.
+ */
+const bulkDeleteProgrammes = asyncHandler(async (req, res, next) => {
+  const { ids } = req.body;
+
+  if (!Array.isArray(ids) || ids.length === 0) {
+    return next(new ApiError(HTTP_STATUS.BAD_REQUEST, 'NO_IDS_PROVIDED', 'Please select at least one programme.'));
+  }
+
+  const programmes = await Programme.find({ _id: { $in: ids }, isDeleted: false });
+  const results = { deleted: [] };
+
+  for (const programme of programmes) {
+    programme.isDeleted = true;
+    programme.deletedAt = new Date();
+    programme.deletedBy = req.account._id;
+    programme.status = 'coming_soon';
+    programme.activeCohort = null;
+    await programme.save();
+    results.deleted.push({ id: programme._id, name: programme.name });
+  }
+
+  await req.logAction(AUDIT_ACTIONS.PROGRAMME_BULK_DELETED, {
+    targetModel: 'Programme',
+    description: `Bulk programme delete: ${ids.length} selected`,
+    metadata: { results },
+  });
+
+  return sendSuccess(res, HTTP_STATUS.OK, results, `${results.deleted.length} programme(s) removed.`);
+});
+
+// FIND the final export block and REPLACE with:
 export {
-   getAllProgrammes,
+  getAllProgrammes,
   getProgrammeBySlug,
   getProgrammesByCategory,
   getAllProgrammesAdmin,
@@ -237,4 +337,6 @@ export {
   createProgramme,
   updateProgramme,
   deleteProgramme,
+  bulkUpdateProgrammes,
+  bulkDeleteProgrammes,
 };

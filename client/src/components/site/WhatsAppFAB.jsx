@@ -25,13 +25,10 @@ export function WhatsAppFAB() {
       target="_blank"
       rel="noreferrer"
       aria-label="Chat with us on WhatsApp"
-      className="
-        fixed bottom-6 left-4 z-40 flex h-14 w-14 items-center justify-center
-        rounded-full bg-secondary text-white shadow-elevated
-        transition-all duration-200 hover:brightness-90 active:scale-95
-      "
+      className="wa-pill fixed bottom-6 left-4 z-40 bg-secondary text-white"
     >
-      <MessageCircle size={26} />
+      <MessageCircle size={18} />
+      <span>How can I help you</span>
     </a>
   );
 }

@@ -61,6 +61,11 @@ const updateSettingsValidator = [
     .trim()
     .isLength({ max: 300 }).withMessage('Address must not exceed 300 characters.'),
 
+  body('institution.officeHours')
+    .optional({ checkFalsy: true })
+    .trim()
+    .isLength({ max: 100 }).withMessage('Office hours must not exceed 100 characters.'),
+
   body('institution.phone')
     .optional({ checkFalsy: true })
     .trim()

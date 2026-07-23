@@ -129,14 +129,34 @@ const COHORT_STATUS = Object.freeze({
   COMPLETED: "completed",
 });
 
+// ADD this new block anywhere near COHORT_STATUS:
+
+// ─────────────────────────────────────────────────────────────────────
+// COHORT FIELD-LOCKING RULES
+// Governs which cohort fields remain editable per status, per client
+// decision: status transitions are ALWAYS allowed; every other field
+// locks once status === 'active'. Deletion is blocked only while active.
+// ─────────────────────────────────────────────────────────────────────
+export const COHORT_LOCKED_FIELDS_WHEN_ACTIVE = [
+  'programme',
+  'name',
+  'startDate',
+  'endDate',
+  'enrollmentStartDate',
+  'enrollmentEndDate',
+  'deliveryFormat',
+  'maxCapacity',
+];
+
 // ─────────────────────────────────────────────────────────────────────
 // DELIVERY FORMATS
 // How a cohort/programme is delivered.
 // ─────────────────────────────────────────────────────────────────────
-const DELIVERY_FORMATS = Object.freeze({
-  IN_PERSON: "in_person",
-  ONLINE: "online",
-});
+ const DELIVERY_FORMATS = {
+  ONLINE: 'online',
+  IN_PERSON: 'in_person',
+  HYBRID: 'hybrid', // Cohort offers both — student chooses at enrollment (Enroll flow Step 1)
+};
 
 // ─────────────────────────────────────────────────────────────────────
 // FILE UPLOAD CONSTRAINTS
@@ -598,6 +618,10 @@ const AUDIT_ACTIONS = Object.freeze({
   FAQ_UPDATED: "FAQ_UPDATED",
   FAQ_DELETED: "FAQ_DELETED",
   ENROLLMENT_ARCHIVED: 'ENROLLMENT_ARCHIVED',
+  PROGRAMME_BULK_UPDATED: 'PROGRAMME_BULK_UPDATED',
+  PROGRAMME_BULK_DELETED: 'PROGRAMME_BULK_DELETED',
+  COHORT_BULK_UPDATED: 'COHORT_BULK_UPDATED',
+  COHORT_BULK_DELETED: 'COHORT_BULK_DELETED',
   UNAUTHORIZED_ACCESS_ATTEMPT: "UNAUTHORIZED_ACCESS_ATTEMPT",
 });
 

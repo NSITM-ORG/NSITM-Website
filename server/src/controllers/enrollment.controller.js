@@ -67,7 +67,7 @@ const createPartialRecord = asyncHandler(async (req, res, next) => {
     existingPartial.referralCode = referralCode !== undefined ? referralCode || null : existingPartial.referralCode;
     await existingPartial.save();
     enrollment = existingPartial;
-  } else {
+  }  else {
     // Create new partial enrollment record
     enrollment = await Enrollment.create({
       profile: profile._id,
@@ -85,6 +85,13 @@ const createPartialRecord = asyncHandler(async (req, res, next) => {
         $inc: { currentEnrollmentCount: 1 },
       });
     }
+
+    // ── Popularity tracking (client Issue 8) ─────────────────────
+    // All-time counter, incremented ONCE per genuinely new partial
+    // record (not on the update-existing-record branch above, since
+    // that's the same student re-advancing through an already-counted
+    // attempt, not a new one). Never decremented — see model docstring.
+    await Programme.findByIdAndUpdate(programme._id, { $inc: { enrollmentCount: 1 } });
   }
 
   // Per FRD FR-08.1: "If the backend write fails, error is logged silently.

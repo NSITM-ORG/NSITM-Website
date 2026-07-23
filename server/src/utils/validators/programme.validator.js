@@ -77,6 +77,21 @@ const createProgrammeValidator = [
   body('sortOrder')
     .optional()
     .isInt({ min: 0 }).withMessage('Sort order must be a non-negative integer.'),
+
+  body('subDescription')
+    .optional({ checkFalsy: true })
+    .trim()
+    .isLength({ max: 3000 }).withMessage('Sub-description must not exceed 3000 characters.'),
+
+  body('bulletPoints')
+    .optional()
+    .isArray({ max: 15 }).withMessage('A programme may have at most 15 bullet points.'),
+
+  body('bulletPoints.*')
+    .optional()
+    .isString().withMessage('Each bullet point must be a string.')
+    .trim()
+    .isLength({ max: 300 }).withMessage('Each bullet point must not exceed 300 characters.'),
 ];
 
 // ── Update programme (all fields optional) ────────────────────────────
@@ -124,10 +139,37 @@ const createCohortValidator = [
   body('maxCapacity')
     .optional({ checkFalsy: true })
     .isInt({ min: 1 }).withMessage('Maximum capacity must be at least 1.'),
+
+// (replacing the old implied enrollmentOpen boolean, which no longer exists
+// as a settable field anywhere):
+
+  body('enrollmentStartDate')
+    .notEmpty().withMessage('Enrollment start date is required.')
+    .isISO8601().withMessage('Enrollment start date must be a valid date.')
+    .toDate(),
+
+  body('enrollmentEndDate')
+    .notEmpty().withMessage('Enrollment end date is required.')
+    .isISO8601().withMessage('Enrollment end date must be a valid date.')
+    .toDate()
+    .custom((endDate, { req }) => {
+      if (req.body.enrollmentStartDate && new Date(endDate) <= new Date(req.body.enrollmentStartDate)) {
+        throw new Error('Enrollment end date must be after enrollment start date.');
+      }
+      return true;
+    }),
 ];
 
 // ── Update cohort ─────────────────────────────────────────────────────
 const updateCohortValidator = [
+
+
+  body('enrollmentStartDate').optional()
+    .isISO8601().withMessage('Enrollment start date must be a valid date.').toDate(),
+
+  body('enrollmentEndDate').optional()
+    .isISO8601().withMessage('Enrollment end date must be a valid date.').toDate(),
+
   body('name').optional().trim()
     .isLength({ max: 200 }).withMessage('Cohort name must not exceed 200 characters.'),
 
@@ -148,10 +190,56 @@ const updateCohortValidator = [
     .isIn(Object.values(COHORT_STATUS))
     .withMessage(`Status must be one of: ${Object.values(COHORT_STATUS).join(', ')}.`),
 
-  body('enrollmentOpen').optional()
-    .isBoolean().withMessage('enrollmentOpen must be true or false.'),
-
   body('maxCapacity').optional({ checkFalsy: true })
+    .isInt({ min: 1 }).withMessage('Maximum capacity must be at least 1.'),
+];
+
+export const bulkUpdateProgrammesValidator = [
+  body('ids')
+    .isArray({ min: 1 }).withMessage('Please select at least one programme.'),
+  body('ids.*')
+    .isMongoId().withMessage('One or more selected programme IDs are invalid.'),
+  body('updates')
+    .isObject().withMessage('Update payload is required.'),
+  body('updates.status')
+    .optional()
+    .isIn(['active', 'coming_soon']).withMessage("Status must be 'active' or 'coming_soon'."),
+  body('updates.duration')
+    .optional()
+    .trim()
+    .isLength({ max: 100 }).withMessage('Duration must not exceed 100 characters.'),
+  body('updates.fees.full')
+    .optional()
+    .isNumeric().withMessage('Full fee must be a number.'),
+  body('updates.fees.percentageAdjust')
+    .optional()
+    .isFloat({ min: -90, max: 500 }).withMessage('Percentage adjustment must be between -90 and 500.'),
+];
+
+export const bulkDeleteValidator = [
+  body('ids')
+    .isArray({ min: 1 }).withMessage('Please select at least one item.'),
+  body('ids.*')
+    .isMongoId().withMessage('One or more selected IDs are invalid.'),
+];
+
+// ADD these two new exports at the bottom of the file:
+
+export const bulkUpdateCohortsValidator = [
+  body('ids')
+    .isArray({ min: 1 }).withMessage('Please select at least one cohort.'),
+  body('ids.*')
+    .isMongoId().withMessage('One or more selected cohort IDs are invalid.'),
+  body('updates')
+    .isObject().withMessage('Update payload is required.'),
+  body('updates.status')
+    .optional()
+    .isIn(['upcoming', 'active', 'completed']).withMessage("Status must be 'upcoming', 'active', or 'completed'."),
+  body('updates.deliveryFormat')
+    .optional()
+    .isIn(['online', 'in_person', 'hybrid']).withMessage('Invalid delivery format.'),
+  body('updates.maxCapacity')
+    .optional({ checkFalsy: true })
     .isInt({ min: 1 }).withMessage('Maximum capacity must be at least 1.'),
 ];
 

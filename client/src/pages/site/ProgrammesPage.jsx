@@ -1,18 +1,17 @@
 /**
- * ProgrammesPage — Stack i: grouped-by-category listing (Tech
- * Development / Management / Short Term), each category showing its
- * first page of programmes with a "See all in this category →" link
- * through to ProgrammeCategoryPage for the full paginated view.
+ * src/pages/site/ProgrammesPage.jsx (REPLACES the F6 version)
  *
- * Uses GET /public/programmes (the grouped, unpaginated-per-category
- * endpoint) since this landing view intentionally shows only a preview
- * slice of each category — the responsive 4/6/8 pagination only kicks
- * in on the dedicated category page (Stack ii).
+ * ProgrammesPage — Stack i. Structurally unchanged from F6 (grouped-by-
+ * category preview + "See all" per category), but now renders the F15
+ * hover-slide ProgrammeCard instead of the old flat card, and each
+ * category's preview slice is already popularity-sorted server-side
+ * (F13), so no client re-sort is needed here — order is authoritative
+ * from the API response.
  */
 
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, BookOpen } from 'lucide-react';
 import { useManageState } from '../../hooks/useManageState';
 import { useSEO } from '../../hooks/useSEO';
 import { useResponsiveLimit } from '../../hooks/useResponsiveLimit';
@@ -20,7 +19,6 @@ import { ProgrammeCard } from '../../components/site/ProgrammeCard';
 import { SkeletonCard } from '../../components/ui/Skeleton';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { PROGRAMME_CATEGORY_LABELS } from '../../utils/constants';
-import { BookOpen } from 'lucide-react';
 
 export function ProgrammesPage() {
   const { programmes, actions } = useManageState();
@@ -28,7 +26,7 @@ export function ProgrammesPage() {
 
   useSEO({
     title: 'Our Programmes',
-    description: 'Explore Nextserve\'s 26 Tech Development, Management, and Short Term programmes.',
+    description: "Explore Nextserve's 26 Tech Development, Management, and Short Term programmes.",
   });
 
   useEffect(() => {
@@ -42,9 +40,11 @@ export function ProgrammesPage() {
   return (
     <div className="mx-auto max-w-content px-4 py-14 sm:px-6 lg:px-8">
       <header className="mb-10 text-center">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-wide text-primary">Programmes</p>
         <h1 className="font-heading text-3xl font-bold text-text-primary sm:text-4xl">Our Programmes</h1>
         <p className="mx-auto mt-3 max-w-xl text-text-secondary">
-          26 hands-on programmes across Tech Development, Management, and Short Term categories.
+          26 hands-on programmes across Tech Development, Management, and Short Term categories,
+          ordered by what students are enrolling in most.
         </p>
       </header>
 
@@ -53,7 +53,7 @@ export function ProgrammesPage() {
           {categories.map((cat) => (
             <div key={cat}>
               <div className="mb-4 h-6 w-48 skeleton-shimmer rounded-sm" />
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {Array.from({ length: limit }).map((_, i) => <SkeletonCard key={i} />)}
               </div>
             </div>
@@ -80,7 +80,7 @@ export function ProgrammesPage() {
                     See all <ArrowRight size={15} />
                   </Link>
                 </div>
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                   {items.map((programme) => (
                     <ProgrammeCard key={programme.id} programme={programme} />
                   ))}

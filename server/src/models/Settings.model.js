@@ -114,6 +114,11 @@ const institutionSchema = new mongoose.Schema(
       lowercase: true,
       default: '',
     },
+    officeHours: {
+      type: String,
+      trim: true,
+      default: 'Mon to Fri, 9am – 7pm',
+    },
     website: {
       type: String,
       trim: true,
