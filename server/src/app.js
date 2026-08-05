@@ -160,7 +160,7 @@ app.use(hpp());
 // 8. HEALTH CHECK ENDPOINT
 // Public, unauthenticated. Used by Railway and monitoring tools.
 // ─────────────────────────────────────────────────────────────────────
-import { attachAuditLogger }from './middleware/auditLog.middleware.js';
+import { attachAuditLogger } from './middleware/auditLog.middleware.js';
 app.use(attachAuditLogger);
 
 app.get('/health', (req, res) => {
@@ -210,3 +210,4 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 export default app;
+

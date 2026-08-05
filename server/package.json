@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "nodemon src/index.js",
+    "vercel-build": "echo Hello",
     "seed:superadmin": "node scripts/seedSuperAdmin.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed:programmes": "node scripts/seedProgrammes.js",
