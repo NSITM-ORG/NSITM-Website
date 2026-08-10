@@ -29,6 +29,7 @@ export function ProgrammeDetailPage() {
   const { slug } = useParams();
   const { programmes, settings, actions } = useManageState();
 
+  console.log(programmes)
   useEffect(() => {
     actions.fetchProgrammeBySlug(slug);
     if (!settings.publicSettings) actions.fetchPublicSettings();

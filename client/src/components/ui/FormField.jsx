@@ -201,8 +201,8 @@ export function FormField({
           <option value="" disabled>
             {placeholder || 'Select an option'}
           </option>
-          {options.map((opt) => (
-            <option key={opt.value} value={opt.value}>
+          {options.map((opt, idx) => (
+            <option key={idx} value={opt.value}>
               {opt.label}
             </option>
           ))}
