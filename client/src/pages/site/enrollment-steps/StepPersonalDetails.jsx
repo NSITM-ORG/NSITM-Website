@@ -41,8 +41,8 @@ export function StepPersonalDetails() {
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
-  console.log(programmes);
-  console.log(state);
+  // console.log(programmes);
+  // console.log(state);
 
   const flatProgrammes = useMemo(() => Object.values(programmes.list).flat(), [programmes.list]);
 
@@ -50,7 +50,7 @@ export function StepPersonalDetails() {
     () => flatProgrammes.filter((p) => p.status === PROGRAMME_STATUS.ACTIVE).map((p) => ({ value: p.id, label: p.name })),
     [flatProgrammes]
   );
-  console.log(flatProgrammes);
+  // console.log(flatProgrammes);
   const selectedProgramme = useMemo(
     () => flatProgrammes.find((p) => p.id === state.programme),
     [flatProgrammes, state.programme]
