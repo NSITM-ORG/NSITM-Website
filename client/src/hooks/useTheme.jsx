@@ -19,7 +19,8 @@
 import { useCallback, useEffect, useState } from 'react';
 
 const STORAGE_KEY = 'nsitm-theme';
-const THEMES = ['light', 'dark', 'brand'];
+const THEMES = ['light', 'dark'];
+// const THEMES = ['light', 'dark', 'brand'];
 
 function getInitialTheme() {
   const stored = localStorage.getItem(STORAGE_KEY);
@@ -30,9 +31,10 @@ function getInitialTheme() {
 
 function applyThemeClass(theme) {
   const root = document.documentElement;
-  root.classList.remove('dark', 'brand');
+  root.classList.remove('dark');
+  // root.classList.remove('dark', 'brand');
   if (theme === 'dark') root.classList.add('dark');
-  if (theme === 'brand') root.classList.add('brand');
+  // if (theme === 'brand') root.classList.add('brand');
 }
 
 export function useTheme() {

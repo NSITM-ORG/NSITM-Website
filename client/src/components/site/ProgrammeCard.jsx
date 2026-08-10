@@ -14,7 +14,6 @@
  * The old touch-device-only corner icon is removed — redundant now
  * that the whole card is tappable on every device.
  */
-
 import { Link, useNavigate } from 'react-router-dom';
 import { Clock, Star, ArrowUpRight, Users } from 'lucide-react';
 import { Badge } from '../ui/Badge';
@@ -40,42 +39,151 @@ export function ProgrammeCard({ programme }) {
 
   return (
     <Link to={`/programmes/${programme.slug}`} className="block h-full group">
-      <div className={` programme-card group h-full border border-border/80 bg-surface-elevated rounded-2xl overflow-hidden shadow-card transition-all duration-300 hover:shadow-card-lift hover:border-primary/30`}>
-        <div className={`relative flex h-44 items-center justify-center bg-linear-to-br ${gradient} text-white overflow-hidden`}>
-          <div className="absolute inset-0 bg-black/10 backdrop-blur-[1px]"></div>
-          <span className="font-heading text-4xl font-extrabold tracking-wider opacity-90 drop-shadow-sm relative z-10">{programme.name.slice(0, 2).toUpperCase()}</span>
-          <span className={`absolute right-3 top-3 rounded-full ${!isActive ? "bg-primary/90" : "bg-secondary/50"} backdrop-blur-md px-3.5 py-1.5 text-xs font-bold text-white shadow-sm z-10 border border-white/20`}>
+      <div
+        className={`
+          programme-card group h-full border rounded-2xl overflow-hidden shadow-card
+          transition-all duration-300 hover:shadow-card-lift
+          ${isActive
+            ? 'border-border/80 bg-surface-elevated hover:border-primary/30'
+            : 'border-border/60 bg-surface-elevated/80 dark:bg-surface-elevated/60 hover:border-primary/20'
+          }
+        `}
+      >
+        {/* ── Header / cover ─────────────────────────────────────── */}
+        <div
+          className={`
+            relative flex h-44 items-center justify-center
+            bg-linear-to-br ${gradient} text-white overflow-hidden
+            ${!isActive ? 'saturate-50 brightness-90' : ''}
+          `}
+        >
+          {/* Stronger dim for Coming Soon so the gradient still reads but feels “offline” */}
+          <div
+            className={`
+              absolute inset-0
+              ${isActive ? 'bg-black/10' : 'bg-black/35'}
+              backdrop-blur-[1px]
+            `}
+          />
+
+          <span className="font-heading text-4xl font-extrabold tracking-wider opacity-90 drop-shadow-sm relative z-10">
+            {programme.name.slice(0, 2).toUpperCase()}
+          </span>
+
+          {/* Status / price badge */}
+          <span
+            className={`
+              absolute right-3 top-3 z-10 rounded-full px-3.5 py-1.5 text-xs font-bold
+              text-white shadow-sm border border-white/20 backdrop-blur-md
+              ${isActive ? 'bg-secondary/80' : 'bg-primary/90'}
+            `}
+          >
             {isActive ? formatCurrency(programme.fees?.full) : 'Coming Soon'}
           </span>
         </div>
 
-        <div className="p-6 flex flex-col justify-around items-start h-[calc(100%-11rem)] ">
-          <span className={`mb-2.5 inline-block rounded-full ${isActive ? "bg-primary/10 text-primary" : "bg-primary/10 text-primary/50"} px-3.5 py-1 text-xs font-bold tracking-wide`}>
+        {/* ── Body ───────────────────────────────────────────────── */}
+        <div className="p-6 flex flex-col justify-around items-start h-[calc(100%-11rem)]">
+          {/* Category chip */}
+          <span
+            className={`
+              mb-2.5 inline-block rounded-full px-3.5 py-1 text-xs font-bold tracking-wide
+              ${isActive
+                ? 'bg-primary/10 text-primary'
+                : 'bg-primary/5 text-primary/60 dark:text-primary/50'
+              }
+            `}
+          >
             {PROGRAMME_CATEGORY_LABELS[programme.category]}
           </span>
-          <h3 className={`mb-3 font-heading text-xl font-bold leading-snug ${isActive ? " text-black/80 group-hover:text-primary" : 'text-black/50 group-hover:text-primary'} transition-colors whitespace text-nowrap truncate `}>{programme.name}</h3>
-          <div className="flex items-center gap-1 text-xs text-warning">
-            {Array.from({ length: 5 }).map((_, i) => <Star key={i} size={13} fill="currentColor" />)}
+
+          {/* Title – uses real text tokens so it survives dark mode */}
+          <h3
+            className={`
+              mb-3 font-heading text-xl font-bold leading-snug
+              whitespace-nowrap truncate transition-colors
+              ${isActive
+                ? 'text-text-primary group-hover:text-primary'
+                : 'text-text-primary/55 group-hover:text-primary/80'
+              }
+            `}
+          >
+            {programme.name}
+          </h3>
+
+          {/* Stars (always shown, slightly muted for Coming Soon) */}
+          <div
+            className={`
+              flex items-center gap-1 text-xs
+              ${isActive ? 'text-warning' : 'text-warning/50'}
+            `}
+          >
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star key={i} size={13} fill="currentColor" />
+            ))}
             <span className="ml-1.5 font-semibold text-text-secondary">5.0</span>
           </div>
+
+          {/* Meta row */}
           <div className="w-full mt-5 flex items-center justify-between border-t border-primary/20 pt-3.5 text-xs font-medium text-text-secondary">
-            <span className={`flex items-center gap-1.5 ${!isActive && " text-primary/50 "}`}><Clock size={14} className={`${isActive ? "text-primary/70" : "text-primary/50"}`} /> {programme.duration}</span>
-            <span className={`flex items-center gap-1.5 ${!isActive && " text-primary/50 "}`}><Users size={14} className={`${isActive ? "text-secondary/80" : "text-primary/50"}`} /> {programme.enrollmentCount || 0} enrolled</span>
+            <span
+              className={`
+                flex items-center gap-1.5
+                ${!isActive && 'text-text-secondary/60'}
+              `}
+            >
+              <Clock
+                size={14}
+                className={isActive ? 'text-primary/70' : 'text-primary/40'}
+              />
+              {programme.duration}
+            </span>
+
+            <span
+              className={`
+                flex items-center gap-1.5
+                ${!isActive && 'text-text-secondary/60'}
+              `}
+            >
+              <Users
+                size={14}
+                className={isActive ? 'text-secondary/80' : 'text-primary/40'}
+              />
+              {programme.enrollmentCount || 0} enrolled
+            </span>
           </div>
         </div>
 
+        {/* ── Hover panel (desktop) ──────────────────────────────── */}
         <div className="programme-card-hover-panel hidden md:flex rounded-2xl">
           <div className="w-full">
             <span className="mb-2 inline-block rounded-full bg-primary/10 px-3.5 py-1 text-xs font-bold text-primary">
               {PROGRAMME_CATEGORY_LABELS[programme.category]}
             </span>
-            <h3 className="mb-3 font-heading text-xl font-extrabold leading-snug text-text-primary">{programme.name}</h3>
-            {isActive && <p className="mb-2 font-heading text-2xl font-black text-primary">{formatCurrency(programme.fees?.full)}</p>}
-            <p className="mb-5 line-clamp-3 text-sm leading-relaxed text-text-secondary">{programme.description}</p>
+
+            <h3 className="mb-3 font-heading text-xl font-extrabold leading-snug text-text-primary">
+              {programme.name}
+            </h3>
+
+            {isActive && (
+              <p className="mb-2 font-heading text-2xl font-black text-primary">
+                {formatCurrency(programme.fees?.full)}
+              </p>
+            )}
+
+            <p className="mb-5 line-clamp-3 text-sm leading-relaxed text-text-secondary">
+              {programme.description}
+            </p>
+
             <div className="flex items-center gap-1 text-xs text-warning">
-              {Array.from({ length: 5 }).map((_, i) => <Star key={i} size={13} fill="currentColor" />)}
-              <span className="ml-1 text-text-secondary font-medium">5.0 ({programme.enrollmentCount || 0} enrolled)</span>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} size={13} fill="currentColor" />
+              ))}
+              <span className="ml-1 text-text-secondary font-medium">
+                5.0 ({programme.enrollmentCount || 0} enrolled)
+              </span>
             </div>
+
             {isActive ? (
               <button
                 onClick={handleEnrollClick}
@@ -84,7 +192,9 @@ export function ProgrammeCard({ programme }) {
                 Enroll Now <ArrowUpRight size={16} />
               </button>
             ) : (
-              <Badge color="grey" className="mt-6">Coming Soon</Badge>
+              <Badge color="grey" className="mt-6">
+                Coming Soon
+              </Badge>
             )}
           </div>
         </div>

@@ -64,10 +64,22 @@ export function CounterSection() {
   const stats = useMemo(() => {
     const allProgrammes = Object.values(programmes.list).flat();
     const activeCount = allProgrammes.filter((p) => p.status === 'active').length;
+
+    const yearsOfExperience = () => {
+      // 1. Create a new Date object (defaults to current date and time)
+      const currentDate = new Date();
+
+      // 2. Extract the 4-digit year
+      const currentYear = currentDate.getFullYear();
+
+      return currentYear - 2012; // Assuming the institution started in 2010
+    }
+
     return {
       activeProgrammes: activeCount,
       totalProgrammes: allProgrammes.length || 26, // 26 confirmed catalogue size as sane floor
       activeCohorts: cohorts.activeCohorts.length,
+      yearsOfExperience: yearsOfExperience(),
     };
   }, [programmes.list, cohorts.activeCohorts]);
 
@@ -78,7 +90,7 @@ export function CounterSection() {
           <CounterCard icon={BookOpen} targetValue={stats.activeProgrammes} label="Active Programmes" colorClass="bg-primary/20 text-primary" cardColor='primary' />
           <CounterCard icon={GraduationCap} targetValue={stats.totalProgrammes} label="Total Programmes" colorClass="bg-secondary/20 text-secondary" cardColor='secondary' />
           <CounterCard icon={Calendar} targetValue={stats.activeCohorts} label="Active Cohorts" colorClass="bg-accent/20 text-accent" cardColor='accent' />
-          <CounterCard icon={Award} targetValue={14} label="Years of Experience" colorClass="bg-info/20 text-info" cardColor='info' />
+          <CounterCard icon={Award} targetValue={stats.yearsOfExperience} label="Years of Experience" colorClass="bg-info/20 text-info" cardColor='info' />
         </div>
       </div>
     </section>

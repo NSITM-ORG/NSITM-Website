@@ -3,11 +3,13 @@
  * SiteLayout header and PanelLayout top bar.
  */
 
-import { Sun, Moon, Palette } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '../../hooks/useTheme';
 
-const ICONS = { light: Sun, dark: Moon, brand: Palette };
-const LABELS = { light: 'Light mode', dark: 'Dark mode', brand: 'Brand mode' };
+const ICONS = { light: Sun, dark: Moon };
+const LABELS = { light: 'Light mode', dark: 'Dark mode' };
+// const ICONS = { light: Sun, dark: Moon, brand: Palette };
+// const LABELS = { light: 'Light mode', dark: 'Dark mode', brand: 'Brand mode' };
 
 export const ThemeToggle = () => {
   const { theme, cycleTheme } = useTheme();

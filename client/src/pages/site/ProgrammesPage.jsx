@@ -80,7 +80,7 @@ export function ProgrammesPage() {
             return (
               <section key={category}>
                 <div className="mb-5 flex items-center justify-between">
-                  <h2 className="font-heading text-xl font-bold text-text-primary">
+                  <h2 className="font-heading text-xl font-bold sm:text-2xl">
                     {PROGRAMME_CATEGORY_LABELS[category]}
                   </h2>
                   <Link

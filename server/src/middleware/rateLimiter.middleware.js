@@ -125,7 +125,7 @@ const joinCommunityLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   handler: handler429('Too many submissions from this IP. Please try again later.'),
-  keyGenerator: (req) => req.ip,
+  keyGenerator: (req) => ipKeyGenerator(req),
 });
 
 
