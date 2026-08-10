@@ -196,7 +196,7 @@ function SquareSocialIcon({ href, icon: Icon, label }) {
       target="_blank"
       rel="noreferrer"
       aria-label={label}
-      className="flex h-9 w-9 items-center justify-center rounded-lg border border-primary/20 bg-surface text-text-secondary shadow-xs transition-all duration-200 hover:bg-primary hover:text-white hover:border-primary active:scale-95"
+      className="flex h-9 w-9 items-center justify-center rounded-lg border border-primary/20 bg-surface text-text-secondary shadow-xs transition-all duration-200 hover:text-white hover:border-primary active:scale-95"
     >
       <Icon size={16} />
     </a>
