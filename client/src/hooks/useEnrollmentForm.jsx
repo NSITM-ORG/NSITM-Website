@@ -29,6 +29,7 @@ const initialFormState = {
   programme: '',
   cohortId: null,        // NEW — set alongside programme when prefilled
   isPrefilled: false,    // NEW — true when arrived via ?programme=slug
+  resolvedProgramme: null,
   deliveryFormat: '',
   referralCode: '',
   policies: { /* unchanged */ noRefundPolicy: false, attendancePolicy: false, codeOfConduct: false, paymentPlanTerms: false },
@@ -59,6 +60,14 @@ function enrollmentFormReducer(state, action) {
       return { ...state, programme: action.programme, policies: initialFormState.policies };
     case 'PREFILL_FROM_QUERY':
       return { ...state, programme: action.programme, cohortId: action.cohortId || null, isPrefilled: true };
+    case 'SET_RESOLVED_PROGRAMME':
+      return {
+        ...state,
+        programme: action.programme.id,
+        resolvedProgramme: action.programme,
+        cohortId: action.cohortId || action.programme.activeCohort?.id || null,
+        isPrefilled: true,
+      };
     case 'RESET':
       return initialFormState;
     default:
@@ -84,6 +93,10 @@ export function EnrollmentFormProvider({ children }) {
     (programme, cohortId) => dispatch({ type: 'PREFILL_FROM_QUERY', programme, cohortId }),
     []
   );
+  const setResolvedProgramme = useCallback(
+    (programme, cohortId) => dispatch({ type: 'SET_RESOLVED_PROGRAMME', programme, cohortId }),
+    []
+  );
   const resetForm = useCallback(() => dispatch({ type: 'RESET' }), []);
 
   const allPoliciesChecked = Object.values(state.policies).every(Boolean);
@@ -98,6 +111,7 @@ export function EnrollmentFormProvider({ children }) {
     previousStep,
     changeProgrammeMidForm,
     prefillFromQuery,
+    setResolvedProgramme, 
     resetForm,
     allPoliciesChecked,
   };

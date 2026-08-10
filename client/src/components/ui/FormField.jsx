@@ -198,11 +198,15 @@ export function FormField({
           className={baseFieldClasses}
           {...rest}
         >
-          <option value="" disabled>
+          <option value="" disabled style={{ backgroundColor: 'var(--color-surface-elevated)', color: 'var(--color-text-secondary)' }}>
             {placeholder || 'Select an option'}
           </option>
-          {options.map((opt, idx) => (
-            <option key={idx} value={opt.value}>
+          {options.map((opt) => (
+            <option
+              key={opt.value}
+              value={opt.value}
+              style={{ backgroundColor: 'var(--color-surface-elevated)', color: 'var(--color-text-primary)' }}
+            >
               {opt.label}
             </option>
           ))}

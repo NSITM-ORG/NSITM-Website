@@ -65,7 +65,9 @@
 
 /* ── LIGHT THEME (default — applied on :root, no class needed) ────── */
 :root {
-  --color-background: #f5f6fa;
+  color-scheme: light;
+  --color-background: #f4f6f9;
+  /* --color-background: #f5f6fa; */
   --color-surface-elevated: #ffffff;
   --color-surface: #eef0f5;
   --color-text-primary: #1a1f2e;
@@ -75,7 +77,9 @@
 
 /* ── DARK THEME ───────────────────────────────────────────────────── */
 .dark {
-  --color-background: #0c0e14;
+  color-scheme: dark;
+  --color-background: #111318;
+  /* --color-background: #0c0e14; */
   --color-surface-elevated: #161920;
   --color-surface: #1c2029;
   --color-text-primary: #f0f2f6;

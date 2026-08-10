@@ -32,7 +32,7 @@ import { StepReceiptUpload } from './enrollment-steps/StepReceiptUpload';
 
 function EnrollmentFormBody() {
   const [searchParams] = useSearchParams();
-  const { state, STEP, prefillFromQuery } = useEnrollmentForm();
+  const { state, STEP, setResolvedProgramme } = useEnrollmentForm();
   const { programmes, actions } = useManageState();
 
   useEffect(() => {
@@ -41,14 +41,26 @@ function EnrollmentFormBody() {
   }, []);
   
   useEffect(() => {
-    const slug = searchParams.get("programme");
-    const cohortId = searchParams.get("cohort");
+    const slug = searchParams.get('programme');
+    const cohortIdParam = searchParams.get('cohort');
     if (!slug) return;
-    const flat = Object.values(programmes.list).flat();
-    const match = flat.find((p) => p.slug === slug);
-    if (match) prefillFromQuery(match.id, cohortId || match.activeCohort?.id);
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const result = await actions.fetchProgrammeBySlug(slug);
+        if (!cancelled && result?.programme) {
+          setResolvedProgramme(result.programme, cohortIdParam);
+        }
+      } catch {
+        // Unknown or removed programme slug — the field simply stays
+        // empty; the student can still pick manually from the dropdown.
+      }
+    })();
+
+    return () => { cancelled = true; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams, programmes.list]);
+  }, [searchParams]);
 
   const STEPS = {
     [STEP.PERSONAL]: <StepPersonalDetails />,

@@ -1,22 +1,26 @@
 /**
- * src/pages/site/enrollment-steps/StepPersonalDetails.jsx (REPLACES F7 version)
+ * src/pages/site/enrollment-steps/StepPersonalDetails.jsx
  *
- * Changes per client instruction:
- *   1. Programme + cohort name displayed PROMINENTLY at the top of the
- *      step (a highlighted summary card), not just silently pre-filled
- *      into a dropdown the student might not even notice.
- *   2. Programme select becomes a DISABLED, read-only display when
- *      arrived via ?programme=slug (state.isPrefilled) — the student
- *      cannot second-guess or accidentally change it from a card click;
- *      they'd need to go back to Programmes and pick a different card.
- *   3. Delivery format: for a HYBRID cohort, the student still chooses
- *      Online or In-Person themselves. For a pure Online or pure
- *      In-Person cohort, the format is shown read-only (no student
- *      choice) since there's nothing to choose between.
- *   4. First-timer guidance banner at the top of the step.
+ * BUG FIXES APPLIED:
+ *   1. "Enrolling In" now always shows the CORRECT programme — sourced
+ *      from state.resolvedProgramme (the canonical single-fetch result),
+ *      never re-derived from the shared bulk list cache.
+ *   2. The disabled/greyed-out Programme <select> is REPLACED with a
+ *      proper read-only confirmation card, matching the "Enrolling In"
+ *      banner — the student can now clearly SEE their programme name at
+ *      all times, plus a "Change Programme" link back to /programmes,
+ *      rather than staring at a dead dropdown with no visible value.
+ *   3. Delivery format resolution now reads from resolvedProgramme too
+ *      — automatically correct once the above is fixed, since it was
+ *      never a separate bug.
+ *   4. The delivery-format auto-set side effect was previously stuffed
+ *      into useMemo (an anti-pattern — useMemo must be pure and must
+ *      never cause side effects during render). Converted to a proper
+ *      useEffect.
  */
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useEnrollmentForm } from '../../../hooks/useEnrollmentForm';
 import { useManageState } from '../../../hooks/useManageState';
 import { FormField } from '../../../components/ui/FormField';
@@ -24,8 +28,7 @@ import { Button } from '../../../components/ui/Button';
 import { GuidanceBanner } from '../../../components/site/GuidanceBanner';
 import { validators, validateForm } from '../../../utils/validation';
 import { DELIVERY_FORMATS, DELIVERY_FORMAT_LABELS, PROGRAMME_STATUS } from '../../../utils/constants';
-import { useState } from 'react';
-import { GraduationCap, Calendar } from 'lucide-react';
+import { GraduationCap, Calendar, PencilLine } from 'lucide-react';
 
 const SCHEMA = {
   fullName: [validators.required(), validators.fullName()],
@@ -38,31 +41,26 @@ const SCHEMA = {
 export function StepPersonalDetails() {
   const { state, setField, nextStep } = useEnrollmentForm();
   const { programmes, actions } = useManageState();
+  const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
-  // console.log(programmes);
-  // console.log(state);
-
+  // Only needed for the MANUAL dropdown path (student arrived at /enroll
+  // with no ?programme= param and picks one themselves). The prefilled
+  // path never touches this — see resolvedProgramme below.
   const flatProgrammes = useMemo(() => Object.values(programmes.list).flat(), [programmes.list]);
-
   const programmeOptions = useMemo(
     () => flatProgrammes.filter((p) => p.status === PROGRAMME_STATUS.ACTIVE).map((p) => ({ value: p.id, label: p.name })),
     [flatProgrammes]
   );
-  // console.log(flatProgrammes);
-  const selectedProgramme = useMemo(
-    () => flatProgrammes.find((p) => p.id === state.programme),
-    [flatProgrammes, state.programme]
-  );
 
-  const cohort = selectedProgramme?.activeCohort;
+  // ── Single source of truth once prefilled — no re-derivation, no
+  // dependency on any other component's cache state. ──────────────────
+  const cohort = state.resolvedProgramme?.activeCohort;
   const cohortDeliveryFormat = cohort?.deliveryFormat;
   const isHybridCohort = cohortDeliveryFormat === DELIVERY_FORMATS.HYBRID;
 
-  // Auto-set the read-only delivery format for non-hybrid cohorts, once
-  // a programme with a known cohort format is resolved.
-  useMemo(() => {
+  useEffect(() => {
     if (cohortDeliveryFormat && !isHybridCohort && state.deliveryFormat !== cohortDeliveryFormat) {
       setField('deliveryFormat', cohortDeliveryFormat);
     }
@@ -87,7 +85,7 @@ export function StepPersonalDetails() {
         referralCode: state.referralCode || undefined,
       });
     } catch {
-      // FRD FR-08.1: failure must not block advancement.
+      // FRD FR-08.1: failure must not block advancement. Toast already shown centrally.
     } finally {
       setSubmitting(false);
       nextStep();
@@ -104,12 +102,12 @@ export function StepPersonalDetails() {
       </GuidanceBanner>
 
       {/* ── Prominent Programme + Cohort Summary (when prefilled) ── */}
-      {state.isPrefilled && selectedProgramme && (
+      {state.isPrefilled && state.resolvedProgramme && (
         <div className="rounded-md border border-primary/30 bg-primary/5 p-4">
           <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-primary">
             <GraduationCap size={14} /> Enrolling In
           </p>
-          <p className="font-heading text-lg font-bold text-text-primary">{selectedProgramme.name}</p>
+          <p className="font-heading text-lg font-bold text-text-primary">{state.resolvedProgramme.name}</p>
           {cohort && (
             <p className="mt-1 flex items-center gap-1.5 text-sm text-text-secondary">
               <Calendar size={14} /> {cohort.name}
@@ -152,19 +150,40 @@ export function StepPersonalDetails() {
         required
       />
 
-      {/* ── Programme select — disabled/read-only when prefilled ── */}
-      <FormField
-        type="select"
-        label="Programme"
-        value={state.programme}
-        onChange={(v) => setField('programme', v)}
-        options={programmeOptions}
-        error={errors.programme}
-        placeholder="Select a programme"
-        disabled={state.isPrefilled}
-        hint={state.isPrefilled ? 'Pre-selected from the programme you chose. Go back to Programmes to pick a different one.' : undefined}
-        required
-      />
+      {/* ── Programme: read-only confirmation card when prefilled,
+           functional dropdown otherwise — no more disabled-select with
+           an invisible value. ────────────────────────────────────── */}
+      {state.isPrefilled ? (
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-text-primary">Programme</label>
+          <div className="flex items-center justify-between gap-3 rounded-sm border border-border bg-surface px-4 py-3">
+            <span className="text-sm font-semibold text-text-primary">
+              {state.resolvedProgramme?.name || 'Loading…'}
+            </span>
+            <button
+              type="button"
+              onClick={() => navigate('/programmes')}
+              className="flex shrink-0 items-center gap-1 text-xs font-medium text-primary hover:underline"
+            >
+              <PencilLine size={13} /> Change
+            </button>
+          </div>
+          <p className="mt-1.5 text-sm text-text-secondary">
+            Pre-selected from the programme you chose. Click "Change" to pick a different one.
+          </p>
+        </div>
+      ) : (
+        <FormField
+          type="select"
+          label="Programme"
+          value={state.programme}
+          onChange={(v) => setField('programme', v)}
+          options={programmeOptions}
+          error={errors.programme}
+          placeholder="Select a programme"
+          required
+        />
+      )}
 
       {/* ── Delivery format: choice for Hybrid, read-only otherwise ── */}
       {isHybridCohort ? (
@@ -181,15 +200,30 @@ export function StepPersonalDetails() {
           hint="This cohort supports both formats — choose whichever works for you."
           required
         />
+      ) : state.isPrefilled ? (
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-text-primary">Delivery Format</label>
+          <div className="rounded-sm border border-border bg-surface px-4 py-3">
+            <span className="text-sm font-semibold text-text-primary">
+              {DELIVERY_FORMAT_LABELS[state.deliveryFormat] || 'Online'}
+            </span>
+          </div>
+          <p className="mt-1.5 text-sm text-text-secondary">
+            This cohort's delivery format is set by the administration.
+          </p>
+        </div>
       ) : (
         <FormField
-          type="select"
+          type="radio-group"
           label="Delivery Format"
           value={state.deliveryFormat}
-          onChange={() => {}}
-          options={[{ value: state.deliveryFormat || DELIVERY_FORMATS.ONLINE, label: DELIVERY_FORMAT_LABELS[state.deliveryFormat] || 'Online' }]}
-          disabled
-          hint="This cohort's delivery format is fixed by the administration."
+          onChange={(v) => setField('deliveryFormat', v)}
+          options={[
+            { value: DELIVERY_FORMATS.ONLINE, label: 'Online' },
+            { value: DELIVERY_FORMATS.IN_PERSON, label: 'In-Person' },
+          ]}
+          error={errors.deliveryFormat}
+          required
         />
       )}
 
