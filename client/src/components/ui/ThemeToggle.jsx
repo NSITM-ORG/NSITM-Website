@@ -36,7 +36,16 @@ export const FloatingThemeToggle = () => {
       onClick={cycleTheme}
       title={`Currently ${LABELS[theme]} — click to switch`}
       aria-label="Toggle theme"
-      className="fixed bottom-15 right-9 rounded-full p-2 text-text-secondary transition-colors hover:bg-surface hover:text-text-primary"
+      className="
+        fixed bottom-15 right-9 z-50
+        rounded-full p-1.5
+        bg-primary/15 text-primary
+        shadow-lg backdrop-blur-lg
+        border border-primary/20
+        transition-all duration-200
+        hover:bg-primary/25 hover:shadow-lg hover:scale-105
+        active:scale-95
+      "
     >
       <Icon size={35} />
     </button>
