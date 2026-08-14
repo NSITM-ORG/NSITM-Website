@@ -1,0 +1,6 @@
+{
+    "files.autoSave": "afterDelay",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnPaste": true,
+    "workbench.colorTheme": "Shades of Purple (Super Dark)"
+}

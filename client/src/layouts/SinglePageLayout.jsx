@@ -40,20 +40,22 @@ export function SinglePageLayout() {
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <header className="flex items-center justify-between bg-surface-elevated px-4 py-3 sm:px-6">
-        <button
-          onClick={handleBack}
-          className="flex items-center gap-2 text-base md:text-xl font-medium cursor-pointer hover:text-primary"
-        >
-          <ArrowLeft size={30} /> Back
-        </button>
-        <SiteLogo />
-        {whatsappLink ? (
-          <a href={whatsappLink} target="_blank" rel="noreferrer" className="text-secondary hover:brightness-90">
-            <WhatsappIcon size={40} />
-          </a>
-        ) : (
-          <span className="w-5.5" />
-        )}
+        <div className="flex items-center justify-between w-full max-w-content mx-auto">
+          <button
+            onClick={handleBack}
+            className="flex items-center gap-2 text-base md:text-xl font-medium cursor-pointer hover:text-primary"
+          >
+            <ArrowLeft size={30} /> Back
+          </button>
+          <SiteLogo />
+          {whatsappLink ? (
+            <a href={whatsappLink} target="_blank" rel="noreferrer" className="text-secondary hover:brightness-90">
+              <WhatsappIcon size={40} />
+            </a>
+          ) : (
+            <span className="w-5.5" />
+          )}
+        </div>
       </header>
       <main className="flex-1">
         <Outlet />
