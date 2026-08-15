@@ -8,8 +8,8 @@ node_modules/
 .env.local
 server/.env
 server/.env.development
-.server/.env.production
-.server/.env.local
+# server/.env.production
+# server/.env.local
 
 # ── Logs
 logs/

@@ -25,6 +25,7 @@ export function Footer() {
   }, []);
 
   const institution = settings.publicSettings?.institution;
+  console.log(settings);
 
   const phoneDisplay = institution?.phone || "+2348093344991";
   const emailDisplay = institution?.email || "info@nextservesystems.com";

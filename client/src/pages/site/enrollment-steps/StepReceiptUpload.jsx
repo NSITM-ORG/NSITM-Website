@@ -47,6 +47,7 @@ export function StepReceiptUpload() {
   const canSubmit = transferConfirmed && fileUpload.hasFile && !fileUpload.error;
 
   const handleSubmit = async () => {
+    console.log(enrollments);
     if (!enrollments.partialEnrollmentId) {
       setSubmitError('Your enrollment session could not be found. Please contact us on WhatsApp.');
       return;
