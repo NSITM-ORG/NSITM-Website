@@ -27,11 +27,11 @@ export function Footer() {
   const institution = settings.publicSettings?.institution;
   console.log(settings);
 
-  const phoneDisplay = institution?.phone || "+2348093344991";
-  const emailDisplay = institution?.email || "info@nextservesystems.com";
+  const phoneDisplay = institution?.phone || "+2349035007621, +2348037248978";
+  const emailDisplay = institution?.email || "nsitmonline@gmail.com";
   const addressDisplay =
     institution?.address ||
-    "114 Funsho Williams Avenue, Surulere, Lagos, Nigeria";
+    "Plot 3, Owolabi Street, Lord Bus Stop, Ago Palace Way, Okota, Lagos State, Nigeria";
 
   return (
     <footer className="mt-5 bg-surface-elevated ">
@@ -89,17 +89,15 @@ export function Footer() {
             <div className="grid grid-cols-2 gap-x-4 gap-y-3.5 text-sm font-medium">
               {/* Column 1 */}
               <div className="space-y-3">
-                <FooterArrowLink to="/cohorts" label="Graduation" />
+                <FooterArrowLink to="/cohorts" label="Cohorts" />
                 <FooterArrowLink to="/enroll" label="Admissions" />
-                <FooterArrowLink to="/programmes" label="International" />
                 <FooterArrowLink to="/faq" label="FAQs" />
               </div>
               {/* Column 2 */}
               <div className="space-y-3">
                 <FooterArrowLink to="/programmes" label="Courses" />
                 <FooterArrowLink to="/about" label="About Us" />
-                <FooterArrowLink to="/my-payment" label="Book Store" />
-                <FooterArrowLink to="/about" label="Alumni" />
+                <FooterArrowLink to="/my-payment" label="Payments" />
               </div>
             </div>
           </div>

@@ -39,7 +39,7 @@ const SCHEMA = {
 };
 
 export function StepPersonalDetails() {
-  const { state, setField, nextStep } = useEnrollmentForm();
+  const { state, setField, nextStep, setResolvedProgramme } = useEnrollmentForm();
   const { programmes, actions } = useManageState();
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
@@ -50,22 +50,32 @@ export function StepPersonalDetails() {
   // path never touches this — see resolvedProgramme below.
   const flatProgrammes = useMemo(() => Object.values(programmes.list).flat(), [programmes.list]);
   const programmeOptions = useMemo(
-    () => flatProgrammes.filter((p) => p.status === PROGRAMME_STATUS.ACTIVE).map((p) => ({ value: p.id, label: p.name })),
+    () => flatProgrammes.filter((p) => p.status === PROGRAMME_STATUS.ACTIVE).map((p) => ({ value: p._id || p.id, label: p.name })),
     [flatProgrammes]
   );
 
-  // ── Single source of truth once prefilled — no re-derivation, no
-  // dependency on any other component's cache state. ──────────────────
-  const cohort = state.resolvedProgramme?.activeCohort;
+  console.log(state)
+
+  // ── Single source of truth once prefilled or selected manually ────────
+  const selectedProgrammeFromDropdown = useMemo(() => {
+    if (state.resolvedProgramme && (state.resolvedProgramme.id === state.programme || state.resolvedProgramme._id === state.programme)) {
+      return state.resolvedProgramme;
+    }
+    return flatProgrammes.find(p => p.id === state.programme || p._id === state.programme);
+  }, [state.programme, flatProgrammes, state.resolvedProgramme]);
+
+  console
+
+  const cohort = selectedProgrammeFromDropdown?.activeCohort;
   const cohortDeliveryFormat = cohort?.deliveryFormat;
   const isHybridCohort = cohortDeliveryFormat === DELIVERY_FORMATS.HYBRID;
 
   useEffect(() => {
-    if (cohortDeliveryFormat && !isHybridCohort && state.deliveryFormat !== cohortDeliveryFormat) {
+    if (cohortDeliveryFormat && state.deliveryFormat !== cohortDeliveryFormat) {
       setField('deliveryFormat', cohortDeliveryFormat);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cohortDeliveryFormat, isHybridCohort]);
+  }, [cohortDeliveryFormat]);
 
   const handleNext = async (e) => {
     e.preventDefault();
@@ -139,6 +149,16 @@ export function StepPersonalDetails() {
         value={state.whatsappNumber}
         onChange={(v) => setField('whatsappNumber', v)}
         hint="Leave blank if same as your phone number."
+        actionButton={
+          <button
+            type="button"
+            onClick={() => setField('whatsappNumber', state.phoneNumber)}
+            disabled={!state.phoneNumber}
+            className="mb-1 text-xs font-semibold text-primary hover:underline disabled:opacity-50 disabled:hover:no-underline"
+          >
+            Use Phone Number
+          </button>
+        }
       />
       <FormField
         type="email"
@@ -153,79 +173,41 @@ export function StepPersonalDetails() {
       {/* ── Programme: read-only confirmation card when prefilled,
            functional dropdown otherwise — no more disabled-select with
            an invisible value. ────────────────────────────────────── */}
-      {state.isPrefilled ? (
-        <div>
-          <label className="mb-1.5 block text-sm font-medium text-text-primary">Programme</label>
-          <div className="flex items-center justify-between gap-3 rounded-sm border border-border bg-surface px-4 py-3">
-            <span className="text-sm font-semibold text-text-primary">
-              {state.resolvedProgramme?.name || 'Loading…'}
-            </span>
-            <button
-              type="button"
-              onClick={() => navigate('/programmes')}
-              className="flex shrink-0 items-center gap-1 text-xs font-medium text-primary hover:underline"
-            >
-              <PencilLine size={13} /> Change
-            </button>
-          </div>
-          <p className="mt-1.5 text-sm text-text-secondary">
-            Pre-selected from the programme you chose. Click "Change" to pick a different one.
-          </p>
-        </div>
-      ) : (
-        <FormField
-          type="select"
-          label="Programme"
-          value={state.programme}
-          onChange={(v) => setField('programme', v)}
-          options={programmeOptions}
-          error={errors.programme}
-          placeholder="Select a programme"
-          required
-        />
-      )}
+      <FormField
+        type="select"
+        label="Programme"
+        value={state.programme}
+        onChange={(v) => {
+          setField('programme', v);
+          // If the user manually changes the programme, we should clear the isPrefilled flag
+          // if it's currently prefilled, but `setField` already updates the state properly.
+        }}
+        options={programmeOptions}
+        error={errors.programme}
+        placeholder="Select a programme"
+        required
+      />
 
-      {/* ── Delivery format: choice for Hybrid, read-only otherwise ── */}
-      {isHybridCohort ? (
-        <FormField
-          type="radio-group"
-          label="Delivery Format"
-          value={state.deliveryFormat}
-          onChange={(v) => setField('deliveryFormat', v)}
-          options={[
-            { value: DELIVERY_FORMATS.ONLINE, label: 'Online' },
-            { value: DELIVERY_FORMATS.IN_PERSON, label: 'In-Person' },
-          ]}
-          error={errors.deliveryFormat}
-          hint="This cohort supports both formats — choose whichever works for you."
-          required
-        />
-      ) : state.isPrefilled ? (
-        <div>
-          <label className="mb-1.5 block text-sm font-medium text-text-primary">Delivery Format</label>
-          <div className="rounded-sm border border-border bg-surface px-4 py-3">
-            <span className="text-sm font-semibold text-text-primary">
-              {DELIVERY_FORMAT_LABELS[state.deliveryFormat] || 'Online'}
-            </span>
-          </div>
-          <p className="mt-1.5 text-sm text-text-secondary">
-            This cohort's delivery format is set by the administration.
-          </p>
+      {/* ── Delivery format: displayed value as requested ── */}
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-text-primary">Delivery Format</label>
+        <div className="rounded-sm border border-border bg-surface px-4 py-3">
+          <span className="text-sm font-semibold text-text-primary">
+            {(() => {
+              const format = state.deliveryFormat || cohortDeliveryFormat;
+              if (!format) return 'To be determined';
+
+              const normalizedFormat = format.toLowerCase();
+              return DELIVERY_FORMAT_LABELS[format] ||
+                DELIVERY_FORMAT_LABELS[normalizedFormat] ||
+                (format.charAt(0).toUpperCase() + format.slice(1).replace('_', ' '));
+            })()}
+          </span>
         </div>
-      ) : (
-        <FormField
-          type="radio-group"
-          label="Delivery Format"
-          value={state.deliveryFormat}
-          onChange={(v) => setField('deliveryFormat', v)}
-          options={[
-            { value: DELIVERY_FORMATS.ONLINE, label: 'Online' },
-            { value: DELIVERY_FORMATS.IN_PERSON, label: 'In-Person' },
-          ]}
-          error={errors.deliveryFormat}
-          required
-        />
-      )}
+        <p className="mt-1.5 text-sm text-text-secondary">
+          This cohort's delivery format is dictated by the administration.
+        </p>
+      </div>
 
       <FormField
         label="Referral Code"

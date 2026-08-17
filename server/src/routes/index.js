@@ -10,6 +10,7 @@ import publicSettingsRoutes   from './public/settings.routes.js';
 import publicEnrollmentRoutes from './public/enrollement.routes.js';
 import publicInstalmentRoutes from './public/instalment.routes.js';
 import publicEngagementRoutes  from './public/engagement.routes.js';
+import publicLegalPageRoutes  from './public/legalPage.routes.js';
 
 // ── Admin routes ─────────────────────────────────────────────────────
 import adminAuthRoutes         from './admin/auth.routes.js';
@@ -17,6 +18,7 @@ import adminRegistrationRoutes from './admin/registration.routes.js';
 import adminEnrollmentRoutes   from './admin/enrollment.routes.js';
 import adminPaymentRoutes     from './admin/payment.routes.js';
 import adminInstalmentRoutes   from './admin/instalment.routes.js';
+import adminLegalPageRoutes    from './admin/legalPage.routes.js';
 
 
 // ── Super Admin routes ───────────────────────────────────────────────
@@ -47,7 +49,7 @@ router.use('/public/settings', publicSettingsRoutes);
 router.use('/public/enrollment', publicEnrollmentRoutes);
 router.use('/public/my-payment', publicInstalmentRoutes);
 router.use('/public', publicEngagementRoutes); // /join-requests, /contact-messages, /faqs
-
+router.use('/public/legal-pages', publicLegalPageRoutes);
 
 // ── ADMIN ──────────────────────────────────────────────────────────────
 router.use('/admin/auth', adminAuthRoutes);
@@ -55,7 +57,7 @@ router.use('/admin/registration', adminRegistrationRoutes); // public, invite-ba
 router.use('/admin/enrollments', adminEnrollmentRoutes);
 router.use('/admin/payments', adminPaymentRoutes);
 router.use('/admin/instalments', adminInstalmentRoutes);
-
+router.use('/admin/legal-pages', adminLegalPageRoutes);
 
 // ── SUPER ADMIN ──────────────────────────────────────────────────────
 router.use('/superadmin/auth', superAdminAuthRoutes);

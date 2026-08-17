@@ -32,10 +32,12 @@ export function StepReceiptUpload() {
   const [submitError, setSubmitError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const selectedProgramme = useMemo(
-    () => Object.values(programmes.list).flat().find((p) => p.id === state.programme),
-    [programmes.list, state.programme]
-  );
+  const selectedProgramme = useMemo(() => {
+    if (state.resolvedProgramme && (state.resolvedProgramme.id === state.programme || state.resolvedProgramme._id === state.programme)) {
+      return state.resolvedProgramme;
+    }
+    return Object.values(programmes.list).flat().find((p) => p.id === state.programme || p._id === state.programme);
+  }, [programmes.list, state.programme, state.resolvedProgramme]);
 
   const depositAmount = useMemo(() => {
     if (!selectedProgramme) return null;
@@ -47,7 +49,6 @@ export function StepReceiptUpload() {
   const canSubmit = transferConfirmed && fileUpload.hasFile && !fileUpload.error;
 
   const handleSubmit = async () => {
-    console.log(enrollments);
     if (!enrollments.partialEnrollmentId) {
       setSubmitError('Your enrollment session could not be found. Please contact us on WhatsApp.');
       return;
@@ -82,9 +83,9 @@ export function StepReceiptUpload() {
         files: JPG, PNG, or PDF, up to 5MB. We typically confirm payments within 2–3 business days.
       </GuidanceBanner>
 
-      <div className="rounded-md border border-border bg-surface p-4 text-sm">
-        <p className="text-text-secondary">Amount to transfer</p>
-        <p className="font-heading text-xl font-bold text-primary">{formatCurrency(depositAmount)}</p>
+      <div className="rounded-xl border border-primary/20 bg-primary/5 p-5 shadow-sm text-center">
+        <p className="text-sm font-medium text-text-secondary mb-1">Amount to transfer</p>
+        <p className="font-heading text-3xl font-extrabold text-primary">{formatCurrency(depositAmount)}</p>
       </div>
 
       <FormField

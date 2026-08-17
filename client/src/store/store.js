@@ -30,6 +30,7 @@ import analyticsReducer from './slices/analyticsSlice';
 import settingsReducer from './slices/settingsSlice';
 import auditReducer from './slices/auditSlice';
 import uiReducer from './slices/uiSlice';
+import legalPageReducer from './slices/legalPageSlice';
 import { toastMiddleware } from './toastMiddleware';
 
 export const store = configureStore({
@@ -49,6 +50,7 @@ export const store = configureStore({
     settings: settingsReducer,
     audit: auditReducer,
     ui: uiReducer,
+    legalPages: legalPageReducer,
   },
    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(toastMiddleware),
   devTools: import.meta.env.VITE_APP_ENV !== 'production',

@@ -36,10 +36,11 @@ export const siteRoutes = [
     id: 'privacy-policy', path: '/privacy-policy', page: 'PrivacyPolicyPage', layout: 'SiteLayout', access: 'allow',
     meta: { title: 'Privacy Policy', description: 'Nextserve Privacy & Data Protection Policy.' },
   },
-  {
-    id: 'terms-of-service', path: '/terms-of-service', page: 'TermsOfServicePage', layout: 'SiteLayout', access: 'allow',
-    meta: { title: 'Terms of Service', description: 'Nextserve Academy Terms and Conditions.' },
-  },
+  { id: 'site-terms-of-service', path: '/terms-of-service', page: 'TermsOfServicePage', layout: 'SiteLayout', meta: { title: 'Terms of Service' } },
+  { id: 'site-no-refund-policy', path: '/no-refund-policy', page: 'NoRefundPolicyPage', layout: 'SiteLayout', meta: { title: 'No-Refund Policy' } },
+  { id: 'site-attendance-policy', path: '/attendance-policy', page: 'AttendancePolicyPage', layout: 'SiteLayout', meta: { title: 'Attendance Policy' } },
+  { id: 'site-code-of-conduct', path: '/code-of-conduct', page: 'CodeOfConductPage', layout: 'SiteLayout', meta: { title: 'Code of Conduct' } },
+  { id: 'site-payment-plan-terms', path: '/payment-plan-terms', page: 'PaymentPlanTermsPage', layout: 'SiteLayout', meta: { title: 'Payment Plan Terms' } },
 ];
 
 export default siteRoutes;

@@ -10,49 +10,65 @@
  * component changes.
  */
 
+import { useState } from 'react';
 import { useEnrollmentForm } from '../../../hooks/useEnrollmentForm';
 import { FormField } from '../../../components/ui/FormField';
 import { Button } from '../../../components/ui/Button';
 import GuidanceBanner from '../../../components/site/GuidanceBanner';
+import { Modal } from '../../../components/ui/Modal';
+import { Info } from 'lucide-react';
 
 const POLICIES = [
   {
     key: 'noRefundPolicy',
     label: 'I have read and agree to the No-Refund Policy',
     text: 'Fees paid are non-refundable under any circumstances, including withdrawal, deferral, or failure to attend.',
+    fullText: 'This is the full text for the No-Refund Policy. It will be replaced with the final legal text once approved by the founder.',
   },
   {
     key: 'attendancePolicy',
     label: 'I have read and agree to the Attendance Policy',
     text: 'Students are required to attend a minimum of 80% of scheduled sessions.',
+    fullText: 'This is the full text for the Attendance Policy. It will be replaced with the final legal text once approved by the founder.',
   },
   {
     key: 'codeOfConduct',
     label: 'I have read and agree to the Code of Conduct',
     text: 'Students must conduct themselves respectfully toward instructors and peers in all online and in-person interactions.',
+    fullText: 'This is the full text for the Code of Conduct. It will be replaced with the final legal text once approved by the founder.',
   },
   {
     key: 'paymentPlanTerms',
     label: 'I have read and agree to the Payment Plan Terms',
     text: 'Instalment payers must complete full payment within the agreed timeline. Failure to pay may result in suspension of access to sessions.',
+    fullText: 'This is the full text for the Payment Plan Terms. It will be replaced with the final legal text once approved by the founder.',
   },
 ];
 
 export function StepPolicyAcknowledgment() {
   const { state, setPolicy, nextStep, previousStep, allPoliciesChecked } = useEnrollmentForm();
+  const [activePolicy, setActivePolicy] = useState(null);
 
   return (
     <div className="space-y-5">
-    <h2 className="font-heading text-xl font-semibold text-text-primary">Institutional Policies</h2>
-    <GuidanceBanner>
-      These four policies apply to every Nextserve student. Please read each one — you must check all
-      four boxes before you can continue to the payment step.
-    </GuidanceBanner>
+      <h2 className="font-heading text-xl font-semibold text-text-primary">Institutional Policies</h2>
+      <GuidanceBanner>
+        These four policies apply to every Nextserve student. Please read each one — you must check all
+        four boxes before you can continue to the payment step.
+      </GuidanceBanner>
 
       <div className="space-y-4">
         {POLICIES.map((policy) => (
-          <div key={policy.key} className="rounded-md border border-border bg-surface p-4">
-            <p className="mb-2 text-sm text-text-secondary">{policy.text}</p>
+          <div key={policy.key} className="relative rounded-md border border-border bg-surface p-4 pr-12">
+            <button
+              type="button"
+              onClick={() => setActivePolicy(policy)}
+              className="absolute right-4 top-4 text-primary hover:text-primary-focus transition-colors"
+              title="View full policy"
+            >
+              <Info size={20} />
+            </button>
+            <p className="mb-2 text-sm text-text-secondary pr-6">{policy.text}</p>
             <FormField
               type="checkbox"
               label={policy.label}
@@ -71,6 +87,20 @@ export function StepPolicyAcknowledgment() {
           Continue to Payment
         </Button>
       </div>
+
+      <Modal
+        isOpen={!!activePolicy}
+        onClose={() => setActivePolicy(null)}
+        title={activePolicy?.label.replace('I have read and agree to the ', '')}
+        size="lg"
+      >
+        <div className="mt-2 text-text-secondary leading-relaxed space-y-4">
+          <p>{activePolicy?.fullText}</p>
+        </div>
+        <div className="mt-6 flex justify-end">
+          <Button onClick={() => setActivePolicy(null)}>Close</Button>
+        </div>
+      </Modal>
     </div>
   );
 }

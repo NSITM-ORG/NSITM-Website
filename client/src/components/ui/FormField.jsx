@@ -48,6 +48,7 @@ export function FormField({
   validate = [],
   options = [], // for select / radio-group: [{ value, label }]
   file, // for file-dropzone: { file, previewUrl, error, dragHandlers, handleInputChange, isPdf, clearFile }
+  actionButton, // React node to render beside label
   className = '',
   ...rest
 }) {
@@ -57,6 +58,14 @@ export function FormField({
   const [touched, setTouched] = useState(false);
 
   const error = externalError || (touched ? internalError : null);
+
+  const handleChange = (val) => {
+    if (type === 'tel') {
+      onChange?.(val.replace(/[^\d+]/g, ''));
+    } else {
+      onChange?.(val);
+    }
+  };
 
   const handleBlur = (e) => {
     setTouched(true);
@@ -304,13 +313,16 @@ export function FormField({
   // ── Default: text / email / tel / number ───────────────────────
   return (
     <div className={className}>
-      {label && <FieldLabel htmlFor={id} required={required}>{label}</FieldLabel>}
+      <div className="flex items-center justify-between">
+        {label && <FieldLabel htmlFor={id} required={required}>{label}</FieldLabel>}
+        {actionButton}
+      </div>
       <input
         id={id}
         type={type}
         name={name}
         value={value ?? ''}
-        onChange={(e) => onChange?.(e.target.value)}
+        onChange={(e) => handleChange(e.target.value)}
         onBlur={handleBlur}
         placeholder={placeholder}
         maxLength={maxLength}

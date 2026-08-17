@@ -29,6 +29,7 @@ import { StepPersonalDetails } from './enrollment-steps/StepPersonalDetails';
 import { StepPolicyAcknowledgment } from './enrollment-steps/StepPolicyAcknowledgment';
 import { StepPaymentDetails } from './enrollment-steps/StepPaymentDetails';
 import { StepReceiptUpload } from './enrollment-steps/StepReceiptUpload';
+import { EnrollmentSummary } from '../../components/site/EnrollmentSummary';
 
 function EnrollmentFormBody() {
   const [searchParams] = useSearchParams();
@@ -72,8 +73,13 @@ function EnrollmentFormBody() {
   return (
     <div className="mx-auto max-w-content px-4 py-10 sm:px-6">
       <EnrollmentStepper />
-      <div className="rounded-lg border border-primary/30 bg-surface-elevated p-6 shadow-card sm:p-8">
-        {STEPS[state.step]}
+      <div className="mt-8 flex flex-col items-start gap-8 lg:flex-row">
+        <div className="flex-1 w-full rounded-2xl border border-primary/15 bg-surface-elevated p-6 shadow-card sm:p-8">
+          {STEPS[state.step]}
+        </div>
+        <div className="w-full shrink-0 lg:w-80">
+          <EnrollmentSummary />
+        </div>
       </div>
     </div>
   );

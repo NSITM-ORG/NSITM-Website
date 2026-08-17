@@ -75,3 +75,9 @@ export function formatFileSize(bytes) {
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
   return `${(bytes / 1024 ** i).toFixed(1)} ${units[i]}`;
 }
+
+/** Formats Nigerian phone numbers for display/input (removes spaces to match backend regex) */
+export function formatNigerianPhone(value) {
+  if (!value) return '';
+  return value.replace(/[^\d+]/g, '');
+}

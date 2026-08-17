@@ -127,7 +127,7 @@ const seed = async () => {
     process.exit(0);
   } catch (err) {
     console.error(`\n❌ Seed failed: ${err.message}\n`);
-    await mongoose.disconnect().catch(() => {});
+    await mongoose.disconnect().catch(() => { });
     process.exit(1);
   }
 };

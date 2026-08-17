@@ -28,8 +28,13 @@ function App() {
 
   useEffect(() => {
     const handleRedirect = () => {
-      const target = window.location.pathname.startsWith('/superadmin') ? '/superadmin/login' : '/admin/login';
-      router.navigate(target);
+      const path = window.location.pathname;
+      if (path.startsWith('/superadmin')) {
+        router.navigate('/superadmin/login');
+      } else if (path.startsWith('/admin')) {
+        router.navigate('/admin/login');
+      }
+      // Public routes never redirect to admin login
     };
     window.addEventListener('nsitm:redirect-to-login', handleRedirect);
     return () => window.removeEventListener('nsitm:redirect-to-login', handleRedirect);

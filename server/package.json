@@ -15,8 +15,9 @@
     "seed:programmes": "node scripts/seedProgrammes.js",
     "seed:faqs": "node scripts/seedFaqs.js",
     "seed:settings": "node scripts/seedSettings.js",
+    "seed:legalpages": "node scripts/seedLegalPages.js",
     "recalculate:popularity": "node scripts/recalculatePopularityScores.js",
-    "seed:all": "npm run seed:superadmin && npm run seed:programmes && npm run seed:faqs && npm run seed:settings"
+    "seed:all": "npm run seed:superadmin && npm run seed:programmes && npm run seed:faqs && npm run seed:settings && npm run seed:legalpages"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

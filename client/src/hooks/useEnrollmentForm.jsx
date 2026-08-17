@@ -63,9 +63,9 @@ function enrollmentFormReducer(state, action) {
     case 'SET_RESOLVED_PROGRAMME':
       return {
         ...state,
-        programme: action.programme.id,
+        programme: action.programme._id || action.programme.id,
         resolvedProgramme: action.programme,
-        cohortId: action.cohortId || action.programme.activeCohort?.id || null,
+        cohortId: action.cohortId || action.programme.activeCohort?._id || action.programme.activeCohort?.id || null,
         isPrefilled: true,
       };
     case 'RESET':

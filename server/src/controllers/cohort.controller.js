@@ -21,7 +21,7 @@ import { assertCohortFieldsEditable, assertCohortDeletable } from '../helpers/co
 // FRD FR-01.5 — active cohorts page
 // ─────────────────────────────────────────────────────────────────────
 const getActiveCohorts = asyncHandler(async (req, res, next) => {
-  
+
   const cohorts = await Cohort.getActiveCohorts();
 
   return sendSuccess(
@@ -44,7 +44,7 @@ const getCohortById = asyncHandler(async (req, res, next) => {
       new ApiError(HTTP_STATUS.BAD_REQUEST, 'INVALID_ID_FORMAT', 'Invalid cohort ID format.')
     );
   }
-  
+
   const cohort = await Cohort.findOne({
     _id: req.params.id,
     isDeleted: false,
@@ -97,7 +97,7 @@ const getCohortByIdAdmin = asyncHandler(async (req, res, next) => {
       new ApiError(HTTP_STATUS.BAD_REQUEST, 'INVALID_ID_FORMAT', 'Invalid cohort ID format.')
     );
   }
-  
+
   const cohort = await Cohort.findOne({ _id: req.params.id, isDeleted: false })
     .populate('programme', 'name slug category')
     .populate('createdBy', 'email')
@@ -122,17 +122,22 @@ const createCohort = asyncHandler(async (req, res, next) => {
   }
 
 
-// (no field-set change needed structurally — createCohort already accepts
-// whatever's in req.body via the validator; this note confirms
-// enrollmentStartDate/enrollmentEndDate now flow through unchanged since
-// they're plain schema fields, and status is now unlock-by-default on create,
-// which was already true — no gating existed on create, only on edit).
+  // (no field-set change needed structurally — createCohort already accepts
+  // whatever's in req.body via the validator; this note confirms
+  // enrollmentStartDate/enrollmentEndDate now flow through unchanged since
+  // they're plain schema fields, and status is now unlock-by-default on create,
+  // which was already true — no gating existed on create, only on edit).
 
   const cohort = await Cohort.create({
     ...req.body,
     createdBy: req.account._id,
     updatedBy: req.account._id,
   });
+
+  // Automatically link this cohort to the programme if it is created as active
+  if (cohort.status === 'active') {
+    await Programme.findByIdAndUpdate(programme._id, { activeCohort: cohort._id });
+  }
 
   await req.logAction(AUDIT_ACTIONS.COHORT_CREATED, {
     targetModel: 'Cohort',
@@ -141,7 +146,10 @@ const createCohort = asyncHandler(async (req, res, next) => {
     metadata: { programme: programme.name, startDate: cohort.startDate },
   });
 
-  return sendSuccess(res, HTTP_STATUS.CREATED, { cohort }, `Cohort "${cohort.name}" created successfully.`);
+  // Populate the programme so the response matches what the frontend expects
+  const populatedCohort = await Cohort.findById(cohort._id).populate('programme', 'name slug category');
+
+  return sendSuccess(res, HTTP_STATUS.CREATED, { cohort: populatedCohort }, `Cohort "${cohort.name}" created successfully.`);
 });
 
 // ─────────────────────────────────────────────────────────────────────
@@ -177,6 +185,14 @@ const updateCohort = asyncHandler(async (req, res, next) => {
 
   cohort.updatedBy = req.account._id;
   await cohort.save();
+
+  // Automatically link or unlink this cohort from the programme based on status
+  if (cohort.status === 'active') {
+    await Programme.findByIdAndUpdate(cohort.programme, { activeCohort: cohort._id });
+  } else {
+    // If it was active but is no longer, unset it from the programme if it was the active one
+    await Programme.findOneAndUpdate({ activeCohort: cohort._id }, { $set: { activeCohort: null } });
+  }
 
   await req.logAction(AUDIT_ACTIONS.COHORT_UPDATED, {
     targetModel: 'Cohort',
@@ -264,6 +280,11 @@ const bulkUpdateCohorts = asyncHandler(async (req, res, next) => {
         cohort.status = sanitizedUpdates.status;
         cohort.updatedBy = req.account._id;
         await cohort.save();
+        if (cohort.status === 'active') {
+          await Programme.findByIdAndUpdate(cohort.programme, { activeCohort: cohort._id });
+        } else {
+          await Programme.findOneAndUpdate({ activeCohort: cohort._id }, { $set: { activeCohort: null } });
+        }
         results.partiallyUpdated.push({ id: cohort._id, name: cohort.name });
       } else {
         results.skipped.push({ id: cohort._id, name: cohort.name, reason: 'Cohort is active — locked fields cannot be bulk-edited.' });
@@ -276,6 +297,15 @@ const bulkUpdateCohorts = asyncHandler(async (req, res, next) => {
     });
     cohort.updatedBy = req.account._id;
     await cohort.save();
+
+    if (sanitizedUpdates.status !== undefined) {
+      if (cohort.status === 'active') {
+        await Programme.findByIdAndUpdate(cohort.programme, { activeCohort: cohort._id });
+      } else {
+        await Programme.findOneAndUpdate({ activeCohort: cohort._id }, { $set: { activeCohort: null } });
+      }
+    }
+
     results.updated.push({ id: cohort._id, name: cohort.name });
   }
 
@@ -356,9 +386,9 @@ const checkCohortsExist = asyncHandler(async (req, res) => {
   // const exists = await Cohort.exists({ isDeleted: false }).where('status').in(['active', 'completed']);
   const exists = await Cohort.exists({
     isDeleted: false,
-    status: mongoose.trusted( { $in: ['active', 'completed'] })
+    status: mongoose.trusted({ $in: ['active', 'completed'] })
   });
-  
+
   return sendSuccess(res, HTTP_STATUS.OK, { exists: !!exists }, 'Cohort existence check complete.');
 });
 

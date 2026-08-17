@@ -59,6 +59,7 @@ import * as faqActions from '../store/slices/faqSlice';
 import * as analyticsActions from '../store/slices/analyticsSlice';
 import * as settingsActions from '../store/slices/settingsSlice';
 import * as auditActions from '../store/slices/auditSlice';
+import * as legalPageActions from '../store/slices/legalPageSlice';
 import { addToast, removeToast, openModal, closeModal, toggleSidebar, setSidebarCollapsed } from '../store/slices/uiSlice';
 
 export function useManageState() {
@@ -79,6 +80,7 @@ export function useManageState() {
   const settings = useSelector((s) => s.settings);
   const audit = useSelector((s) => s.audit);
   const ui = useSelector((s) => s.ui);
+  const legalPages = useSelector((s) => s.legalPages);
 
   // ── Actions (bound + auto-unwrapped, memoized once) ───────────────
   const actions = useMemo(
@@ -196,6 +198,15 @@ export function useManageState() {
       fetchPasswordResetTrail: (f) => dispatch(auditActions.fetchPasswordResetTrail(f)).unwrap(),
       fetchUnauthorizedAccessTrail: (page) => dispatch(auditActions.fetchUnauthorizedAccessTrail(page)).unwrap(),
 
+      // Legal Pages
+      fetchPublicLegalPage: (slug) => dispatch(legalPageActions.fetchPublicLegalPage(slug)).unwrap(),
+      fetchAllLegalPagesAdmin: () => dispatch(legalPageActions.fetchAllLegalPagesAdmin()).unwrap(),
+      fetchLegalPageAdmin: (slug) => dispatch(legalPageActions.fetchLegalPageAdmin(slug)).unwrap(),
+      updateLegalPage: (p) => dispatch(legalPageActions.updateLegalPage(p)).unwrap(),
+      publishLegalPage: (slug) => dispatch(legalPageActions.publishLegalPage(slug)).unwrap(),
+      clearCurrentLegalPage: () => dispatch(legalPageActions.clearCurrentLegalPage()),
+      clearPublicLegalPage: () => dispatch(legalPageActions.clearPublicLegalPage()),
+
       // UI
       addToast: (p) => dispatch(addToast(p)),
       removeToast: (id) => dispatch(removeToast(id)),
@@ -222,6 +233,7 @@ export function useManageState() {
     settings,
     audit,
     ui,
+    legalPages,
     actions,
   };
 }

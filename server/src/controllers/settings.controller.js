@@ -26,6 +26,7 @@ const getPublicSettings = asyncHandler(async (req, res, next) => {
     {
       bankDetails: settings.bankDetails,
       whatsapp: settings.whatsapp,
+      institution: settings.institution,
     },
     "Payment settings retrieved successfully.",
   );
