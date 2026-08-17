@@ -8,6 +8,7 @@ import {
   getLegalPageBySlug,
   updateLegalPage,
   publishLegalPage,
+  createLegalPage,
 } from '../../controllers/legalPage.controller.js';
 import { protect } from '../../middleware/auth.middleware.js';
 import { authorize } from '../../middleware/rbac.middleware.js';
@@ -22,6 +23,9 @@ router.get('/', getAllLegalPages);
 
 // GET /api/v1/admin/legal-pages/:slug
 router.get('/:slug', getLegalPageBySlug);
+
+// POST /api/v1/admin/legal-pages
+router.post('/', createLegalPage);
 
 // PUT /api/v1/admin/legal-pages/:slug
 router.put('/:slug', updateLegalPage);

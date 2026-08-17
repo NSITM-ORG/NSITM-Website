@@ -63,6 +63,33 @@ export const getLegalPageBySlug = asyncHandler(async (req, res, next) => {
 });
 
 // ─────────────────────────────────────────────────────────────────────
+// ADMIN/SUPERADMIN: POST /api/v1/admin/legal-pages
+// Creates a new legal page
+// ─────────────────────────────────────────────────────────────────────
+export const createLegalPage = asyncHandler(async (req, res, next) => {
+  const { slug, title } = req.body;
+
+  if (!slug || !title) {
+    return next(new ApiError(HTTP_STATUS.BAD_REQUEST, 'MISSING_FIELDS', 'Slug and title are required.'));
+  }
+
+  const existing = await LegalPage.findOne({ slug });
+  if (existing) {
+    return next(new ApiError(HTTP_STATUS.BAD_REQUEST, 'PAGE_EXISTS', `A legal page with slug '${slug}' already exists.`));
+  }
+
+  const page = await LegalPage.create({
+    slug,
+    status: 'draft',
+    hero: { title },
+    createdBy: req.account._id,
+    updatedBy: req.account._id,
+  });
+
+  return sendSuccess(res, HTTP_STATUS.CREATED, { page }, 'Legal page created successfully.');
+});
+
+// ─────────────────────────────────────────────────────────────────────
 // ADMIN/SUPERADMIN: PUT /api/v1/admin/legal-pages/:slug
 // Updates a legal page (keeps it in current status, typically draft)
 // ─────────────────────────────────────────────────────────────────────

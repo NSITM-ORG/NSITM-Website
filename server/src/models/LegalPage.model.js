@@ -92,10 +92,12 @@ const legalPageSchema = new mongoose.Schema(
       enum: [
         'terms-of-service',
         'privacy-policy',
-        'no-refund-policy',
+        'refund-policy',
+        // 'no-refund-policy',
         'attendance-policy',
         'code-of-conduct',
-        'payment-plan-terms',
+        'payment-plan',
+        // 'payment-plan-terms',
       ],
     },
     status: {
