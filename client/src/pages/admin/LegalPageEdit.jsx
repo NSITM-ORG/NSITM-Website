@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useManageState } from '../../hooks/useManageState';
 import { useSEO } from '../../hooks/useSEO';
 import { Save, Globe, ArrowLeft, Plus, Trash2, GripVertical, ChevronDown, ChevronUp } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { FormField } from '../../components/ui/FormField';
@@ -30,18 +31,110 @@ function LinkPresetDropdown({ value, onSelect, options }) {
   const displayValue = isMatch ? value : 'custom';
 
   return (
-    <div className="mb-2">
-      <FormField
-        type="select"
-        label="Target Preset"
-        value={displayValue}
-        onChange={(val) => {
-          if (val === 'custom') return;
+    <FormField
+      type="select"
+      label={false}
+      options={options}
+      value={displayValue}
+      onChange={(val) => {
+        if (val !== 'custom') {
           const opt = options.find(o => o.value === val);
-          onSelect(opt.label, opt.value);
-        }}
-        options={options}
-      />
+          onSelect(opt.label, val);
+        } else {
+          onSelect('', ''); // clear for custom entry
+        }
+      }}
+      className="mb-2"
+    />
+  );
+}
+
+const STANDARD_ICONS = [
+  'FileText', 'CheckCircle2', 'UserCheck', 'DollarSign', 'Award', 'ShieldAlert',
+  'HelpCircle', 'Mail', 'Database', 'Eye', 'Lock', 'Bell', 'AlertTriangle',
+  'BookOpen', 'Briefcase', 'Calendar', 'Camera', 'CreditCard', 'Globe',
+  'Heart', 'Info', 'MessageSquare', 'Phone', 'Settings', 'Users', 'ArrowRight'
+];
+
+function IconPicker({ value, onChange, label = "Icon", size = "md", variant = "default", className = "" }) {
+  const isStandard = STANDARD_ICONS.includes(value) || !value;
+  const [isCustomMode, setIsCustomMode] = useState(!isStandard && value);
+
+  useEffect(() => {
+    if (STANDARD_ICONS.includes(value)) {
+      setIsCustomMode(false);
+    } else if (value && !STANDARD_ICONS.includes(value)) {
+      setIsCustomMode(true);
+    }
+  }, [value]);
+
+  const selectValue = isCustomMode ? 'custom_svg' : (value || '');
+
+  const options = [
+    { label: '-- Select an Icon --', value: '' },
+    { label: '✨ Custom (Paste SVG Code)', value: 'custom_svg' },
+    ...STANDARD_ICONS.map(i => ({ label: i, value: i }))
+  ];
+
+  const IconComponent = LucideIcons[value];
+  const isRawSvg = value && (value.startsWith('<svg') || value.startsWith('<path'));
+
+  const renderPreview = () => {
+    if (isCustomMode && isRawSvg) {
+      if (value.startsWith('<svg')) {
+        return <div dangerouslySetInnerHTML={{ __html: value }} className="w-5 h-5 flex items-center justify-center *:w-full *:h-full text-text-secondary" />;
+      }
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5 text-text-secondary" dangerouslySetInnerHTML={{ __html: value }} />
+      );
+    }
+    if (IconComponent) {
+      return <IconComponent className="w-5 h-5 text-text-secondary" />;
+    }
+    return <LucideIcons.Image className="w-5 h-5 text-text-muted opacity-30" />;
+  };
+
+  return (
+    <div className={`flex flex-col gap-2 ${className}`}>
+      <div className="flex items-end gap-3">
+        <div className="flex-1">
+          <FormField
+            type="select"
+            label={label !== false ? label : undefined}
+            options={options}
+            value={selectValue}
+            onChange={(val) => {
+              if (val === 'custom_svg') {
+                setIsCustomMode(true);
+                onChange('');
+              } else {
+                setIsCustomMode(false);
+                onChange(val);
+              }
+            }}
+            size={size}
+            variant={variant}
+          />
+        </div>
+        <div
+          className="flex-shrink-0 h-10 w-10 border border-border rounded-lg bg-surface-elevated flex items-center justify-center mb-[1px]"
+          title="Icon Preview"
+        >
+          {renderPreview()}
+        </div>
+      </div>
+      {isCustomMode && (
+        <FormField
+          type="textarea"
+          label={label !== false ? "Paste SVG Code" : undefined}
+          placeholder={label === false ? "Paste SVG Code here..." : undefined}
+          hint={label !== false ? "Copy SVG code from lucide.dev or another site and paste it here." : undefined}
+          value={value}
+          onChange={onChange}
+          rows={4}
+          size={size}
+        />
+      )}
     </div>
   );
 }
@@ -70,6 +163,13 @@ export default function LegalPageEdit() {
   if (legalPages.loading || !formData) {
     return <div className="p-8 text-center text-text-secondary">Loading page editor...</div>;
   }
+
+  const linkOptions = getLinkOptions(legalPages);
+
+  const isLinkLocked = (val) => {
+    if (!val) return false;
+    return linkOptions.some(o => o.value === val && o.value !== 'custom');
+  };
 
   const handleHeroChange = (field, value) => {
     setFormData((prev) => ({ ...prev, hero: { ...prev.hero, [field]: value } }));
@@ -259,8 +359,8 @@ export default function LegalPageEdit() {
                 value={formData.hero?.badgeText || ''}
                 onChange={(v) => handleHeroChange('badgeText', v)}
               />
-              <FormField
-                label="Badge Icon (Lucide)"
+              <IconPicker
+                label="Badge Icon"
                 value={formData.hero?.badgeIcon || ''}
                 onChange={(v) => handleHeroChange('badgeIcon', v)}
               />
@@ -318,14 +418,13 @@ export default function LegalPageEdit() {
                             inputClassName="font-semibold"
                             className="flex-1"
                           />
-                          <FormField
+                          <IconPicker
                             value={section.icon || ''}
                             onChange={(v) => updateSection(sIdx, 'icon', v)}
-                            placeholder="Icon"
+                            label={false}
                             variant="ghost"
                             size="sm"
-                            inputClassName="text-text-secondary"
-                            className="w-24"
+                            className="w-48"
                           />
                         </div>
                         <div className="flex items-center gap-2">
@@ -455,8 +554,8 @@ export default function LegalPageEdit() {
           <Card className="p-6">
             <h2 className="mb-4 font-heading text-lg font-semibold text-text-primary">Support Callout</h2>
             <div className="space-y-4">
-              <FormField
-                label="Icon"
+              <IconPicker
+                label="Callout Icon"
                 value={formData.supportCallout?.icon || ''}
                 onChange={(v) => handleSupportChange('icon', v)}
               />
@@ -476,22 +575,30 @@ export default function LegalPageEdit() {
               <div className="border-t border-primary/10 pt-4">
                 <LinkPresetDropdown
                   value={formData.supportCallout?.ctaTo || formData.supportCallout?.ctaHref || ''}
-                  options={getLinkOptions(legalPages)}
+                  options={linkOptions}
                   onSelect={(label, url) => {
                     handleSupportChange('ctaLabel', label);
                     handleSupportChange('ctaTo', url);
                   }}
                 />
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 mt-4">
                   <FormField
                     label="CTA Label"
                     value={formData.supportCallout?.ctaLabel || ''}
                     onChange={(e) => handleSupportChange('ctaLabel', e.target.value)}
                   />
+                  <IconPicker
+                    label="CTA Icon"
+                    value={formData.supportCallout?.ctaIcon || ''}
+                    onChange={(v) => handleSupportChange('ctaIcon', v)}
+                  />
                   <FormField
                     label="CTA Link (To/Href)"
                     value={formData.supportCallout?.ctaTo || formData.supportCallout?.ctaHref || ''}
                     onChange={(e) => handleSupportChange('ctaTo', e.target.value)}
+                    className="col-span-2"
+                    disabled={isLinkLocked(formData.supportCallout?.ctaTo || formData.supportCallout?.ctaHref)}
+                    hint={isLinkLocked(formData.supportCallout?.ctaTo || formData.supportCallout?.ctaHref) ? "Preset links cannot be manually edited. Change dropdown to 'Custom' to edit." : undefined}
                   />
                 </div>
               </div>
@@ -506,7 +613,7 @@ export default function LegalPageEdit() {
                 <h3 className="mb-2 text-sm font-medium text-text-secondary">Left Link</h3>
                 <LinkPresetDropdown
                   value={formData.bottomLinks?.left?.to || ''}
-                  options={getLinkOptions(legalPages)}
+                  options={linkOptions}
                   onSelect={(label, url) => {
                     handleLinkChange('left', 'label', label);
                     handleLinkChange('left', 'to', url);
@@ -522,6 +629,8 @@ export default function LegalPageEdit() {
                     placeholder="URL (/path)"
                     value={formData.bottomLinks?.left?.to || ''}
                     onChange={(e) => handleLinkChange('left', 'to', e.target.value)}
+                    disabled={isLinkLocked(formData.bottomLinks?.left?.to)}
+                    hint={isLinkLocked(formData.bottomLinks?.left?.to) ? "Preset link locked." : undefined}
                   />
                 </div>
               </div>
@@ -529,7 +638,7 @@ export default function LegalPageEdit() {
                 <h3 className="mb-2 text-sm font-medium text-text-secondary">Right Link</h3>
                 <LinkPresetDropdown
                   value={formData.bottomLinks?.right?.to || ''}
-                  options={getLinkOptions(legalPages)}
+                  options={linkOptions}
                   onSelect={(label, url) => {
                     handleLinkChange('right', 'label', label);
                     handleLinkChange('right', 'to', url);
@@ -545,6 +654,8 @@ export default function LegalPageEdit() {
                     placeholder="URL (/path)"
                     value={formData.bottomLinks?.right?.to || ''}
                     onChange={(e) => handleLinkChange('right', 'to', e.target.value)}
+                    disabled={isLinkLocked(formData.bottomLinks?.right?.to)}
+                    hint={isLinkLocked(formData.bottomLinks?.right?.to) ? "Preset link locked." : undefined}
                   />
                 </div>
               </div>

@@ -202,6 +202,7 @@ export function useManageState() {
       fetchPublicLegalPage: (slug) => dispatch(legalPageActions.fetchPublicLegalPage(slug)).unwrap(),
       fetchAllLegalPagesAdmin: () => dispatch(legalPageActions.fetchAllLegalPagesAdmin()).unwrap(),
       fetchLegalPageAdmin: (slug) => dispatch(legalPageActions.fetchLegalPageAdmin(slug)).unwrap(),
+      createLegalPage: (p) => dispatch(legalPageActions.createLegalPage(p)).unwrap(),
       updateLegalPage: (p) => dispatch(legalPageActions.updateLegalPage(p)).unwrap(),
       publishLegalPage: (slug) => dispatch(legalPageActions.publishLegalPage(slug)).unwrap(),
       clearCurrentLegalPage: () => dispatch(legalPageActions.clearCurrentLegalPage()),

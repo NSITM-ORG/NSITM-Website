@@ -37,8 +37,21 @@ export function LegalPageRenderer({ slug }) {
     );
   }
 
-  const renderIcon = (iconName, className) => {
-    const Icon = LucideIcons[iconName] || LucideIcons.FileText;
+  const renderIcon = (iconValue, className) => {
+    if (!iconValue) return <LucideIcons.FileText className={className} />;
+    
+    // If it's a raw SVG paste
+    if (iconValue.startsWith('<svg') || iconValue.startsWith('<path')) {
+      if (iconValue.startsWith('<svg')) {
+        return <div dangerouslySetInnerHTML={{ __html: iconValue }} className={`flex items-center justify-center ${className} *:w-full *:h-full`} />;
+      }
+      // If just paths, wrap in Lucide-like SVG container
+      return (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} dangerouslySetInnerHTML={{ __html: iconValue }} />
+      );
+    }
+
+    const Icon = LucideIcons[iconValue] || LucideIcons.FileText;
     return <Icon className={className} />;
   };
 

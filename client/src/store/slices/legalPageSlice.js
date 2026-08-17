@@ -42,6 +42,17 @@ export const fetchLegalPageAdmin = createAsyncThunk(
   }
 );
 
+export const createLegalPage = createAsyncThunk(
+  'legalPages/create',
+  async (payload, { rejectWithValue }) => {
+    try {
+      return (await httpClient.post('/admin/legal-pages', payload)).data.page;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  }
+);
+
 export const updateLegalPage = createAsyncThunk(
   'legalPages/update',
   async ({ slug, payload }, { rejectWithValue }) => {
@@ -124,6 +135,17 @@ const legalPageSlice = createSlice({
       .addCase(fetchLegalPageAdmin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      // Create Admin
+      .addCase(createLegalPage.pending, (state) => {
+        state.saving = true;
+      })
+      .addCase(createLegalPage.fulfilled, (state, action) => {
+        state.saving = false;
+        state.list.push(action.payload);
+      })
+      .addCase(createLegalPage.rejected, (state) => {
+        state.saving = false;
       })
       // Update Admin
       .addCase(updateLegalPage.pending, (state) => {

@@ -1,16 +1,54 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useManageState } from '../../hooks/useManageState';
 import { useSEO } from '../../hooks/useSEO';
-import { FileText, Edit2, ExternalLink } from 'lucide-react';
+import { FileText, Edit2, ExternalLink, Plus } from 'lucide-react';
 import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
+import { Modal } from '../../components/ui/Modal';
+import { FormField } from '../../components/ui/FormField';
+
+const EXPECTED_PAGES = [
+  { slug: 'terms-of-service', title: 'Terms of Service' },
+  { slug: 'privacy-policy', title: 'Privacy Policy' },
+  { slug: 'refund-policy', title: 'Refund Policy' },
+  { slug: 'attendance-policy', title: 'Attendance Policy' },
+  { slug: 'code-of-conduct', title: 'Code of Conduct' },
+  { slug: 'payment-plan', title: 'Payment Plan Terms' }
+];
 
 export default function LegalPagesList() {
   useSEO({ title: 'Manage Legal Pages' });
   const navigate = useNavigate();
   const { legalPages, actions } = useManageState();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [selectedSlug, setSelectedSlug] = useState('');
+
+  const existingSlugs = new Set(legalPages.list?.map(p => p.slug) || []);
+  const availablePages = EXPECTED_PAGES.filter(p => !existingSlugs.has(p.slug));
+  const options = availablePages.map(p => ({ label: p.title, value: p.slug }));
+
+  useEffect(() => {
+    if (availablePages.length > 0 && !selectedSlug) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setSelectedSlug(availablePages[0].slug);
+    }
+  }, [availablePages, selectedSlug]);
+
+  const handleCreate = async () => {
+    try {
+      const pageInfo = EXPECTED_PAGES.find(p => p.slug === selectedSlug);
+      if (!pageInfo) return;
+      await actions.createLegalPage({ slug: pageInfo.slug, title: pageInfo.title });
+      actions.addToast({ type: 'success', message: 'Legal page created successfully' });
+      setIsCreateModalOpen(false);
+      navigate(`/admin/legal-pages/${pageInfo.slug}/edit`);
+    } catch (err) {
+      // toast shown centrally
+      actions.addToast({ type: 'error', message: err?.message || 'Failed to create legal page' });
+    }
+  };
 
   useEffect(() => {
     actions.fetchAllLegalPagesAdmin();
@@ -26,6 +64,9 @@ export default function LegalPagesList() {
             Manage terms of service, privacy policy, and other institutional policies.
           </p>
         </div>
+        <Button icon={Plus} onClick={() => setIsCreateModalOpen(true)}>
+          New Legal Page
+        </Button>
       </div>
 
       <Card>
@@ -104,6 +145,29 @@ export default function LegalPagesList() {
           </table>
         </div>
       </Card>
+
+      <Modal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} title="Create New Legal Page">
+        <div className="space-y-4 pt-4">
+          {availablePages.length === 0 ? (
+            <p className="text-sm text-text-secondary">All expected legal pages have already been created.</p>
+          ) : (
+            <>
+              <p className="text-sm text-text-secondary">Select one of the standard legal pages to initialize it.</p>
+              <FormField 
+                type="select" 
+                label="Page Type" 
+                options={options} 
+                value={selectedSlug} 
+                onChange={(v) => setSelectedSlug(v)} 
+              />
+              <div className="flex justify-end gap-3 pt-4 border-t border-border mt-4">
+                <Button variant="outline" onClick={() => setIsCreateModalOpen(false)}>Cancel</Button>
+                <Button onClick={handleCreate} disabled={legalPages.saving}>Create Page</Button>
+              </div>
+            </>
+          )}
+        </div>
+      </Modal>
     </div>
   );
 }
