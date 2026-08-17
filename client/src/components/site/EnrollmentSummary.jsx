@@ -3,7 +3,7 @@ import { useEnrollmentForm } from '../../hooks/useEnrollmentForm';
 import { useManageState } from '../../hooks/useManageState';
 import { formatCurrency } from '../../utils/formatters';
 import { PAYMENT_TYPES, DELIVERY_FORMAT_LABELS } from '../../utils/constants';
-import { GraduationCap, Calendar, CreditCard, ChevronRight } from 'lucide-react';
+import { GraduationCap, Calendar, } from 'lucide-react';
 
 export function EnrollmentSummary() {
   const { state, goToStep, STEP } = useEnrollmentForm();

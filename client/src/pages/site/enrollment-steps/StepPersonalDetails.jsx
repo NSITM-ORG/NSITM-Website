@@ -20,15 +20,15 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { useEnrollmentForm } from '../../../hooks/useEnrollmentForm';
 import { useManageState } from '../../../hooks/useManageState';
 import { FormField } from '../../../components/ui/FormField';
 import { Button } from '../../../components/ui/Button';
 import { GuidanceBanner } from '../../../components/site/GuidanceBanner';
 import { validators, validateForm } from '../../../utils/validation';
-import { DELIVERY_FORMATS, DELIVERY_FORMAT_LABELS, PROGRAMME_STATUS } from '../../../utils/constants';
-import { GraduationCap, Calendar, PencilLine } from 'lucide-react';
+import {  DELIVERY_FORMAT_LABELS, PROGRAMME_STATUS } from '../../../utils/constants';
+import { GraduationCap, Calendar, } from 'lucide-react';
 
 const SCHEMA = {
   fullName: [validators.required(), validators.fullName()],
@@ -39,9 +39,9 @@ const SCHEMA = {
 };
 
 export function StepPersonalDetails() {
-  const { state, setField, nextStep, setResolvedProgramme } = useEnrollmentForm();
+  const { state, setField, nextStep, } = useEnrollmentForm();
   const { programmes, actions } = useManageState();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -54,7 +54,6 @@ export function StepPersonalDetails() {
     [flatProgrammes]
   );
 
-  console.log(state)
 
   // ── Single source of truth once prefilled or selected manually ────────
   const selectedProgrammeFromDropdown = useMemo(() => {
@@ -64,11 +63,9 @@ export function StepPersonalDetails() {
     return flatProgrammes.find(p => p.id === state.programme || p._id === state.programme);
   }, [state.programme, flatProgrammes, state.resolvedProgramme]);
 
-  console
-
   const cohort = selectedProgrammeFromDropdown?.activeCohort;
   const cohortDeliveryFormat = cohort?.deliveryFormat;
-  const isHybridCohort = cohortDeliveryFormat === DELIVERY_FORMATS.HYBRID;
+  // const isHybridCohort = cohortDeliveryFormat === DELIVERY_FORMATS.HYBRID;
 
   useEffect(() => {
     if (cohortDeliveryFormat && state.deliveryFormat !== cohortDeliveryFormat) {
