@@ -176,8 +176,8 @@ export function AboutPage() {
             </div>
           ) : teaserProgrammes.length > 0 ? (
             <div className={`grid gap-4 ${ABOUT_PROGRAMME_GRID}`}>
-              {teaserProgrammes.map((p) => (
-                <ProgrammeCard key={p.id} programme={p} />
+              {teaserProgrammes.map((p, idx) => (
+                <ProgrammeCard key={idx} programme={p} />
               ))}
             </div>
           ) : (
@@ -290,9 +290,9 @@ export function AboutPage() {
             <SkeletonText lines={3} />
           ) : teaserFaqs.length > 0 ? (
             <div className="space-y-4">
-              {teaserFaqs.map((faq) => (
+              {teaserFaqs.map((faq, idx) => (
                 <div
-                  key={faq.id}
+                  key={idx}
                   className="border-b border-primary/30 pb-3 last:border-0"
                 >
                   <p className="font-medium text-text-primary">

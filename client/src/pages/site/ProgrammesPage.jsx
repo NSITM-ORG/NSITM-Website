@@ -9,24 +9,25 @@
  * from the API response.
  */
 
-import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, BookOpen } from 'lucide-react';
-import { useManageState } from '../../hooks/useManageState';
-import { useSEO } from '../../hooks/useSEO';
-import { useResponsiveLimit } from '../../hooks/useResponsiveLimit';
-import { ProgrammeCard } from '../../components/site/ProgrammeCard';
-import { SkeletonCard } from '../../components/ui/Skeleton';
-import { EmptyState } from '../../components/ui/EmptyState';
-import { PROGRAMME_CATEGORY_LABELS } from '../../utils/constants';
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { ArrowRight, BookOpen } from "lucide-react";
+import { useManageState } from "../../hooks/useManageState";
+import { useSEO } from "../../hooks/useSEO";
+import { useResponsiveLimit } from "../../hooks/useResponsiveLimit";
+import { ProgrammeCard } from "../../components/site/ProgrammeCard";
+import { SkeletonCard } from "../../components/ui/Skeleton";
+import { EmptyState } from "../../components/ui/EmptyState";
+import { PROGRAMME_CATEGORY_LABELS } from "../../utils/constants";
 
 export function ProgrammesPage() {
   const { programmes, actions } = useManageState();
   const limit = useResponsiveLimit();
 
   useSEO({
-    title: 'Our Programmes',
-    description: "Explore Nextserve's 26 Tech Development, Management, and Short Term programmes.",
+    title: "Our Programmes",
+    description:
+      "Explore Nextserve's 26 Tech Development, Management, and Short Term programmes.",
   });
 
   useEffect(() => {
@@ -35,7 +36,9 @@ export function ProgrammesPage() {
   }, []);
 
   const categories = Object.keys(PROGRAMME_CATEGORY_LABELS);
-  const hasAnyProgrammes = Object.values(programmes.list).some((arr) => arr?.length > 0);
+  const hasAnyProgrammes = Object.values(programmes.list).some(
+    (arr) => arr?.length > 0,
+  );
 
   return (
     <div className="mx-auto max-w-content px-4 py-32 sm:px-6 lg:px-8">
@@ -54,8 +57,8 @@ export function ProgrammesPage() {
 
       {programmes.loading ? (
         <div className="space-y-12">
-          {categories.map((cat) => (
-            <div key={cat}>
+          {categories.map((cat, idx) => (
+            <div key={idx}>
               <div className="mb-4 h-6 w-48 skeleton-shimmer rounded-sm" />
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {Array.from({ length: limit }).map((_, i) => (
@@ -73,12 +76,12 @@ export function ProgrammesPage() {
         />
       ) : (
         <div className="space-y-14">
-          {categories.map((category) => {
+          {categories.map((category, idx) => {
             const items = (programmes.list[category] || []).slice(0, limit);
             if (items.length === 0) return null;
 
             return (
-              <section key={category}>
+              <section key={idx}>
                 <div className="mb-5 flex items-center justify-between">
                   <h2 className="font-heading text-xl font-bold sm:text-2xl">
                     {PROGRAMME_CATEGORY_LABELS[category]}
@@ -91,8 +94,8 @@ export function ProgrammesPage() {
                   </Link>
                 </div>
                 <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                  {items.map((programme) => (
-                    <ProgrammeCard key={programme.id} programme={programme} />
+                  {items.map((programme, idx) => (
+                    <ProgrammeCard key={idx} programme={programme} />
                   ))}
                 </div>
               </section>

@@ -7,6 +7,45 @@ import { Button } from '../../components/ui/Button';
 import { Card } from '../../components/ui/Card';
 import { FormField } from '../../components/ui/FormField';
 
+const LINK_OPTIONS = [
+  { label: 'Custom / External', value: 'custom' },
+  { label: 'Home', value: '/' },
+  { label: 'FAQ', value: '/faq' },
+  { label: 'About Us', value: '/about' },
+  { label: 'Contact', value: '/contact' },
+  { label: 'Enroll', value: '/enroll' },
+];
+
+const getLinkOptions = (legalPages) => {
+  const dynamicOptions = legalPages.list?.map(p => ({
+    label: p.hero?.title || p.slug,
+    value: `/${p.slug}`
+  })) || [];
+  return [...LINK_OPTIONS, ...dynamicOptions];
+};
+
+function LinkPresetDropdown({ value, onSelect, options }) {
+  // If value matches an option's value (other than custom), select it. Else 'custom'
+  const isMatch = options.find(o => o.value === value && o.value !== 'custom');
+  const displayValue = isMatch ? value : 'custom';
+
+  return (
+    <div className="mb-2">
+      <FormField
+        type="select"
+        label="Target Preset"
+        value={displayValue}
+        onChange={(val) => {
+          if (val === 'custom') return;
+          const opt = options.find(o => o.value === val);
+          onSelect(opt.label, opt.value);
+        }}
+        options={options}
+      />
+    </div>
+  );
+}
+
 export default function LegalPageEdit() {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -99,7 +138,7 @@ export default function LegalPageEdit() {
   const handleDrop = (e, targetIdx) => {
     e.preventDefault();
     if (draggedSectionIndex === null || draggedSectionIndex === targetIdx) return;
-    
+
     setFormData((prev) => {
       const newSections = [...prev.sections];
       const draggedSection = newSections[draggedSectionIndex];
@@ -218,27 +257,27 @@ export default function LegalPageEdit() {
               <FormField
                 label="Badge Text"
                 value={formData.hero?.badgeText || ''}
-                onChange={(e) => handleHeroChange('badgeText', e.target.value)}
+                onChange={(v) => handleHeroChange('badgeText', v)}
               />
               <FormField
                 label="Badge Icon (Lucide)"
                 value={formData.hero?.badgeIcon || ''}
-                onChange={(e) => handleHeroChange('badgeIcon', e.target.value)}
+                onChange={(v) => handleHeroChange('badgeIcon', v)}
               />
               <div className="sm:col-span-2">
                 <FormField
                   label="Title"
                   value={formData.hero?.title || ''}
-                  onChange={(e) => handleHeroChange('title', e.target.value)}
+                  onChange={(v) => handleHeroChange('title', v)}
                 />
               </div>
               <div className="sm:col-span-2">
-                <label className="mb-1 block text-sm font-medium text-text-primary">Description</label>
-                <textarea
-                  className="w-full rounded-md border border-primary/20 bg-surface px-3 py-2 text-sm text-text-primary focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
-                  rows="3"
+                <FormField
+                  type="textarea"
+                  label="Description"
+                  rows={3}
                   value={formData.hero?.description || ''}
-                  onChange={(e) => handleHeroChange('description', e.target.value)}
+                  onChange={(v) => handleHeroChange('description', v)}
                 />
               </div>
             </div>
@@ -252,7 +291,7 @@ export default function LegalPageEdit() {
                 <Plus className="h-4 w-4" /> Add Section
               </Button>
             </div>
-            
+
             <div className="space-y-4">
               {formData.sections?.map((section, sIdx) => (
                 <div
@@ -270,17 +309,23 @@ export default function LegalPageEdit() {
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
                         <div className="flex w-full items-center gap-3 pr-4">
-                          <input
+                          <FormField
                             value={section.title || ''}
-                            onChange={(e) => updateSection(sIdx, 'title', e.target.value)}
+                            onChange={(v) => updateSection(sIdx, 'title', v)}
                             placeholder="Section Title"
-                            className="flex-1 rounded border-b border-transparent bg-transparent px-1 py-1 font-semibold text-text-primary focus:border-primary focus:outline-none"
+                            variant="ghost"
+                            size="sm"
+                            inputClassName="font-semibold"
+                            className="flex-1"
                           />
-                          <input
+                          <FormField
                             value={section.icon || ''}
-                            onChange={(e) => updateSection(sIdx, 'icon', e.target.value)}
+                            onChange={(v) => updateSection(sIdx, 'icon', v)}
                             placeholder="Icon"
-                            className="w-24 rounded border-b border-transparent bg-transparent px-1 py-1 text-sm text-text-secondary focus:border-primary focus:outline-none"
+                            variant="ghost"
+                            size="sm"
+                            inputClassName="text-text-secondary"
+                            className="w-24"
                           />
                         </div>
                         <div className="flex items-center gap-2">
@@ -305,15 +350,16 @@ export default function LegalPageEdit() {
                           >
                             <Trash2 className="h-4 w-4" />
                           </button>
-                          
+
                           {block.type === 'paragraph' && (
                             <div className="pr-6">
-                              <label className="mb-1 block text-xs font-medium text-text-secondary">Paragraph (Punctuation auto-applied)</label>
-                              <textarea
+                              <FormField
+                                type="textarea"
+                                label="Paragraph (Punctuation auto-applied)"
                                 value={block.text || ''}
-                                onChange={(e) => updateBlock(sIdx, bIdx, 'text', e.target.value)}
-                                className="w-full rounded border border-primary/20 bg-surface px-2 py-1 text-sm text-text-primary focus:outline-none"
-                                rows="3"
+                                onChange={(v) => updateBlock(sIdx, bIdx, 'text', v)}
+                                rows={3}
+                                size="sm"
                               />
                             </div>
                           )}
@@ -324,17 +370,19 @@ export default function LegalPageEdit() {
                               <div className="space-y-2">
                                 {block.items?.map((item, iIdx) => (
                                   <div key={iIdx} className="flex gap-2">
-                                    <input
+                                    <FormField
                                       value={item.label || ''}
-                                      onChange={(e) => updateListItem(sIdx, bIdx, iIdx, 'label', e.target.value)}
+                                      onChange={(v) => updateListItem(sIdx, bIdx, iIdx, 'label', v)}
                                       placeholder="Bold Label (Optional)"
-                                      className="w-1/3 rounded border border-primary/20 bg-surface px-2 py-1 text-sm"
+                                      size="sm"
+                                      className="w-1/3"
                                     />
-                                    <input
+                                    <FormField
                                       value={item.text || ''}
-                                      onChange={(e) => updateListItem(sIdx, bIdx, iIdx, 'text', e.target.value)}
+                                      onChange={(v) => updateListItem(sIdx, bIdx, iIdx, 'text', v)}
                                       placeholder="List text..."
-                                      className="flex-1 rounded border border-primary/20 bg-surface px-2 py-1 text-sm"
+                                      size="sm"
+                                      className="flex-1"
                                     />
                                     <button onClick={() => removeListItem(sIdx, bIdx, iIdx)} className="text-text-muted hover:text-red-500">
                                       <Trash2 className="h-4 w-4" />
@@ -354,17 +402,20 @@ export default function LegalPageEdit() {
                               <div className="space-y-2">
                                 {block.items?.map((item, iIdx) => (
                                   <div key={iIdx} className="flex gap-2">
-                                    <input
+                                    <FormField
                                       value={item.title || ''}
-                                      onChange={(e) => updateListItem(sIdx, bIdx, iIdx, 'title', e.target.value)}
+                                      onChange={(v) => updateListItem(sIdx, bIdx, iIdx, 'title', v)}
                                       placeholder="Grid Title"
-                                      className="w-1/3 rounded border border-primary/20 bg-surface px-2 py-1 text-sm font-semibold"
+                                      size="sm"
+                                      inputClassName="font-semibold"
+                                      className="w-1/3"
                                     />
-                                    <input
+                                    <FormField
                                       value={item.description || ''}
-                                      onChange={(e) => updateListItem(sIdx, bIdx, iIdx, 'description', e.target.value)}
+                                      onChange={(v) => updateListItem(sIdx, bIdx, iIdx, 'description', v)}
                                       placeholder="Grid description..."
-                                      className="flex-1 rounded border border-primary/20 bg-surface px-2 py-1 text-sm"
+                                      size="sm"
+                                      className="flex-1"
                                     />
                                     <button onClick={() => removeListItem(sIdx, bIdx, iIdx)} className="text-text-muted hover:text-red-500">
                                       <Trash2 className="h-4 w-4" />
@@ -407,32 +458,43 @@ export default function LegalPageEdit() {
               <FormField
                 label="Icon"
                 value={formData.supportCallout?.icon || ''}
-                onChange={(e) => handleSupportChange('icon', e.target.value)}
+                onChange={(v) => handleSupportChange('icon', v)}
               />
               <FormField
                 label="Title"
                 value={formData.supportCallout?.title || ''}
-                onChange={(e) => handleSupportChange('title', e.target.value)}
+                onChange={(v) => handleSupportChange('title', v)}
               />
-              <div>
-                <label className="mb-1 block text-sm font-medium text-text-primary">Description</label>
-                <textarea
-                  className="w-full rounded-md border border-primary/20 bg-surface px-3 py-2 text-sm text-text-primary focus:border-primary focus:outline-none"
-                  rows="2"
-                  value={formData.supportCallout?.description || ''}
-                  onChange={(e) => handleSupportChange('description', e.target.value)}
+              <FormField
+                type="textarea"
+                label="Description"
+                rows={2}
+                value={formData.supportCallout?.description || ''}
+                onChange={(v) => handleSupportChange('description', v)}
+              />
+
+              <div className="border-t border-primary/10 pt-4">
+                <LinkPresetDropdown
+                  value={formData.supportCallout?.ctaTo || formData.supportCallout?.ctaHref || ''}
+                  options={getLinkOptions(legalPages)}
+                  onSelect={(label, url) => {
+                    handleSupportChange('ctaLabel', label);
+                    handleSupportChange('ctaTo', url);
+                  }}
                 />
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    label="CTA Label"
+                    value={formData.supportCallout?.ctaLabel || ''}
+                    onChange={(e) => handleSupportChange('ctaLabel', e.target.value)}
+                  />
+                  <FormField
+                    label="CTA Link (To/Href)"
+                    value={formData.supportCallout?.ctaTo || formData.supportCallout?.ctaHref || ''}
+                    onChange={(e) => handleSupportChange('ctaTo', e.target.value)}
+                  />
+                </div>
               </div>
-              <FormField
-                label="CTA Label"
-                value={formData.supportCallout?.ctaLabel || ''}
-                onChange={(e) => handleSupportChange('ctaLabel', e.target.value)}
-              />
-              <FormField
-                label="CTA Link (To/Href)"
-                value={formData.supportCallout?.ctaTo || formData.supportCallout?.ctaHref || ''}
-                onChange={(e) => handleSupportChange('ctaTo', e.target.value)}
-              />
             </div>
           </Card>
 
@@ -442,7 +504,15 @@ export default function LegalPageEdit() {
             <div className="space-y-4">
               <div>
                 <h3 className="mb-2 text-sm font-medium text-text-secondary">Left Link</h3>
-                <div className="space-y-2">
+                <LinkPresetDropdown
+                  value={formData.bottomLinks?.left?.to || ''}
+                  options={getLinkOptions(legalPages)}
+                  onSelect={(label, url) => {
+                    handleLinkChange('left', 'label', label);
+                    handleLinkChange('left', 'to', url);
+                  }}
+                />
+                <div className="grid grid-cols-2 gap-4">
                   <FormField
                     placeholder="Label"
                     value={formData.bottomLinks?.left?.label || ''}
@@ -457,7 +527,15 @@ export default function LegalPageEdit() {
               </div>
               <div className="border-t border-primary/10 pt-4">
                 <h3 className="mb-2 text-sm font-medium text-text-secondary">Right Link</h3>
-                <div className="space-y-2">
+                <LinkPresetDropdown
+                  value={formData.bottomLinks?.right?.to || ''}
+                  options={getLinkOptions(legalPages)}
+                  onSelect={(label, url) => {
+                    handleLinkChange('right', 'label', label);
+                    handleLinkChange('right', 'to', url);
+                  }}
+                />
+                <div className="grid grid-cols-2 gap-4">
                   <FormField
                     placeholder="Label"
                     value={formData.bottomLinks?.right?.label || ''}

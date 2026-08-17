@@ -8,27 +8,29 @@
 
 import { Layers } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { FormField } from '../ui/FormField';
 
 export function BulkSelectAllCheckbox({ allSelected, onToggleAll }) {
   return (
-    <input
+    <FormField
       type="checkbox"
-      checked={allSelected}
+      value={allSelected}
       onChange={onToggleAll}
-      className="h-4 w-4 rounded-sm border-border text-primary focus:ring-primary"
+      inputClassName="!mt-0"
     />
   );
 }
 
 export function BulkRowCheckbox({ checked, onChange }) {
   return (
-    <input
-      type="checkbox"
-      checked={checked}
-      onChange={onChange}
-      onClick={(e) => e.stopPropagation()}
-      className="h-4 w-4 rounded-sm border-border text-primary focus:ring-primary"
-    />
+    <div onClick={(e) => e.stopPropagation()}>
+      <FormField
+        type="checkbox"
+        value={checked}
+        onChange={onChange}
+        inputClassName="!mt-0"
+      />
+    </div>
   );
 }
 

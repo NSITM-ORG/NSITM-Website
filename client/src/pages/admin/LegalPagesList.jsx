@@ -41,13 +41,13 @@ export default function LegalPagesList() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border/50 bg-surface">
-              {legalPages.loading && legalPages.list.length === 0 ? (
+              {legalPages.loading && legalPages.list?.length === 0 ? (
                 <tr>
                   <td colSpan="5" className="px-6 py-8 text-center text-text-secondary">
                     Loading pages...
                   </td>
                 </tr>
-              ) : legalPages.list.length === 0 ? (
+              ) : legalPages.list?.length === 0 ? (
                 <tr>
                   <td colSpan="5" className="px-6 py-8 text-center text-text-secondary">
                     No legal pages found.

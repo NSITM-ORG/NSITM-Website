@@ -10,11 +10,14 @@
  *      route-level code-split boundaries.
  */
 
+import SiteLogo from "../assets/SiteLogo";
+
 
 export function AppPreloader() {
   return (
     <div className="fixed inset-0 z-200 flex flex-col items-center justify-center gap-5 bg-background">
-      <img src="/nsitm-logo.svg" alt="" className="h-14 w-14 animate-pulse rounded-md" />
+      {/* <img src="/nsitm-logo.svg" alt="" className="h-14 w-14 animate-pulse rounded-md" /> */}
+      <SiteLogo />
       <div className="relative font-heading text-2xl font-bold text-primary">
         <span className="opacity-20">Nextserve</span>
         <span className="absolute inset-0 overflow-hidden text-primary" style={{ animation: 'preloaderReveal 1.6s ease-in-out infinite' }}>

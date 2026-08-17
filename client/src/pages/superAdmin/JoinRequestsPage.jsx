@@ -77,15 +77,18 @@ export function JoinRequestsPage() {
                   <td className="px-4 py-3 text-text-secondary">{JOIN_COMMUNITY_ROLE_LABELS[req.role]}</td>
                   <td className="px-4 py-3 text-text-secondary">{formatDateTime(req.createdAt)}</td>
                   <td className="px-4 py-3">
-                    <select
+                    <FormField
+                      type="select"
                       value={req.status}
-                      onChange={(e) => handleStatusChange(req.id, e.target.value)}
-                      className="rounded-sm border border-border bg-surface-elevated px-2 py-1 text-xs"
-                    >
-                      <option value="new">New</option>
-                      <option value="reviewed">Reviewed</option>
-                      <option value="archived">Archived</option>
-                    </select>
+                      onChange={(v) => handleStatusChange(req.id, v)}
+                      size="sm"
+                      inputClassName="text-xs !py-1 w-auto inline-block"
+                      options={[
+                        { value: 'new', label: 'New' },
+                        { value: 'reviewed', label: 'Reviewed' },
+                        { value: 'archived', label: 'Archived' }
+                      ]}
+                    />
                     <Badge color={STATUS_COLORS[req.status]} className="ml-2">{req.status}</Badge>
                   </td>
                 </tr>

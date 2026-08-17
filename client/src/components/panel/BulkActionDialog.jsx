@@ -78,15 +78,14 @@ export function BulkActionDialog({ isOpen, onClose, selectedCount, fields, onSub
             </p>
             {fields.map((field) => (
               <div key={field.name} className="rounded-md border border-border p-3">
-                <label className="mb-2 flex items-center gap-2 text-sm font-medium text-text-primary">
-                  <input
+                <div className="mb-2 font-medium">
+                  <FormField
                     type="checkbox"
-                    checked={!!enabledFields[field.name]}
+                    label={field.label}
+                    value={!!enabledFields[field.name]}
                     onChange={() => toggleField(field.name)}
-                    className="h-4 w-4 rounded-sm border-border text-primary focus:ring-primary"
                   />
-                  {field.label}
-                </label>
+                </div>
                 {enabledFields[field.name] && (
                   <FormField
                     type={field.type}

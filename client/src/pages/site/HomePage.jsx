@@ -179,7 +179,7 @@ export function HomePage() {
           </div>
         ) : cohorts.activeCohorts.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {cohorts.activeCohorts.map((c) => <CohortCard key={c.id} cohort={c} />)}
+            {cohorts.activeCohorts.map((c, ind) => <CohortCard key={ind} cohort={c} />)}
           </div>
         ) : (
           <EmptyState
@@ -205,8 +205,8 @@ export function HomePage() {
           </div>
         ) : popularProgrammes.length > 0 ? (
           <div className={`grid gap-6 ${gridColsClass}`}>
-            {popularProgrammes.slice(0, limit).map((p) => (
-              <ProgrammeCard key={p.id} programme={p} />
+            {popularProgrammes.slice(0, limit).map((p, idx) => (
+              <ProgrammeCard key={idx} programme={p} />
             ))}
           </div>
         ) : (

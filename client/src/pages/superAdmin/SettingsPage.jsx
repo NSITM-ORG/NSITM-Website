@@ -19,6 +19,23 @@ const TABS = [
   { value: 'institution', label: 'Institution' },
 ];
 
+const handlePhoneFormat = (val) => {
+  if (!val) return '+234';
+  let cleaned = val.replace(/[^\d+]/g, '');
+  if (!cleaned.startsWith('+234')) {
+    if (cleaned.startsWith('0')) {
+      cleaned = '+234' + cleaned.substring(1);
+    } else if (cleaned.startsWith('234')) {
+      cleaned = '+' + cleaned;
+    } else if (cleaned.length < 4) {
+      cleaned = '+234';
+    } else {
+      cleaned = '+234' + cleaned.replace(/^\+/, '');
+    }
+  }
+  return cleaned;
+};
+
 export function SettingsPage() {
   const { settings, actions } = useManageState();
   const { showSuccess } = useToast();
@@ -87,7 +104,7 @@ function WhatsAppForm({ settings, actions, showSuccess }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <FormField label="WhatsApp Number" value={form.number || ''} onChange={(v) => setForm((f) => ({ ...f, number: v }))} placeholder="+2348012345678" />
+      <FormField type="tel" label="WhatsApp Number" value={form.number || '+234'} onChange={(v) => setForm((f) => ({ ...f, number: handlePhoneFormat(v) }))} placeholder="+2348012345678" />
       <FormField label="WhatsApp Link" value={form.link || ''} onChange={(v) => setForm((f) => ({ ...f, link: v }))} placeholder="https://wa.me/2348012345678" />
       <FormField type="textarea" label="Pre-filled Message" value={form.prefilledMessage || ''} onChange={(v) => setForm((f) => ({ ...f, prefilledMessage: v }))} hint="Optional" rows={2} />
       <Button type="submit" loading={settings.saving} fullWidth>Save WhatsApp Settings</Button>
@@ -112,7 +129,7 @@ function InstitutionForm({ settings, actions, showSuccess }) {
     <form onSubmit={handleSubmit} className="space-y-4">
       <FormField label="Institution Name" value={form.name || ''} onChange={(v) => setForm((f) => ({ ...f, name: v }))} />
       <FormField label="Address" value={form.address || ''} onChange={(v) => setForm((f) => ({ ...f, address: v }))} />
-      <FormField label="Phone" value={form.phone || ''} onChange={(v) => setForm((f) => ({ ...f, phone: v }))} />
+      <FormField type="tel" label="Phone" value={form.phone || '+234'} onChange={(v) => setForm((f) => ({ ...f, phone: handlePhoneFormat(v) }))} />
       <FormField type="email" label="Email" value={form.email || ''} onChange={(v) => setForm((f) => ({ ...f, email: v }))} />
       <FormField label="Website" value={form.website || ''} onChange={(v) => setForm((f) => ({ ...f, website: v }))} />
       <FormField label="Instagram" value={form.instagram || ''} onChange={(v) => setForm((f) => ({ ...f, instagram: v }))} />

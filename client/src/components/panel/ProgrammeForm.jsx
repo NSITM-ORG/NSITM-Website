@@ -147,14 +147,14 @@ export function ProgrammeForm({ initialData, onSubmit, submitting, submitLabel =
 
       <div>
         <label className="mb-1.5 block text-sm font-medium text-text-primary">What Students Will Learn (Bullet Points)</label>
-        <div className="mb-2 flex gap-2">
-          <input
+        <div className="mb-2 flex items-start gap-2">
+          <FormField
             value={bulletDraft}
-            onChange={(e) => setBulletDraft(e.target.value)}
+            onChange={(v) => setBulletDraft(v)}
             onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); addBulletPoint(); } }}
             placeholder="Type a point and press Enter or click Add"
             disabled={form.bulletPoints.length >= MAX_BULLET_POINTS}
-            className="flex-1 rounded-sm border border-border bg-surface-elevated px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50"
+            className="flex-1"
           />
           <Button type="button" variant="outline" icon={Plus} onClick={addBulletPoint} disabled={form.bulletPoints.length >= MAX_BULLET_POINTS}>
             Add

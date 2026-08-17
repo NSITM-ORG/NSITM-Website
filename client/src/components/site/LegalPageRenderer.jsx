@@ -16,7 +16,7 @@ export function LegalPageRenderer({ slug }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
-  const pageData = legalPages.publicPage?.data;
+  const pageData = legalPages.publicPage;
 
   useSEO({
     title: pageData?.hero?.title || 'Legal Information',
@@ -79,13 +79,13 @@ export function LegalPageRenderer({ slug }) {
                   {section.title}
                 </h2>
               </div>
-              
+
               <div className="space-y-6 text-text-secondary leading-relaxed">
                 {section.content?.map((block, bIdx) => {
                   if (block.type === 'paragraph') {
                     return <p key={bIdx}>{block.text}</p>;
                   }
-                  
+
                   if (block.type === 'list') {
                     return (
                       <ul key={bIdx} className="space-y-3 pl-6 list-disc">
@@ -111,7 +111,7 @@ export function LegalPageRenderer({ slug }) {
                       </div>
                     );
                   }
-                  
+
                   return null;
                 })}
               </div>
@@ -151,16 +151,28 @@ export function LegalPageRenderer({ slug }) {
 
         {/* Bottom Links */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-primary/10 pt-8 sm:flex-row">
-          {pageData.bottomLinks?.left?.to ? (
-            <Link to={pageData.bottomLinks.left.to} className="text-sm font-medium text-text-secondary hover:text-primary">
-              {pageData.bottomLinks.left.label}
-            </Link>
-          ) : <div/>}
-          {pageData.bottomLinks?.right?.to && (
-            <Link to={pageData.bottomLinks.right.to} className="text-sm font-medium text-text-secondary hover:text-primary">
-              {pageData.bottomLinks.right.label}
-            </Link>
-          )}
+          {(() => {
+            const rawLeftTo = pageData.bottomLinks?.left?.to;
+            const leftTo = rawLeftTo || '/faq';
+            const rawLeftLabel = pageData.bottomLinks?.left?.label || (rawLeftTo ? '' : 'FAQ');
+            const leftLabel = rawLeftLabel.replace(/^←\s*/, '').replace(/\s*→$/, '');
+
+            const rawRightTo = pageData.bottomLinks?.right?.to;
+            const rightTo = rawRightTo || '/about';
+            const rawRightLabel = pageData.bottomLinks?.right?.label || (rawRightTo ? '' : 'About Us');
+            const rightLabel = rawRightLabel.replace(/^←\s*/, '').replace(/\s*→$/, '');
+
+            return (
+              <>
+                <Link to={leftTo} className="text-sm font-medium text-text-secondary hover:text-primary">
+                  {leftLabel ? `← ${leftLabel}` : '← Back'}
+                </Link>
+                <Link to={rightTo} className="text-sm font-medium text-text-secondary hover:text-primary">
+                  {rightLabel ? `${rightLabel} →` : 'Next →'}
+                </Link>
+              </>
+            );
+          })()}
         </div>
       </div>
     </div>

@@ -21,27 +21,31 @@ import { Info } from 'lucide-react';
 const POLICIES = [
   {
     key: 'noRefundPolicy',
+    slug: 'no-refund-policy',
     label: 'I have read and agree to the No-Refund Policy',
     text: 'Fees paid are non-refundable under any circumstances, including withdrawal, deferral, or failure to attend.',
-    fullText: 'This is the full text for the No-Refund Policy. It will be replaced with the final legal text once approved by the founder.',
+    summary: 'By enrolling in this programme, you agree that your tuition and associated fees are strictly non-refundable. Nextserve immediately commits resources to your seat. If you cannot attend, you may request a deferral to a future cohort, but cash refunds are not issued under any circumstances.'
   },
   {
     key: 'attendancePolicy',
+    slug: 'attendance-policy',
     label: 'I have read and agree to the Attendance Policy',
     text: 'Students are required to attend a minimum of 80% of scheduled sessions.',
-    fullText: 'This is the full text for the Attendance Policy. It will be replaced with the final legal text once approved by the founder.',
+    summary: 'Active participation is required for graduation. You must maintain at least 80% attendance in all scheduled classes. Falling below this threshold without prior documented excuse from the administration may result in academic probation or dismissal from the cohort.'
   },
   {
     key: 'codeOfConduct',
+    slug: 'code-of-conduct',
     label: 'I have read and agree to the Code of Conduct',
     text: 'Students must conduct themselves respectfully toward instructors and peers in all online and in-person interactions.',
-    fullText: 'This is the full text for the Code of Conduct. It will be replaced with the final legal text once approved by the founder.',
+    summary: 'Nextserve enforces a strict zero-tolerance policy against harassment, bullying, and academic dishonesty. You are expected to treat all peers, instructors, and staff with respect. Plagiarism or cheating will lead to immediate expulsion from the academy.'
   },
   {
     key: 'paymentPlanTerms',
+    slug: 'payment-plan-terms',
     label: 'I have read and agree to the Payment Plan Terms',
     text: 'Instalment payers must complete full payment within the agreed timeline. Failure to pay may result in suspension of access to sessions.',
-    fullText: 'This is the full text for the Payment Plan Terms. It will be replaced with the final legal text once approved by the founder.',
+    summary: 'If you choose an instalment plan, you are contractually bound to make payments by their designated due dates. Failure to settle outstanding dues within the grace period will result in immediate suspension of portal access until the balance is cleared.'
   },
 ];
 
@@ -95,10 +99,15 @@ export function StepPolicyAcknowledgment() {
         size="lg"
       >
         <div className="mt-2 text-text-secondary leading-relaxed space-y-4">
-          <p>{activePolicy?.fullText}</p>
+          <p>{activePolicy?.summary}</p>
         </div>
-        <div className="mt-6 flex justify-end">
-          <Button onClick={() => setActivePolicy(null)}>Close</Button>
+        <div className="mt-6 flex justify-end gap-3">
+          <Button variant="outline" onClick={() => setActivePolicy(null)}>Close</Button>
+          {activePolicy?.slug && (
+            <Button onClick={() => window.open(`/${activePolicy.slug}`, '_blank')}>
+              Read Full Policy
+            </Button>
+          )}
         </div>
       </Modal>
     </div>

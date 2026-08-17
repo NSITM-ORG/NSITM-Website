@@ -20,7 +20,7 @@ export function ImageOrPlaceholder({ src, alt, className = "h-full w-full object
   //   return <img src={resolvedSrc} alt={alt} className={className} />;
   // }
 
-  console.log((parseInt(placeholderText?.length) + parseInt(placeholderSubText.length)))
+  // console.log((parseInt(placeholderText?.length) + parseInt(placeholderSubText.length)))
 
   if (placeholderSubText || placeholderText) {
     return (

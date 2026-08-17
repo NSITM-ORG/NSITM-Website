@@ -198,7 +198,7 @@ const pages = [
       ctaHref: 'mailto:info@nsitm.org.ng',
     },
     bottomLinks: {
-      left: { label: 'Read Terms of Service →', to: '/terms-of-service' },
+      left: { label: 'Read Terms of Service', to: '/terms-of-service' },
       right: { label: 'Back to Home', to: '/' },
     },
     publishedAt: new Date(),
@@ -240,7 +240,7 @@ const pages = [
       ctaTo: '/contact',
     },
     bottomLinks: {
-      left: { label: '← Back to Enrollment', to: '/enroll' },
+      left: { label: 'Back to Enrollment', to: '/enroll' },
       right: { label: 'Terms of Service', to: '/terms-of-service' },
     },
     publishedAt: new Date(),
@@ -283,7 +283,7 @@ const pages = [
       ctaTo: '/contact',
     },
     bottomLinks: {
-      left: { label: '← Back to Enrollment', to: '/enroll' },
+      left: { label: 'Back to Enrollment', to: '/enroll' },
       right: { label: 'Code of Conduct', to: '/code-of-conduct' },
     },
     publishedAt: new Date(),
@@ -333,7 +333,7 @@ const pages = [
       ctaTo: '/contact',
     },
     bottomLinks: {
-      left: { label: '← Back to Enrollment', to: '/enroll' },
+      left: { label: 'Back to Enrollment', to: '/enroll' },
       right: { label: 'Attendance Policy', to: '/attendance-policy' },
     },
     publishedAt: new Date(),
@@ -376,7 +376,7 @@ const pages = [
       ctaTo: '/contact',
     },
     bottomLinks: {
-      left: { label: '← Back to Enrollment', to: '/enroll' },
+      left: { label: 'Back to Enrollment', to: '/enroll' },
       right: { label: 'No-Refund Policy', to: '/no-refund-policy' },
     },
     publishedAt: new Date(),

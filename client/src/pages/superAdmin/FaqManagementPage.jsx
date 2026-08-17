@@ -147,18 +147,17 @@ function FaqFormModal({ isOpen, data, onClose }) {
         <FormField type="textarea" label="Answer" value={form.answer} onChange={(v) => setForm((f) => ({ ...f, answer: v }))} error={errors.answer} rows={4} required />
 
         <div>
-          <label className="mb-1.5 block text-sm font-medium text-text-primary">Category</label>
-          <input
+          <FormField
+            label="Category"
             list="faq-category-suggestions"
             value={form.category}
-            onChange={(e) => setForm((f) => ({ ...f, category: e.target.value }))}
-            className="w-full rounded-sm border border-border bg-surface-elevated px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            onChange={(v) => setForm((f) => ({ ...f, category: v }))}
             placeholder="Type or select a category"
+            error={errors.category}
           />
           <datalist id="faq-category-suggestions">
             {faqs.categories.map((c) => <option key={c} value={c} />)}
           </datalist>
-          {errors.category && <p className="mt-1.5 text-sm text-error">{errors.category}</p>}
         </div>
 
         <FormField type="checkbox" label="Published (visible on public FAQ page)" value={form.isPublished} onChange={(v) => setForm((f) => ({ ...f, isPublished: v }))} />

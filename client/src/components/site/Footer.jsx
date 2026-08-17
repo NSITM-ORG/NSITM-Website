@@ -25,7 +25,6 @@ export function Footer() {
   }, []);
 
   const institution = settings.publicSettings?.institution;
-  console.log(settings);
 
   const phoneDisplay = institution?.phone || "+2349035007621, +2348037248978";
   const emailDisplay = institution?.email || "nsitmonline@gmail.com";

@@ -27,7 +27,7 @@ import { FormField } from '../../../components/ui/FormField';
 import { Button } from '../../../components/ui/Button';
 import { GuidanceBanner } from '../../../components/site/GuidanceBanner';
 import { validators, validateForm } from '../../../utils/validation';
-import {  DELIVERY_FORMAT_LABELS, PROGRAMME_STATUS } from '../../../utils/constants';
+import { DELIVERY_FORMAT_LABELS, PROGRAMME_STATUS } from '../../../utils/constants';
 import { GraduationCap, Calendar, } from 'lucide-react';
 
 const SCHEMA = {
@@ -39,7 +39,7 @@ const SCHEMA = {
 };
 
 export function StepPersonalDetails() {
-  const { state, setField, nextStep, } = useEnrollmentForm();
+  const { state, setField, nextStep } = useEnrollmentForm();
   const { programmes, actions } = useManageState();
   // const navigate = useNavigate();
   const [errors, setErrors] = useState({});
@@ -209,7 +209,7 @@ export function StepPersonalDetails() {
       <FormField
         label="Referral Code"
         value={state.referralCode}
-        onChange={(v) => v.length <= 20 && setField('referralCode', v)}
+        onChange={(v) => v?.length <= 20 && setField('referralCode', v)}
         placeholder="Enter referral code if you have one"
         maxLength={20}
         showCounter

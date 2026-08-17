@@ -36,6 +36,7 @@ const sidebarNavigation = [
   },
   { key: 'join-requests', label: 'Join Community', icon: 'Users', path: '/superadmin/join-requests', roles: ['super_admin'] },
   { key: 'faqs', label: 'FAQ Management', icon: 'FileText', path: '/superadmin/faqs', roles: ['super_admin'] },
+  { key: 'legal-pages', label: 'Legal Pages', icon: 'FileText', path: '/admin/legal-pages', roles: ['admin', 'super_admin'] },
   {
     key: 'analytics', label: 'Analytics', icon: 'BarChart3', path: '/superadmin/analytics', roles: ['super_admin'],
     children: [{ key: 'export', label: 'Export CSV', path: '/superadmin/export' }],

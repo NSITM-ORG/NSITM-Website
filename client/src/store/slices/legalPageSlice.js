@@ -13,7 +13,7 @@ export const fetchPublicLegalPage = createAsyncThunk(
   'legalPages/fetchPublic',
   async (slug, { rejectWithValue }) => {
     try {
-      return (await httpClient.get(`/public/legal-pages/${slug}`)).data;
+      return (await httpClient.get(`/public/legal-pages/${slug}`)).data.data;
     } catch (err) {
       return rejectWithValue(err);
     }
@@ -24,7 +24,7 @@ export const fetchAllLegalPagesAdmin = createAsyncThunk(
   'legalPages/fetchAllAdmin',
   async (_, { rejectWithValue }) => {
     try {
-      return (await httpClient.get('/admin/legal-pages')).pages;
+      return (await httpClient.get('/admin/legal-pages')).data.pages;
     } catch (err) {
       return rejectWithValue(err);
     }
@@ -35,7 +35,7 @@ export const fetchLegalPageAdmin = createAsyncThunk(
   'legalPages/fetchAdmin',
   async (slug, { rejectWithValue }) => {
     try {
-      return (await httpClient.get(`/admin/legal-pages/${slug}`)).page;
+      return (await httpClient.get(`/admin/legal-pages/${slug}`)).data.page;
     } catch (err) {
       return rejectWithValue(err);
     }
@@ -46,7 +46,7 @@ export const updateLegalPage = createAsyncThunk(
   'legalPages/update',
   async ({ slug, payload }, { rejectWithValue }) => {
     try {
-      return (await httpClient.put(`/admin/legal-pages/${slug}`, payload)).page;
+      return (await httpClient.put(`/admin/legal-pages/${slug}`, payload)).data.page;
     } catch (err) {
       return rejectWithValue(err);
     }
@@ -57,7 +57,7 @@ export const publishLegalPage = createAsyncThunk(
   'legalPages/publish',
   async (slug, { rejectWithValue }) => {
     try {
-      return (await httpClient.patch(`/admin/legal-pages/${slug}/publish`)).page;
+      return (await httpClient.patch(`/admin/legal-pages/${slug}/publish`)).data.page;
     } catch (err) {
       return rejectWithValue(err);
     }

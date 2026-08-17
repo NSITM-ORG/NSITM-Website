@@ -50,6 +50,9 @@ export function FormField({
   file, // for file-dropzone: { file, previewUrl, error, dragHandlers, handleInputChange, isPdf, clearFile }
   actionButton, // React node to render beside label
   className = '',
+  inputClassName = '',
+  size = 'md',
+  variant = 'default',
   ...rest
 }) {
   const id = useId();
@@ -77,13 +80,16 @@ export function FormField({
 
   /* ── Frosted / theme-blendable field background (same treatment as Modal) ── */
   const baseFieldClasses = `
-    w-full px-4 py-2.5 rounded-xl border 
-    bg-surface-elevated/90 backdrop-blur-sm
-    text-text-primary placeholder:text-text-secondary/70 transition-all duration-200
+    w-full transition-all duration-200
     focus:outline-none focus:ring-2 focus:ring-primary/80 focus:ring-offset-2 focus:border-primary
     disabled:opacity-50 disabled:cursor-not-allowed
-    ${error ? 'border-error ring-1 ring-error/30' : 'border-border/80 hover:border-primary/40'}
-  `;
+    ${variant === 'ghost'
+      ? 'bg-transparent border-transparent text-text-primary placeholder:text-text-secondary/50'
+      : `border bg-surface-elevated/90 backdrop-blur-sm text-text-primary placeholder:text-text-secondary/70 ${error ? 'border-error ring-1 ring-error/30' : 'border-border/80 hover:border-primary/40'}`
+    }
+    ${size === 'sm' ? 'px-2 py-1.5 text-sm rounded-md' : 'px-4 py-2.5 rounded-xl'}
+    ${inputClassName}
+  `.trim();
 
 
   // ── File Dropzone ────────────────────────────────────────────────
@@ -120,10 +126,10 @@ export function FormField({
             />
           </label>
         ) : (
-            <div className="flex items-center gap-3 rounded-md border border-border 
+          <div className="flex items-center gap-3 rounded-md border border-border 
             bg-[color-mix(in_oklab,var(--color-surface-elevated),white_10%)] 
             backdrop-blur-sm ring-1 ring-white/10 p-3">
-          {/* <div className="flex items-center gap-3 rounded-md border border-border bg-surface-elevated p-3"> */}
+            {/* <div className="flex items-center gap-3 rounded-md border border-border bg-surface-elevated p-3"> */}
             {file.previewUrl ? (
               <img src={file.previewUrl} alt="Receipt preview" className="h-14 w-14 rounded-sm object-cover" />
             ) : (
@@ -148,7 +154,7 @@ export function FormField({
   if (type === 'checkbox') {
     return (
       <div className={className}>
-        <label htmlFor={id} className="flex items-start gap-3 cursor-pointer">
+        <label htmlFor={id} className={`flex items-start cursor-pointer ${label ? 'gap-3' : ''}`}>
           <input
             id={id}
             type="checkbox"
@@ -156,10 +162,10 @@ export function FormField({
             checked={!!value}
             onChange={(e) => onChange?.(e.target.checked)}
             disabled={disabled}
-            className="mt-1 h-4 w-4 rounded-sm border-border text-primary focus:ring-primary"
+            className={`mt-1 h-4 w-4 rounded-sm border-border text-primary focus:ring-primary ${inputClassName}`}
             {...rest}
           />
-          <span className="text-sm text-text-primary">{label}</span>
+          {label && <span className="text-sm text-text-primary">{label}</span>}
         </label>
         {error && <FieldError message={error} />}
       </div>
